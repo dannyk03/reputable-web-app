@@ -1,12 +1,11 @@
-import AboutExperiment from "../components/Experiment/About";
 import Comments from "../containers/Comments";
-import { comments } from "../mockData";
+import CommunitiesListView from "../containers/Communities/List";
+import { communities } from "../mockData";
 
 export default function HomePage() {
   return (
     <>
-      <AboutExperiment />
-      <Comments comments={comments} />
+      <CommunitiesListView data={communities} />
     </>
   );
 }

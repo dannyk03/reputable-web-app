@@ -20,6 +20,7 @@ export enum ExperimentStatus {
 export interface ICommunity {
   name: string;
   icon: string;
+  memberCount: number;
 }
 
 export interface IContent {
@@ -34,12 +35,29 @@ export interface ExperimentResultMarker {
 
 export interface ResultHistory {
   date: Date;
+  markerValue: MarkerValue;
+}
+
+export interface MarkerValue {
+  value: number;
+  prettified?: string;
+}
+
+export enum MarkerValueChangeType {
+  POSITIVE = "positive",
+  NEGATIVE = "negative",
+}
+
+export interface MarkerValueChange {
+  type: MarkerValueChangeType;
+  percentage: number;
   value: number;
 }
 
 export interface ExperimentResult {
   marker: ExperimentResultMarker;
   history: ResultHistory[];
+  lastChange?: MarkerValueChange;
 }
 
 export interface IExperiment {
