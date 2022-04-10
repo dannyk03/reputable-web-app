@@ -19,7 +19,7 @@ import AboutExperiment from "../../components/Experiment/About";
 import Comments from "../../containers/Comments";
 import ExperimentResults from "../../components/Experiment/Results";
 import React from "react";
-import { IExperiment } from "../../pages/_app";
+import { IExperiment } from "../../types";
 
 interface ExperimentsSingleViewProps {
   data: IExperiment;

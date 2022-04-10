@@ -8,6 +8,7 @@ export default function mockApiCall<T extends Record<string, any>>(
   data: T,
   ms: number
 ) {
+  console.log("Calling api...");
   return new Promise<T>((res, rej) => {
     setTimeout(() => {
       return res(data);

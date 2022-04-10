@@ -1,14 +1,8 @@
-import {
-  Flex,
-  Grid,
-  GridItem,
-  Box,
-  Text,
-  VStack,
-} from "@chakra-ui/react";
+import { Flex, Grid, GridItem, Box, Text, VStack } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
 import Autocomplete from "../../components/Autocomplete/Async";
+import SearchBar from "../../components/SearchBar";
 import { ICommunity } from "../../types";
 
 interface CommunitiesListViewProps {
@@ -22,10 +16,11 @@ export default function CommunitiesListView({
   const formatter = Intl.NumberFormat("en", { notation: "compact" });
   return (
     <Box>
-      <Autocomplete />
+      <SearchBar />
       <Grid mt={10} gap={6} templateColumns="repeat(4, 1fr)">
         {data.map((community, index) => (
           <GridItem
+            key={`community_${index}`}
             w="100%"
             border="1px solid"
             borderRadius="16px"

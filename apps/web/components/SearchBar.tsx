@@ -49,13 +49,15 @@ export const SearchBarItem = (item: ExperimentSearchResult) => (
 );
 
 export default function SearchBar() {
-  const fetchResults = (inputValue: string) =>
+  const fetchResults = (inputValue: string) => (
+    console.log("inpVal", inputValue),
     mockApiCall(
       searchExperimentItems.filter((s) =>
         s.title.toLocaleLowerCase().startsWith(inputValue.toLocaleLowerCase())
       ),
       600
-    );
+    )
+  );
   const router = useRouter();
 
   return (
