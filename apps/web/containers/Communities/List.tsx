@@ -8,7 +8,7 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
-import Autocomplete from "../../components/Autocomplete";
+import Autocomplete from "../../components/Autocomplete/Async";
 import { ICommunity } from "../../types";
 
 interface CommunitiesListViewProps {
