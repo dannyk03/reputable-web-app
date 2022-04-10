@@ -1,18 +1,15 @@
-import { SearchIcon } from "@chakra-ui/icons";
 import {
   Flex,
-  Input,
   Grid,
   GridItem,
-  InputGroup,
-  InputLeftElement,
   Box,
   Text,
   VStack,
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
-import { ICommunity } from "../../pages/_app";
+import Autocomplete from "../../components/Autocomplete";
+import { ICommunity } from "../../types";
 
 interface CommunitiesListViewProps {
   data: ICommunity[];
@@ -25,20 +22,7 @@ export default function CommunitiesListView({
   const formatter = Intl.NumberFormat("en", { notation: "compact" });
   return (
     <Box>
-      <InputGroup variant="filled">
-        <InputLeftElement pointerEvents="none">
-          <SearchIcon color="gray.400" />
-        </InputLeftElement>
-        <Input
-          bgColor="gray.50"
-          borderColor="gray.200"
-          border="1px solid"
-          borderRadius={24}
-          _hover={{}}
-          type="tel"
-          placeholder="Search an experiment"
-        />
-      </InputGroup>
+      <Autocomplete />
       <Grid mt={10} gap={6} templateColumns="repeat(4, 1fr)">
         {data.map((community, index) => (
           <GridItem

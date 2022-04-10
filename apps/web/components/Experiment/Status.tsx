@@ -1,4 +1,4 @@
-import { ExperimentStatus } from "../../pages/_app";
+import { ExperimentStatus } from "../../types";
 import React from "react";
 import { Text } from "@chakra-ui/react";
 

@@ -4,22 +4,7 @@ import makeAvatar from "../../helpers/makeAvatar";
 import Image from "next/image";
 import Voting from "./Voting";
 import React from "react";
-
-export interface Author {
-  firstName: string;
-  lastName: string;
-  profileImage?: string;
-}
-
-export interface IComment {
-  author: Author; // Will be User.
-  isReply?: boolean;
-  upvotes: number;
-  downvotes: number;
-  updatedAt: Date;
-  replies?: IComment[];
-  id?: string;
-}
+import { IComment } from "../../types";
 
 export default function Comment({
   id,

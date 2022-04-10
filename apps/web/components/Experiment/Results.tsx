@@ -12,7 +12,7 @@ import {
 import moment from "moment";
 import React from "react";
 import { BsDot } from "react-icons/bs";
-import { ExperimentResult } from "../../pages/_app";
+import { ExperimentResult } from "../../types";
 import MarkerCard from "./MarkerCard";
 
 export interface ExperimentResultsProps {

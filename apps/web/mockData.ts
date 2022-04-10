@@ -1,12 +1,13 @@
-import { Author, IComment } from "./components/Comment";
+import { Author, IComment } from "./types";
 import {
   ExperimentResultMarker,
+  ExperimentSearchResult,
   ExperimentStatus,
   ICommunity,
   IExperiment,
   IUser,
   MarkerValueChangeType,
-} from "./pages/_app";
+} from "./types";
 
 export const authors: Author[] = [
   {
@@ -79,45 +80,54 @@ export const communities: ICommunity[] = [
     name: "Sleep",
     memberCount: 45321,
     icon: "/icons/communities/sleep.png",
+    slug: "sleep",
   },
   {
     name: "Longevity",
     memberCount: 12394,
     icon: "/icons/communities/longevity.png",
+    slug: "longevity",
   },
   {
     name: "Weight Loss",
     memberCount: 32962,
     icon: "/icons/communities/weight-loss.png",
+    slug: "weight-loss",
   },
   {
     name: "Meditation",
     memberCount: 158979,
     icon: "/icons/communities/meditation.png",
+    slug: "meditation",
   },
   {
     name: "Anxiety",
     memberCount: 102743,
     icon: "/icons/communities/anxiety.png",
+    slug: "anxiety",
   },
   {
     name: "Chronic Pain",
     memberCount: 9322,
     icon: "/icons/communities/chronic-pain.png",
+    slug: "chronic-pain",
   },
   {
     name: "Cardiovascular",
     memberCount: 19556,
     icon: "/icons/communities/cardiovascular.png",
+    slug: "cardiovascular",
   },
   {
     name: "Blood Sugar",
     memberCount: 83967,
     icon: "/icons/communities/blood-sugar.png",
+    slug: "blood-sugar",
   },
 ];
 
 export const experiment: IExperiment = {
+  _id: "9bs23jd29k",
   title: "Meditate twice daily and measure deep sleep",
   status: ExperimentStatus.ACTIVE,
   createdBy: user,
@@ -221,3 +231,21 @@ export const experiment: IExperiment = {
     },
   ],
 };
+
+export const searchExperimentItems: ExperimentSearchResult[] = [
+  {
+    title: experiment.title,
+    communities: experiment.communities,
+    _id: experiment._id,
+  },
+  {
+    title: "Taking vitamin D supplements for 2 weeks and measuring HRV",
+    communities: [communities[1], communities[6]],
+    _id: "123k493v",
+  },
+  {
+    title: "Sleeping 4 hours a day for 2 weeks",
+    communities: [communities[0]],
+    _id: "j4nd391m",
+  },
+];
