@@ -20,6 +20,7 @@ import { IExperiment } from "../../types";
 import { StatusTag } from "../../components/Experiments";
 import AboutExperiment from "../../components/Experiments/About";
 import ExperimentResults from "../../components/Experiments/Results";
+import TextLink from "../../components/TextLink";
 
 interface ExperimentsSingleViewProps {
   data: IExperiment;
@@ -32,14 +33,8 @@ export default function ExperimentsSingleView({
   return (
     <Flex direction={"row"} gap="90px">
       <Box flexGrow={1}>
-        <Link href="/experiments">
-          <Flex align="center">
-            <ArrowBackIcon />
-            <Text fontWeight={600} color="gray.700" pl={2}>
-              Back
-            </Text>
-          </Flex>
-        </Link>
+        <TextLink icon={<ArrowBackIcon />} href="/experiments" />
+
         <Heading color="gray.800" fontSize="36px" pt={4} lineHeight="40px">
           {data.title}
         </Heading>
