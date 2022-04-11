@@ -1,5 +1,4 @@
 import {
-  Box,
   Divider,
   Flex,
   Heading,
@@ -13,7 +12,8 @@ import moment from "moment";
 import React from "react";
 import { BsDot } from "react-icons/bs";
 import { ExperimentResult } from "../../types";
-import MarkerCard from "./MarkerCard";
+import Card from "../Card";
+import MarkerCard from "./Marker";
 
 export interface ExperimentResultsProps {
   updatedAt: Date;
@@ -26,15 +26,7 @@ export default function ExperimentResults({
 }: React.PropsWithChildren<ExperimentResultsProps>) {
   const timeAgo = moment(updatedAt).fromNow();
   return (
-    <Box
-      shadow="md"
-      maxW="sm"
-      borderWidth="1px"
-      p={6}
-      borderRadius="lg"
-      overflow="hidden"
-      minW="400px"
-    >
+    <Card noShadow>
       <Flex gap={4} direction="column">
         <Flex align="center">
           <Icon w={6} h={6} as={BsDot} color="green.400" />
@@ -62,6 +54,6 @@ export default function ExperimentResults({
           <MarkerCard key={`markerCard_${index}`} {...result} />
         ))}
       </Flex>
-    </Box>
+    </Card>
   );
 }

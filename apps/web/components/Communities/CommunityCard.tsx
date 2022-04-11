@@ -2,6 +2,7 @@ import { Box, Flex, VStack, Text } from "@chakra-ui/react";
 import React from "react";
 import { ICommunity } from "../../types";
 import Image from "next/image";
+import Card from "../Card";
 
 export interface CommunityCardProps {
   community: ICommunity;
@@ -12,13 +13,7 @@ export default function CommunityCard({
 }: React.PropsWithChildren<CommunityCardProps>) {
   const formatter = Intl.NumberFormat("en", { notation: "compact" });
   return (
-    <Box
-      width="100%"
-      border="1px solid"
-      borderRadius="16px"
-      borderColor="gray.200"
-      p={6}
-    >
+    <Card noShadow w="100%">
       <Flex justify="center" align="center">
         <VStack gap={3}>
           <Box maxW="82px" maxH="82px">
@@ -44,6 +39,6 @@ export default function CommunityCard({
           >{`${formatter.format(community.memberCount)} members`}</Text>
         </VStack>
       </Flex>
-    </Box>
+    </Card>
   );
 }

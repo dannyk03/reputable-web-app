@@ -14,12 +14,12 @@ import {
 import { BsThreeDots } from "react-icons/bs";
 import { FcDonate, FcShare } from "react-icons/fc";
 import Image from "next/image";
-import StatusTag from "../../components/Experiments/Status";
-import AboutExperiment from "../../components/Experiments/About";
 import Comments from "../../containers/Comments";
-import ExperimentResults from "../../components/Experiments/Results";
 import React from "react";
 import { IExperiment } from "../../types";
+import { StatusTag } from "../../components/Experiments";
+import AboutExperiment from "../../components/Experiments/About";
+import ExperimentResults from "../../components/Experiments/Results";
 
 interface ExperimentsSingleViewProps {
   data: IExperiment;

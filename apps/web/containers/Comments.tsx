@@ -10,12 +10,16 @@ import {
   useTheme,
 } from "@chakra-ui/react";
 import React from "react";
-React.useLayoutEffect = React.useEffect;
-import Comment, { IComment } from "../components/Comment";
+import Comment from "../components/Comment";
 import Xarrow, { Xwrapper } from "react-xarrows";
 import { user } from "../mockData";
 import makeAvatar from "../helpers/makeAvatar";
 import { ArrowDownIcon } from "@chakra-ui/icons";
+import { IComment } from "../types";
+import Card from "../components/Card";
+
+// React-XArrows will throw a warning if this is removed.
+React.useLayoutEffect = React.useEffect;
 
 export interface CommentsProps {
   comments: IComment[];
@@ -28,7 +32,7 @@ export default function Comments({
 
   const [value, setValue] = React.useState("");
   return (
-    <Box p={6} borderRadius="xl" borderWidth={1} shadow="md">
+    <Card>
       <Heading fontSize="20px" fontWeight={600} color="gray.700">
         {" "}
         The Conversation ({comments.length})
@@ -83,6 +87,6 @@ export default function Comments({
           Load More
         </Button>
       </Flex>
-    </Box>
+    </Card>
   );
 }

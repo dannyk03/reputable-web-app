@@ -1,6 +1,7 @@
 import { Box, Divider, Flex, Heading, Text } from "@chakra-ui/react";
 import moment from "moment";
 import React from "react";
+import Card from "../Card";
 import Tag from "../Tag";
 
 export interface AboutExperimentProps {
@@ -23,14 +24,7 @@ export default function AboutExperiment({
     totalDays
   );
   return (
-    <Box
-      shadow="md"
-      borderWidth="1px"
-      p={6}
-      borderRadius="lg"
-      overflow="hidden"
-      width="100%"
-    >
+    <Card noShadow>
       <Heading size="sm">About the experiment</Heading>
       <Divider my="4" />
       <Heading fontSize="30px" fontWeight={600} color="primary.500">
@@ -55,6 +49,6 @@ export default function AboutExperiment({
           ))}
         </Flex>
       </Box>
-    </Box>
+    </Card>
   );
 }

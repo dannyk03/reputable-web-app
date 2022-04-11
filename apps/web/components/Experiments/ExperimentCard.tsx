@@ -1,11 +1,11 @@
 import { Avatar, Box, HStack, Link, Spacer, Text } from "@chakra-ui/react";
-import { truncate } from "lodash";
 import React from "react";
 import makeAvatar from "../../helpers/makeAvatar";
 import { IExperiment } from "../../types";
-import StatusTag from "./Status";
+import StatusTag from "./StatusTag";
 import NextLink from "next/link";
 import Tag from "../Tag";
+import Card from "../Card";
 
 export interface ExperimentCardProps {
   experiment: IExperiment;
@@ -15,7 +15,7 @@ export default function ExperimentCard({
   experiment,
 }: React.PropsWithChildren<ExperimentCardProps>) {
   return (
-    <Box borderRadius="16px" p={6} border="1px solid" borderColor="gray.200">
+    <Card noShadow>
       <HStack>
         <Avatar
           width={"32px"}
@@ -66,6 +66,7 @@ export default function ExperimentCard({
       >
         {experiment.content.map((content, index) => (
           <Text
+            key={`experiment_${experiment._id}_content_${index}`}
             mt={index !== 0 && 3}
           >{`${content.heading}: ${content.body}`}</Text>
         ))}
@@ -75,6 +76,6 @@ export default function ExperimentCard({
           <Tag key={`${experiment._id}_tag_${idx}`}>{tag}</Tag>
         ))}
       </HStack>
-    </Box>
+    </Card>
   );
 }

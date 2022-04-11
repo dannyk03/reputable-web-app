@@ -6,18 +6,12 @@ import {
   Button,
   HStack,
   Heading,
-  Text,
   Spacer,
-  Avatar,
 } from "@chakra-ui/react";
-import { truncate } from "lodash";
 import React from "react";
 import CommunityCard from "../../components/Communities/CommunityCard";
-import ExperimentCard from "../../components/Experiments/ExperimentCard";
-import StatusTag from "../../components/Experiments/Status";
+import { ExperimentCard } from "../../components/Experiments";
 import SearchBar from "../../components/SearchBar";
-import Tag from "../../components/Tag";
-import makeAvatar from "../../helpers/makeAvatar";
 import { ICommunity, IExperiment } from "../../types";
 
 export interface ExperimentsListViewProps {
