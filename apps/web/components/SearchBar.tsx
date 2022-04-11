@@ -1,5 +1,4 @@
 import { HStack, Text } from "@chakra-ui/react";
-import { UseComboboxProps } from "downshift";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import mockApiCall from "../helpers/fakeApiCall";

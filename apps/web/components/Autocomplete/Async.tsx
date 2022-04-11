@@ -44,7 +44,7 @@ export default function AutocompleteAsync<T>({
   }, [debounceMS, fetchData]);
 
   useEffect(() => {
-    debouncedFetch(inputValue);
+    if (inputValue.trim() !== "") debouncedFetch(inputValue);
     return () => {
       debouncedFetch.cancel();
     };

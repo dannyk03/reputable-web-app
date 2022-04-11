@@ -1,5 +1,5 @@
 import { ChakraProvider } from "@chakra-ui/react";
-import { IComment } from "../components/Comment";
+import { IComment } from "../types";
 import MainLayout from "../layouts/Main";
 import reputableTheme from "../theme";
 

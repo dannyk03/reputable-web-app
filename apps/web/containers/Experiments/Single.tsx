@@ -14,10 +14,10 @@ import {
 import { BsThreeDots } from "react-icons/bs";
 import { FcDonate, FcShare } from "react-icons/fc";
 import Image from "next/image";
-import StatusTag from "../../components/Experiment/Status";
-import AboutExperiment from "../../components/Experiment/About";
+import StatusTag from "../../components/Experiments/Status";
+import AboutExperiment from "../../components/Experiments/About";
 import Comments from "../../containers/Comments";
-import ExperimentResults from "../../components/Experiment/Results";
+import ExperimentResults from "../../components/Experiments/Results";
 import React from "react";
 import { IExperiment } from "../../types";
 
