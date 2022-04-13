@@ -13,7 +13,7 @@ import React from "react";
 import { BsDot } from "react-icons/bs";
 import { ExperimentResult } from "../../types";
 import Card from "../Card";
-import MarkerCard from "./Marker";
+import MarkerCard from "./MarkerCard";
 
 export interface ExperimentResultsProps {
   updatedAt: Date;

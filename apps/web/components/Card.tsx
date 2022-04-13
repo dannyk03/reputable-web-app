@@ -1,4 +1,4 @@
-import { Box, ChakraProps } from "@chakra-ui/react";
+import { Box, ChakraComponent, ChakraProps } from "@chakra-ui/react";
 import React from "react";
 
 export interface CardProps extends ChakraProps {
@@ -9,7 +9,7 @@ export default function Card({
   children,
   noShadow = false,
   ...restProps
-}: React.PropsWithChildren<CardProps>) {
+}: React.PropsWithChildren<CardProps & React.ComponentProps<"div">>) {
   return (
     <Box
       shadow={!noShadow && "md"}

@@ -16,7 +16,9 @@
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@svgr/webpack": "^6.2.1",
+    "api": "*",
     "downshift": "^6.1.7",
+    "draft-js": "^0.11.7",
     "framer-motion": "^6",
     "lodash": "^4.17.21",
     "moment": "^2.29.2",
@@ -24,10 +26,10 @@
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-icons": "^4.3.1",
-    "react-xarrows": "^2.0.2",
-    "api": "*"
+    "react-xarrows": "^2.0.2"
   },
   "devDependencies": {
+    "@types/draft-js": "^0.11.9",
     "@types/node": "^17.0.12",
     "@types/react": "17.0.37",
     "config": "*",

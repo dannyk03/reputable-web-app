@@ -137,7 +137,9 @@ export const experiment: IExperiment = {
   createdAt: new Date(2022, 2, 28),
   communities: [communities[0], communities[1]],
   comments: comments,
+  // Remove tags
   tags: ["Sleep", "Meditation", "Stress", "Core"],
+  // Content will be text-editor based - Draft.JS
   content: [
     {
       heading: "Hypothesis",
