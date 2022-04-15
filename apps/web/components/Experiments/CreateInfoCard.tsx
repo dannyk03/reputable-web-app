@@ -10,7 +10,6 @@ import {
 import React from "react";
 import Card from "../Card";
 import { MdInfo } from "react-icons/md";
-import NextLink from "next/link";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import TextLink from "../TextLink";
 

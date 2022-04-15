@@ -9,6 +9,7 @@ import {
   Spacer,
 } from "@chakra-ui/react";
 import React from "react";
+import { PrimaryButton } from "../../components/Button";
 import CommunityCard from "../../components/Communities/CommunityCard";
 import { ExperimentCard } from "../../components/Experiments";
 import SearchBar from "../../components/SearchBar";
@@ -27,18 +28,10 @@ export default function ExperimentsListView({
     <Flex direction="row">
       <VStack w="260px" gap={5}>
         <CommunityCard community={community} />
-        <Button
+        <PrimaryButton
+          text="Create new experiment"
           leftIcon={<AddIcon width="12px" height="12px" />}
-          colorScheme="primary"
-          variant="solid"
-          lineHeight="24px"
-          fontSize="16px"
-          fontWeight={600}
-          width="100%"
-          borderRadius="24px"
-        >
-          Create new experiment
-        </Button>
+        />
       </VStack>
       <Box ml={10} width="100%">
         <HStack>

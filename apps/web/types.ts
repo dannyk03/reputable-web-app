@@ -48,6 +48,8 @@ export interface ExperimentResultMarker {
 export interface ResultHistory {
   date: Date;
   markerValue: MarkerValue;
+  image?: File;
+  imageLink?: string;
 }
 
 export interface MarkerValue {
@@ -81,6 +83,7 @@ export interface IExperiment {
   communities: ICommunity[];
   content: IContent[];
   comments: IComment[];
+  description: string;
   results: ExperimentResult[];
   startDate: Date;
   endDate: Date;
