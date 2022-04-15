@@ -8,6 +8,7 @@ import { IExperiment } from "../../../types";
 import FirstStep from "./Steps/First";
 import { PrimaryButton } from "../../../components/Button";
 import SecondStep from "./Steps/Second";
+import { experimentResultMarkers } from "../../../mockData";
 
 export interface IStep {
   title: string;
@@ -45,22 +46,34 @@ export default function CreateExperimentView() {
   const [currentStep, setCurrentStep] = React.useState<number>(0);
   const methods = useForm<TCreateExperiment>();
 
+  console.log(methods.getValues());
+
   /**
    * For initial validation
    */
   useEffect(() => {
-    methods.trigger();
-  }, []);
+    methods.trigger().then((errors) => {
+      const { formState } = methods;
+      const values = methods.getValues();
+      const step1Completed = !(
+        formState.errors.hasOwnProperty("title") ||
+        formState.errors.hasOwnProperty("description")
+      );
+    });
+  }, [methods]);
 
   // Should be in the same order with steps, needs to change based on methods
   // That's why its in the function itself, not defined outside like steps constant
-  const stepPropsArray: StepProps[] = [
+  const stepPropsArray: (Record<string, any> & StepProps)[] = [
     {
       canFinish:
         methods.formState.errors.hasOwnProperty("description") ||
         methods.formState.errors.hasOwnProperty("title"),
       onFinish: () =>
         setCurrentStep((prevStep) => Math.min(steps.length, prevStep + 1)),
+    },
+    {
+      resultMarkers: experimentResultMarkers,
     },
   ];
 

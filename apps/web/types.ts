@@ -43,6 +43,7 @@ export interface IContent {
 export interface ExperimentResultMarker {
   name: string;
   unit: string;
+  slug: string;
 }
 
 export interface ResultHistory {

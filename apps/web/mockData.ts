@@ -64,14 +64,17 @@ export const experimentResultMarkers: ExperimentResultMarker[] = [
   {
     name: "Resting Heart Rate",
     unit: "bpm",
+    slug: "resting-heart-rate",
   },
   {
     name: "Deep Sleep",
     unit: "minutes",
+    slug: "deep-sleep",
   },
   {
     name: "HRV",
     unit: "milliseconds",
+    slug: "hrv",
   },
 ];
 
