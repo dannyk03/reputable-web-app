@@ -6,7 +6,7 @@ import {
   FormControl,
   FormLabel,
 } from "@chakra-ui/react";
-import RichTextEditor from "../../components/Editor";
+import RichTextEditor from "../../components/RichTextEditor";
 import { CreateInfoCard } from "../../components/Experiments";
 import NoSSR from "../../components/NoSSR";
 import TextLink from "../../components/TextLink";
