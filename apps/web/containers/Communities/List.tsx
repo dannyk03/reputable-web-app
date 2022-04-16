@@ -15,7 +15,7 @@ export default function CommunitiesListView({
 }: React.PropsWithChildren<CommunitiesListViewProps>) {
   const formatter = Intl.NumberFormat("en", { notation: "compact" });
   return (
-    <Box>
+    <Box maxW="960px">
       <SearchBar />
       <Grid mt={10} gap={6} templateColumns="repeat(4, 1fr)">
         {data.map((community, index) => (

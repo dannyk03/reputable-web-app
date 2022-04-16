@@ -1,11 +1,13 @@
-import { Box, Container } from "@chakra-ui/react";
+import { Box, Container, Flex } from "@chakra-ui/react";
 import Navbar from "../containers/Navbar";
 
 export default function MainLayout({ children }) {
   return (
     <Container maxW="container.xl">
       <Navbar />
-      <main>{children}</main>
+      <Flex w="100%" justify="center">
+        {children}
+      </Flex>
       <Box mt="62px"></Box>
     </Container>
   );
