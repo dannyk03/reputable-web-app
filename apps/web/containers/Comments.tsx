@@ -12,11 +12,11 @@ import {
 import React from "react";
 import Comment from "../components/Comment";
 import Xarrow, { Xwrapper } from "react-xarrows";
-import { user } from "../mockData";
 import makeAvatar from "../helpers/makeAvatar";
 import { ArrowDownIcon } from "@chakra-ui/icons";
 import { IComment } from "../types";
 import Card from "../components/Card";
+import { useAuth0 } from "@auth0/auth0-react";
 
 // React-XArrows will throw a warning if this is removed.
 React.useLayoutEffect = React.useEffect;
@@ -29,6 +29,7 @@ export default function Comments({
   comments = [],
 }: React.PropsWithChildren<CommentsProps>) {
   const theme = useTheme();
+  const { user = {} } = useAuth0();
 
   const [value, setValue] = React.useState("");
   return (
@@ -55,7 +56,7 @@ export default function Comments({
           width={"40px"}
           height={"40px"}
           name="Profile Photo"
-          src={user.profileImage ?? makeAvatar("tolga")}
+          src={user.profileImage ?? makeAvatar(user.given_name ?? "User")}
         />
         <Textarea ml={3} placeholder="Add a comment" />
       </Flex>
