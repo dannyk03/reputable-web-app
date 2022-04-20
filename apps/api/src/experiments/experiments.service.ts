@@ -1,16 +1,22 @@
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
 import { CreateExperimentInput } from './dto/create-experiment.input';
 import { UpdateExperimentInput } from './dto/update-experiment.input';
+import { Experiment, ExperimentDocument } from './entities/experiment.entity';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class ExperimentsService {
-  constructor();
+  constructor(
+    @InjectModel(Experiment.name)
+    private experimentModel: Model<ExperimentDocument>,
+  ) {}
   create(createExperimentInput: CreateExperimentInput) {
     return 'This action adds a new experiment';
   }
 
   findAll() {
-    return [];
+    return this.experimentModel.find({}).orFail().exec();
   }
 
   findOne(id: number) {

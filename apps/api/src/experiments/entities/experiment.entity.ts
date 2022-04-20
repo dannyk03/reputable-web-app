@@ -6,6 +6,7 @@ import {
   GraphQLISODateTime,
 } from '@nestjs/graphql';
 import { BaseMongoEntity } from 'src/common/entities/mongo';
+import { buildSchema, DocumentType } from '@typegoose/typegoose';
 
 export enum ExperimentStatus {
   ACTIVE = 'active',
@@ -47,3 +48,7 @@ export class Experiment extends BaseMongoEntity {
   @Field(() => GraphQLISODateTime)
   endDate: Date;
 }
+
+export type ExperimentDocument = DocumentType<Experiment>;
+
+export const ExperimentSchema = buildSchema(Experiment);
