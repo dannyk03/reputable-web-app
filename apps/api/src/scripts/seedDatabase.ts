@@ -98,7 +98,7 @@ export const generateExperimentResultHistory = (
   startDate: Date,
   endDate: Date,
 ): ResultHistory[] => {
-  return Array(length).map(() =>
+  return [...new Array(length)].map(() =>
     generateResultHistory(startDate, endDate),
   ) as ResultHistory[];
 };
@@ -131,7 +131,7 @@ async function main() {
   const users = await getUsers();
   console.log('Retrieved', users.length, 'users');
   const experiments = await Promise.all(
-    [...new Array(200)].map(() => generateExperiment(users)),
+    [...new Array(400)].map(() => generateExperiment(users)),
   );
   console.log(experiments);
   await db.collection('experiments').insertMany(experiments);

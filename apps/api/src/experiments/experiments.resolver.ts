@@ -1,6 +1,14 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { ExperimentsService } from './experiments.service';
-import { Experiment } from './entities/experiment.entity';
+import { Experiment, ResultHistory } from './entities/experiment.entity';
 import { CreateExperimentInput } from './dto/create-experiment.input';
 import { UpdateExperimentInput } from './dto/update-experiment.input';
 import { Public } from 'src/decorators';
@@ -19,7 +27,24 @@ export class ExperimentsResolver {
   @Public()
   @Query(() => [Experiment], { name: 'experiments' })
   findAll() {
-    return this.experimentsService.findAll();
+    return this.experimentsService.findAll().then((experiments) => {
+      return experiments.map((experiment, i) => {
+        return {
+          ...experiment,
+          results: {}
+        }
+        /*
+        experiment.results.map((result, j) => {
+          if ((result.history || []).length > 1) {
+            const valueDiff = result.history[]
+            const lastChange = {
+              type: result.marker.more_is_better ? 
+            }
+          }
+        });*
+        /
+      });
+    });
   }
 
   @Query(() => Experiment, { name: 'experiment' })

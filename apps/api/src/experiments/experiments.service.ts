@@ -16,7 +16,12 @@ export class ExperimentsService {
   }
 
   findAll() {
-    return this.experimentModel.find({}).orFail().exec();
+    return this.experimentModel
+      .find({})
+      .lean()
+      .limit(25)
+      .orFail()
+      .exec() as Promise<Experiment[]>;
   }
 
   findOne(id: number) {

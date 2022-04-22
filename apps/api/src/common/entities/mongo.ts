@@ -6,16 +6,14 @@ import {
   ID,
 } from '@nestjs/graphql';
 
+@ObjectType()
 export class BaseMongoEntity {
-  @Field(() => GraphQLISODateTime)
+  @Field(() => GraphQLISODateTime, { nullable: true })
   createdAt: Date;
 
-  @Field(() => GraphQLISODateTime)
+  @Field(() => GraphQLISODateTime, { nullable: true })
   updatedAt?: Date;
 
   @Field(() => ID)
   _id: string;
-
-  @Field(() => Int)
-  __v?: number;
 }

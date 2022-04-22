@@ -41,6 +41,9 @@ type ExperimentResult {
 
 """experiment"""
 type Experiment {
+  createdAt: DateTime
+  updatedAt: DateTime
+  _id: ID!
   title: String!
   status: ExperimentStatus!
   createdBy: String!
