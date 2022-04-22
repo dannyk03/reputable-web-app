@@ -1,12 +1,17 @@
 import {
   ObjectType,
   Field,
-  Int,
   registerEnumType,
   GraphQLISODateTime,
+  Float,
 } from '@nestjs/graphql';
-import { BaseMongoEntity } from 'src/common/entities/mongo';
-import { buildSchema, DocumentType } from '@typegoose/typegoose';
+import { BaseMongoEntity } from '../../common/entities/mongo';
+import {
+  buildSchema,
+  DocumentType,
+  index,
+  modelOptions,
+} from '@typegoose/typegoose';
 
 export enum ExperimentStatus {
   ACTIVE = 'active',
@@ -15,14 +20,64 @@ export enum ExperimentStatus {
   CLOSED = 'closed',
 }
 
+export enum MarkerValueChangeType {
+  POSITIVE = 'positive',
+  NEGATIVE = 'negative',
+}
+
 registerEnumType(ExperimentStatus, {
   name: 'ExperimentStatus',
 });
 
+registerEnumType(MarkerValueChangeType, {
+  name: 'MarkerValueChangeType',
+});
+
 @ObjectType()
-export class ExperimentResult {}
+export class ExperimentResultMarker {
+  @Field()
+  name: string;
+  @Field()
+  unit: string;
+  @Field()
+  slug: string;
+  @Field(() => Boolean)
+  more_is_better: boolean;
+}
+
+@ObjectType()
+export class ResultHistory {
+  @Field(() => GraphQLISODateTime)
+  date: Date;
+  @Field(() => Float)
+  markerValue: number;
+  @Field()
+  imageLink: string;
+}
+
+@ObjectType()
+export class MarkerValueChange {
+  @Field(() => MarkerValueChangeType)
+  type: MarkerValueChangeType;
+  @Field(() => Float)
+  percentage: number;
+  @Field(() => Float)
+  value: number;
+}
+
+@ObjectType()
+export class ExperimentResult {
+  @Field(() => ExperimentResultMarker)
+  marker: ExperimentResultMarker;
+  @Field(() => [ResultHistory])
+  history: ResultHistory[];
+  @Field(() => MarkerValueChange, { nullable: true })
+  lastChange?: MarkerValueChange;
+}
 
 @ObjectType({ description: 'experiment' })
+@modelOptions({ schemaOptions: { timestamps: true } })
+@index({ communites: 1 })
 export class Experiment extends BaseMongoEntity {
   @Field()
   title?: string;
@@ -31,18 +86,14 @@ export class Experiment extends BaseMongoEntity {
   @Field()
   createdBy: string;
   @Field(() => [String])
-  tags: string[];
-  @Field(() => [String])
   communities: string[];
   /*
-  content: IContent[];
   comments: IComment[];
   */
   @Field()
   description?: string;
-  /*
+  @Field(() => [ExperimentResult])
   results: ExperimentResult[];
-  */
   @Field(() => GraphQLISODateTime)
   startDate: Date;
   @Field(() => GraphQLISODateTime)

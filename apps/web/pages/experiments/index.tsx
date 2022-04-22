@@ -2,13 +2,10 @@ import React from "react";
 import { dehydrate, QueryClient } from "react-query";
 import ExperimentsListView from "../../containers/Experiments/List";
 import { communities, experiment } from "../../mockData";
-import useExperiments from "../../_api/Experiments/getExperiments";
+import { useExperiments, prefetchExperiments } from "../../_api/Experiments";
 
 export async function getStaticProps() {
-  const queryClient = new QueryClient();
-
-  await queryClient.prefetchQuery("experiments", getPosts);
-
+  const queryClient = await prefetchExperiments({ community: "sleep" });
   return {
     props: {
       dehydratedState: dehydrate(queryClient),
@@ -17,7 +14,10 @@ export async function getStaticProps() {
 }
 
 export default function Experiments() {
-  const { experiments, isLoading, error } = useExperiments();
+  const { data, isLoading, error, isFetching } = useExperiments({
+    community: "sleep",
+  });
+  console.log("data", data);
   return (
     <ExperimentsListView
       experiments={[experiment]}

@@ -11,7 +11,7 @@ export class BaseMongoEntity {
   createdAt: Date;
 
   @Field(() => GraphQLISODateTime)
-  updatedAt: Date;
+  updatedAt?: Date;
 
   @Field(() => ID)
   _id: string;
