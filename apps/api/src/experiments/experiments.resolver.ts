@@ -8,10 +8,16 @@ import {
   Parent,
 } from '@nestjs/graphql';
 import { ExperimentsService } from './experiments.service';
-import { Experiment, ResultHistory } from './entities/experiment.entity';
+import {
+  Experiment,
+  MarkerValueChange,
+  MarkerValueChangeType,
+  ResultHistory,
+} from './entities/experiment.entity';
 import { CreateExperimentInput } from './dto/create-experiment.input';
 import { UpdateExperimentInput } from './dto/update-experiment.input';
 import { Public } from 'src/decorators';
+import { XOR } from 'src/common/helpers';
 
 @Resolver(() => Experiment)
 export class ExperimentsResolver {
@@ -31,18 +37,26 @@ export class ExperimentsResolver {
       return experiments.map((experiment, i) => {
         return {
           ...experiment,
-          results: {}
-        }
-        /*
-        experiment.results.map((result, j) => {
-          if ((result.history || []).length > 1) {
-            const valueDiff = result.history[]
-            const lastChange = {
-              type: result.marker.more_is_better ? 
+          results: experiment.results.map((result, j) => {
+            const history = (result.history || []).sort(
+              (a, b) => b.date.getTime() - a.date.getTime(),
+            );
+            if (history.length > 1) {
+              const value = history[1].markerValue - history[0].markerValue;
+              const lastChange: MarkerValueChange = {
+                type: XOR(value > 0, result.marker.more_is_better)
+                  ? MarkerValueChangeType.POSITIVE
+                  : MarkerValueChangeType.NEGATIVE,
+                value: value,
+                percentage: (value / history[1].markerValue) * 100,
+              };
             }
-          }
-        });*
-        /
+            return {
+              ...result,
+              history,
+            };
+          }),
+        };
       });
     });
   }
