@@ -1,23 +1,9 @@
-import {
-  Resolver,
-  Query,
-  Mutation,
-  Args,
-  Int,
-  ResolveField,
-  Parent,
-} from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
 import { ExperimentsService } from './experiments.service';
-import {
-  Experiment,
-  MarkerValueChange,
-  MarkerValueChangeType,
-  ResultHistory,
-} from './entities/experiment.entity';
+import { Experiment } from './entities/experiment.entity';
 import { CreateExperimentInput } from './dto/create-experiment.input';
 import { UpdateExperimentInput } from './dto/update-experiment.input';
 import { Public } from 'src/decorators';
-import { XOR } from 'src/common/helpers';
 
 @Resolver(() => Experiment)
 export class ExperimentsResolver {
@@ -25,7 +11,7 @@ export class ExperimentsResolver {
 
   @Mutation(() => Experiment)
   createExperiment(
-    @Args('createExperimentInput') createExperimentInput: CreateExperimentInput,
+    @Args('experiment') createExperimentInput: CreateExperimentInput,
   ) {
     return this.experimentsService.create(createExperimentInput);
   }
@@ -33,32 +19,7 @@ export class ExperimentsResolver {
   @Public()
   @Query(() => [Experiment], { name: 'experiments' })
   findAll() {
-    return this.experimentsService.findAll().then((experiments) => {
-      return experiments.map((experiment, i) => {
-        return {
-          ...experiment,
-          results: experiment.results.map((result, j) => {
-            const history = (result.history || []).sort(
-              (a, b) => b.date.getTime() - a.date.getTime(),
-            );
-            if (history.length > 1) {
-              const value = history[1].markerValue - history[0].markerValue;
-              const lastChange: MarkerValueChange = {
-                type: XOR(value > 0, result.marker.more_is_better)
-                  ? MarkerValueChangeType.POSITIVE
-                  : MarkerValueChangeType.NEGATIVE,
-                value: value,
-                percentage: (value / history[1].markerValue) * 100,
-              };
-            }
-            return {
-              ...result,
-              history,
-            };
-          }),
-        };
-      });
-    });
+    return this.experimentsService.findAll();
   }
 
   @Query(() => Experiment, { name: 'experiment' })
@@ -68,7 +29,7 @@ export class ExperimentsResolver {
 
   @Mutation(() => Experiment)
   updateExperiment(
-    @Args('updateExperimentInput') updateExperimentInput: UpdateExperimentInput,
+    @Args('experiment') updateExperimentInput: UpdateExperimentInput,
   ) {
     return this.experimentsService.update(
       updateExperimentInput.id,

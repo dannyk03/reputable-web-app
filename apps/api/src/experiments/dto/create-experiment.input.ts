@@ -1,7 +1,16 @@
-import { InputType, Int, Field } from '@nestjs/graphql';
+import { InputType, Int, Field, GraphQLISODateTime } from '@nestjs/graphql';
 
 @InputType()
 export class CreateExperimentInput {
-  @Field(() => Int, { description: 'Example field (placeholder)' })
-  exampleField: number;
+  @Field()
+  title: string;
+  @Field()
+  description: string;
+  @Field(() => GraphQLISODateTime)
+  startDate: Date;
+  @Field(() => GraphQLISODateTime)
+  endDate: Date;
+  @Field()
+  createdBy: string;
+  
 }

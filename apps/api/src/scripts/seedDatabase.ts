@@ -9,6 +9,7 @@ import {
   ExperimentStatus,
   ResultHistory,
 } from '../experiments/entities/experiment.entity';
+import { experimentResultMarkers } from '../common/data/markers';
 
 export const communities = [
   'Sleep',
@@ -20,27 +21,6 @@ export const communities = [
   'Chronic Pain',
   'Cardiovascular',
   'Blood Sugar',
-];
-
-export const experimentResultMarkers: ExperimentResultMarker[] = [
-  {
-    name: 'Resting Heart Rate',
-    unit: 'bpm',
-    slug: 'resting-heart-rate',
-    more_is_better: false,
-  },
-  {
-    name: 'Deep Sleep',
-    unit: 'minutes',
-    slug: 'deep-sleep',
-    more_is_better: true,
-  },
-  {
-    name: 'HRV',
-    unit: 'milliseconds',
-    slug: 'hrv',
-    more_is_better: true,
-  },
 ];
 
 const getAuth0ManagementAccessToken = () => {
@@ -133,8 +113,8 @@ async function main() {
   const experiments = await Promise.all(
     [...new Array(400)].map(() => generateExperiment(users)),
   );
-  console.log(experiments);
   await db.collection('experiments').insertMany(experiments);
+  console.log('Inserted documents to db');
 }
 
 export const generateExperiment = async (users) => {

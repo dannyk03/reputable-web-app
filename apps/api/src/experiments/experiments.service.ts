@@ -4,6 +4,7 @@ import { CreateExperimentInput } from './dto/create-experiment.input';
 import { UpdateExperimentInput } from './dto/update-experiment.input';
 import { Experiment, ExperimentDocument } from './entities/experiment.entity';
 import { Model } from 'mongoose';
+import { plainToClass } from 'class-transformer';
 
 @Injectable()
 export class ExperimentsService {
@@ -11,17 +12,31 @@ export class ExperimentsService {
     @InjectModel(Experiment.name)
     private experimentModel: Model<ExperimentDocument>,
   ) {}
-  create(createExperimentInput: CreateExperimentInput) {
-    return 'This action adds a new experiment';
+
+  async create(createExperimentInput: CreateExperimentInput) {
+    return this.experimentModel
+      .create(createExperimentInput)
+      .then((experiment) => plainToClass(Experiment, experiment.toJSON()));
   }
 
   findAll() {
     return this.experimentModel
       .find({})
-      .lean()
+      .lean({ virtuals: true, getters: true })
       .limit(25)
       .orFail()
-      .exec() as Promise<Experiment[]>;
+      .exec()
+      .then((experiments) => {
+        return experiments.map((experiment, i) => {
+          const experimentInstance = plainToClass(Experiment, experiment);
+          return {
+            ...experimentInstance,
+            results: experimentInstance.results.map((result, j) =>
+              experimentInstance.prettifyResult(result),
+            ),
+          };
+        });
+      }) as Promise<Experiment[]>;
   }
 
   findOne(id: number) {

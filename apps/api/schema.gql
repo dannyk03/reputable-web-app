@@ -15,6 +15,7 @@ type ResultHistory {
   date: DateTime!
   markerValue: Float!
   imageLink: String!
+  prettified: String
 }
 
 """
@@ -67,18 +68,24 @@ type Query {
 }
 
 type Mutation {
-  createExperiment(createExperimentInput: CreateExperimentInput!): Experiment!
-  updateExperiment(updateExperimentInput: UpdateExperimentInput!): Experiment!
+  createExperiment(experiment: CreateExperimentInput!): Experiment!
+  updateExperiment(experiment: UpdateExperimentInput!): Experiment!
   removeExperiment(id: Int!): Experiment!
 }
 
 input CreateExperimentInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  title: String!
+  description: String!
+  startDate: DateTime!
+  endDate: DateTime!
+  createdBy: String!
 }
 
 input UpdateExperimentInput {
-  """Example field (placeholder)"""
-  exampleField: Int
+  title: String
+  description: String
+  startDate: DateTime
+  endDate: DateTime
+  createdBy: String
   id: Int!
 }
