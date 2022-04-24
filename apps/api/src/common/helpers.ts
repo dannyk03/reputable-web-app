@@ -3,7 +3,7 @@ export function XOR(a: boolean, b: boolean) {
 }
 
 export function convertMinsToHrsMins(mins: number) {
-  let h = Math.floor(mins / 60);
-  let m = mins % 60;
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
   return `${h} hr ${m} min`;
 }

@@ -23,18 +23,16 @@ export class ExperimentsResolver {
   }
 
   @Query(() => Experiment, { name: 'experiment' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.experimentsService.findOne(id);
+  findOne(@Args('_id', { type: () => String }) _id: string) {
+    return this.experimentsService.findOne(_id);
   }
 
   @Mutation(() => Experiment)
   updateExperiment(
+    @Args('_id') experimentId: string,
     @Args('experiment') updateExperimentInput: UpdateExperimentInput,
   ) {
-    return this.experimentsService.update(
-      updateExperimentInput.id,
-      updateExperimentInput,
-    );
+    return this.experimentsService.update(experimentId, updateExperimentInput);
   }
 
   @Mutation(() => Experiment)

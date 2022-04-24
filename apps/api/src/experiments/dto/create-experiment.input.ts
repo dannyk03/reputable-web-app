@@ -12,5 +12,4 @@ export class CreateExperimentInput {
   endDate: Date;
   @Field()
   createdBy: string;
-  
 }

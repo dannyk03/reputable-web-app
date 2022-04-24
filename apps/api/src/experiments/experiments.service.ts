@@ -39,12 +39,16 @@ export class ExperimentsService {
       }) as Promise<Experiment[]>;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} experiment`;
+  findOne(_id: string) {
+    return this.experimentModel.findById(_id).orFail().lean().exec();
   }
 
-  update(id: number, updateExperimentInput: UpdateExperimentInput) {
-    return `This action updates a #${id} experiment`;
+  update(_id: string, updateExperimentInput: UpdateExperimentInput) {
+    return this.experimentModel
+      .updateOne({ _id }, updateExperimentInput)
+      .orFail()
+      .lean()
+      .exec();
   }
 
   remove(id: number) {
