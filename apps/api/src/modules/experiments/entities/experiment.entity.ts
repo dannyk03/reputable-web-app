@@ -5,7 +5,7 @@ import {
   GraphQLISODateTime,
   Float,
 } from '@nestjs/graphql';
-import { BaseMongoEntity } from '../../common/entities/mongo';
+import { BaseMongoEntity } from '../../../common/entities/mongo';
 import {
   buildSchema,
   DocumentType,
@@ -15,10 +15,8 @@ import {
   post,
   prop,
 } from '@typegoose/typegoose';
-import { convertMinsToHrsMins, XOR } from '../../common/helpers';
-// TS errors
-const mongooseLeanGetters = require('mongoose-lean-getters');
-const mongooseLeanVirtuals = require('mongoose-lean-virtuals');
+import { convertMinsToHrsMins, XOR } from '../../../common/helpers';
+import { mongooseLeanGetters, mongooseLeanVirtuals } from '../../../plugins';
 
 interface MarkerPrettifiers {
   [k: string]: (value: number) => string;

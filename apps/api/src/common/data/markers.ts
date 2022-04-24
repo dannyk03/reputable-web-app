@@ -1,4 +1,4 @@
-import { ExperimentResultMarker } from '../../experiments/entities/experiment.entity';
+import { ExperimentResultMarker } from '../../modules/experiments/entities/experiment.entity';
 
 export const experimentResultMarkers: ExperimentResultMarker[] = [
   {

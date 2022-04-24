@@ -2,12 +2,13 @@ import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { APP_GUARD } from '@nestjs/core';
-import { ExperimentsModule } from './experiments/experiments.module';
+import { ExperimentsModule } from './modules/experiments/experiments.module';
 import { DirectiveLocation, GraphQLDirective } from 'graphql';
 import { upperDirectiveTransformer } from './common/directives/upper-case.directive';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
+import { CommentsModule } from './modules/comments/comments.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
     }),
     MongooseModule.forRoot(process.env.DB_URL),
     ExperimentsModule,
+    CommentsModule,
   ],
   providers: [
     {

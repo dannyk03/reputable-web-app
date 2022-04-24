@@ -8,7 +8,7 @@ import {
   ExperimentResultMarker,
   ExperimentStatus,
   ResultHistory,
-} from '../experiments/entities/experiment.entity';
+} from '../modules/experiments/entities/experiment.entity';
 import { experimentResultMarkers } from '../common/data/markers';
 
 export const communities = [

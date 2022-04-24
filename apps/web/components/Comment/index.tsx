@@ -10,6 +10,7 @@ export default function Comment({
   id,
   author,
   isReply = false,
+  text,
   upvotes = 300,
   downvotes = 200,
   replies = [],
@@ -36,10 +37,7 @@ export default function Comment({
           </Text>
         </Flex>
         <Flex pl={12}>
-          <Text>
-            Would love it if you can track your blood pressure before and after
-            this experiment as well
-          </Text>
+          <Text>{text}</Text>
         </Flex>
         <Flex pl={12} pt="12px" align="center">
           <Voting
