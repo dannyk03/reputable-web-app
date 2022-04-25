@@ -21,6 +21,14 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type User {
+  created_at: DateTime!
+  email: String!
+  email_verified: Boolean!
+  picture: String!
+  name: String!
+}
+
 type ExperimentResultMarker {
   name: String!
   unit: String!
@@ -73,14 +81,6 @@ enum ExperimentStatus {
   RESULTS_PENDING
   IN_DESIGN
   CLOSED
-}
-
-type User {
-  created_at: DateTime!
-  email: String!
-  email_verified: Boolean!
-  picture: String!
-  name: String!
 }
 
 type Query {

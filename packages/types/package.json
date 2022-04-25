@@ -1,0 +1,19 @@
+{
+  "name": "@reputable/types",
+  "version": "1.0.0",
+  "description": "Common types between web and api",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "rm -rf dist && tsc",
+    "dev":"tsc --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "typescript": "^4.6.3"
+  },
+  "devDependencies": {
+    "config": "*",
+    "tsconfig": "*"
+  }
+}

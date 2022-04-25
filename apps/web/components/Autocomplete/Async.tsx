@@ -28,6 +28,7 @@ export default function AutocompleteAsync<T>({
   renderItem,
   debounceMS = 300,
   onSelectedItemChange: onSelectedItemChangeProp,
+  ...restProps
 }: React.PropsWithChildren<AsyncAutocompleteProps<T>>) {
   const [items, setItems] = useState<T[]>([]);
   const [inputValue, setInputValue] = useState("");
@@ -69,7 +70,7 @@ export default function AutocompleteAsync<T>({
   });
   return (
     <NoSSR>
-      <Box>
+      <Box {...restProps}>
         <InputGroup {...getComboboxProps()} variant="filled">
           <InputLeftElement pointerEvents="none">
             <SearchIcon color="gray.400" />

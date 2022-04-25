@@ -7,7 +7,6 @@ import {
   Flex,
   Heading,
   IconButton,
-  Link,
   Spacer,
   Text,
 } from "@chakra-ui/react";
@@ -16,14 +15,14 @@ import { FcDonate, FcShare } from "react-icons/fc";
 import Image from "next/image";
 import Comments from "../../containers/Comments";
 import React from "react";
-import { IExperiment } from "../../types";
+import { PopulatedExperiment } from "types";
 import { StatusTag } from "../../components/Experiments";
 import AboutExperiment from "../../components/Experiments/About";
 import ExperimentResults from "../../components/Experiments/Results";
 import TextLink from "../../components/TextLink";
 
 interface ExperimentsSingleViewProps {
-  data: IExperiment;
+  data: PopulatedExperiment;
 }
 
 export default function ExperimentsSingleView({
@@ -53,21 +52,6 @@ export default function ExperimentsSingleView({
             <Text color="gray.700" fontSize="18px" fontWeight={600}>
               {data.createdBy.firstName}
             </Text>
-            {data.tags.map((tag, idx) => (
-              <Text
-                key={`experiment_community_tag_${idx}`}
-                py={1}
-                px={3}
-                border="1px solid"
-                boxSizing="border-box"
-                backgroundColor="gray.100"
-                borderColor="gray.50"
-                borderRadius="100px"
-                fontSize="14px"
-              >
-                {tag}
-              </Text>
-            ))}
           </Flex>
           <Spacer />
           <Flex gap={2}>
@@ -95,22 +79,10 @@ export default function ExperimentsSingleView({
             />
           </Flex>
         </Flex>
-        <Box mt={10}>
-          {data.content.map((content, index) => (
-            <Box key={`content_${index}`} mt={index !== 0 && 8}>
-              <Heading
-                color="gray.800"
-                as="h3"
-                fontSize="20px"
-                fontWeight={600}
-                lineHeight="28px"
-              >
-                {content.heading}
-              </Heading>
-              <Text pt={4}>{content.body}</Text>
-            </Box>
-          ))}
-        </Box>
+        <Box
+          mt={10}
+          dangerouslySetInnerHTML={{ __html: data.description }}
+        ></Box>
         <Box mt="50px">
           <Comments comments={data.comments} />
         </Box>

@@ -14,7 +14,11 @@ const query = gql`
     experiments {
       title
       communities
-      createdBy
+      createdBy {
+        name
+        email
+        picture
+      }
       startDate
       status
       description
@@ -30,7 +34,7 @@ export const useExperiments = (params: ExperimentsParams["GET"]) => {
   return useQuery<Experiment[]>(["experiments", { community }], () =>
     client.request(query).then((r) => {
       console.log(r);
-      return r.data.experiments;
+      return r.experiments;
     })
   );
 };
@@ -42,7 +46,8 @@ export const prefetchExperiments = async (params: ExperimentsParams["GET"]) => {
     ["experiments", { community }],
     () =>
       request(`${process.env.API_URL}/graphql`, query).then((r) => {
-        return r.data.experiments;
+        console.log(r);
+        return r.experiments;
       })
   );
   return queryClient;

@@ -1,22 +1,13 @@
 import { AddIcon } from "@chakra-ui/icons";
-import {
-  Flex,
-  Box,
-  VStack,
-  Button,
-  HStack,
-  Heading,
-  Spacer,
-} from "@chakra-ui/react";
-import { Experiment } from "api/src/modules/experiments/entities/experiment.entity";
+import { Flex, Box, VStack, HStack } from "@chakra-ui/react";
+import { PopulatedExperiment } from "types";
 import React from "react";
 import { PrimaryButton } from "../../components/Button";
-import CommunityCard from "../../components/Communities/CommunityCard";
 import { ExperimentCard } from "../../components/Experiments";
 import SearchBar from "../../components/SearchBar";
 
 export interface ExperimentsListViewProps {
-  experiments: Experiment[];
+  experiments: PopulatedExperiment[];
   community: string;
 }
 
@@ -35,20 +26,15 @@ export default function ExperimentsListView({
       </VStack>
       <Box ml={10} width="100%">
         <HStack>
-          <Heading
-            fontSize="24px"
-            lineHeight="32px"
-            fontWeight={600}
-            color="primary.800"
-          >
-            Experiments
-          </Heading>
-          <Spacer />
           <SearchBar />
         </HStack>
         <Box mt={6}>
           {experiments.map((experiment, idx) => (
-            <ExperimentCard key={`experiment_${idx}`} experiment={experiment} />
+            <ExperimentCard
+              mt={6}
+              key={`experiment_${idx}`}
+              experiment={experiment}
+            />
           ))}
         </Box>
       </Box>

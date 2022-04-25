@@ -1,5 +1,5 @@
 {
-  "name": "turborepo-basic-shared",
+  "name": "reputable",
   "version": "0.0.0",
   "private": true,
   "workspaces": [
@@ -20,8 +20,7 @@
     "turbo": "latest"
   },
   "engines": {
-    "npm": ">=7.0.0",
-    "node": ">=14.0.0"
+    "npm": "Please use yarn"
   },
   "packageManager": "yarn@1.22.17"
 }

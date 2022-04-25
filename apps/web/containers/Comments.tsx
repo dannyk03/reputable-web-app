@@ -14,7 +14,7 @@ import Comment from "../components/Comment";
 import Xarrow, { Xwrapper } from "react-xarrows";
 import makeAvatar from "../helpers/makeAvatar";
 import { ArrowDownIcon } from "@chakra-ui/icons";
-import { IComment } from "../types";
+import { IComment } from "types";
 import Card from "../components/Card";
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -30,8 +30,8 @@ export default function Comments({
 }: React.PropsWithChildren<CommentsProps>) {
   const theme = useTheme();
   const { user = {} } = useAuth0();
-
   const [value, setValue] = React.useState("");
+
   return (
     <Card>
       <Heading fontSize="20px" fontWeight={600} color="gray.700">

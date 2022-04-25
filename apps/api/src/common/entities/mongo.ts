@@ -1,11 +1,5 @@
-import {
-  ObjectType,
-  Field,
-  GraphQLISODateTime,
-  Int,
-  ID,
-} from '@nestjs/graphql';
-import { Expose, Exclude, Transform } from 'class-transformer';
+import { ObjectType, Field, GraphQLISODateTime, ID } from '@nestjs/graphql';
+import { Expose, Transform } from 'class-transformer';
 
 @ObjectType()
 export class BaseMongoEntity {

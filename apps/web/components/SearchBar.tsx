@@ -47,7 +47,7 @@ export const SearchBarItem = (item: ExperimentSearchResult) => (
   </HStack>
 );
 
-export default function SearchBar() {
+export default function SearchBar({ ...restProps }) {
   const fetchResults = (inputValue: string) =>
     mockApiCall(
       searchExperimentItems.filter((s) =>
@@ -64,6 +64,7 @@ export default function SearchBar() {
       onSelectedItemChange={({ selectedItem }) => {
         router.push(`/experiments/${selectedItem._id}`);
       }}
+      {...restProps}
     />
   );
 }

@@ -1,6 +1,6 @@
-import { ExperimentStatus } from "../../types";
 import React from "react";
 import { Text } from "@chakra-ui/react";
+import { ExperimentStatus } from "@reputable/types";
 
 interface StatusTagProps {
   status: ExperimentStatus;
@@ -13,7 +13,6 @@ type statusToPropMapper = {
 export default function StatusTag({
   status,
 }: React.PropsWithChildren<StatusTagProps>) {
-  console.log("status", status);
   const statusToProps: statusToPropMapper = {
     [ExperimentStatus.ACTIVE]: { backgroundColor: "green.400", text: "Active" },
     [ExperimentStatus.CLOSED]: { backgroundColor: "red.400", text: "Closed" },

@@ -1,34 +1,41 @@
-import { Avatar, Box, HStack, Link, Spacer, Text } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  ChakraProps,
+  HStack,
+  Link,
+  Spacer,
+  Text,
+} from "@chakra-ui/react";
 import React from "react";
 import makeAvatar from "../../helpers/makeAvatar";
 import StatusTag from "./StatusTag";
 import NextLink from "next/link";
 import Tag from "../Tag";
 import Card from "../Card";
-import { Experiment } from "api/src/modules/experiments/entities/experiment.entity";
+import { PopulatedExperiment } from "types";
+import { truncate } from "lodash";
 
-export interface ExperimentCardProps {
-  experiment: Experiment;
+export interface ExperimentCardProps extends ChakraProps {
+  experiment: PopulatedExperiment;
 }
 
 export default function ExperimentCard({
   experiment,
+  ...restProps
 }: React.PropsWithChildren<ExperimentCardProps>) {
   return (
-    <Card noShadow>
+    <Card {...restProps} noShadow>
       <HStack>
         <Avatar
           width={"32px"}
           height={"32px"}
           name="Profile Photo"
-          src={experiment.createdBy.profileImage ?? makeAvatar("tolga")}
+          src={experiment.createdBy.picture ?? makeAvatar("tolga")}
         />
-        <Text
-          color="gray.700"
-          fontWeight={600}
-          lineHeight="28px"
-          fontSize={18}
-        >{`${experiment.createdBy.firstName} ${experiment.createdBy.lastName}`}</Text>
+        <Text color="gray.700" fontWeight={600} lineHeight="28px" fontSize={18}>
+          {experiment.createdBy.name}
+        </Text>
 
         <Text
           color="gray.600"
@@ -62,8 +69,12 @@ export default function ExperimentCard({
         mt={3}
         textOverflow="ellipsis"
         overflow="hidden"
-        maxH="130px"
-        dangerouslySetInnerHTML={{ __html: experiment.description }}
+        dangerouslySetInnerHTML={{
+          __html: truncate(experiment.description, {
+            length: 400,
+            separator: "<br/>",
+          }),
+        }}
       />
       <HStack mt={3}>
         {experiment.communities.map((tag, idx) => (

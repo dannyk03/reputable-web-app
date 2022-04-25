@@ -1,4 +1,4 @@
-const withTM = require("next-transpile-modules")(["api"]);
+const withTM = require("next-transpile-modules")(["types"]);
 
 module.exports = withTM({
   reactStrictMode: true,
@@ -7,11 +7,15 @@ module.exports = withTM({
       test: /\.svg$/,
       use: ["@svgr/webpack"],
     });
-
+    config.resolve.fallback = {
+      ...config.resolve.fallback, // if you miss it, all the other options in fallback, specified
+      // by next.js will be dropped. Doesn't make much sense, but how it is
+      fs: false, // the solution
+    };
     return config;
   },
   env: {
-    API_URL: process.env.API_URL || 'http://localhost:4000',
+    API_URL: process.env.API_URL || "http://localhost:4000",
     AUTH0_DOMAIN: process.env.AUTH0_DOMAIN || "dev-mpvuqq8o.us.auth0.com",
     AUTH0_CLIENT_ID:
       process.env.AUTH0_CLIENT_ID || "4JpjfVVmuJzQOzxBjqQ4fzmmygy5VS6Z",

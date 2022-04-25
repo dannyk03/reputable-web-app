@@ -2,28 +2,25 @@ import { Avatar, Box, Button, Flex, Text, Textarea } from "@chakra-ui/react";
 import moment from "moment";
 import makeAvatar from "../../helpers/makeAvatar";
 import Image from "next/image";
-import Voting from "./Voting";
 import React from "react";
-import { IComment } from "../../types";
+import { IComment } from "types";
 
 export default function Comment({
-  id,
+  _id,
   author,
-  isReply = false,
+  replyTo,
   text,
-  upvotes = 300,
-  downvotes = 200,
   replies = [],
   updatedAt,
 }: React.PropsWithChildren<IComment>) {
   const timeAgo = moment(updatedAt).fromNow();
   return (
     <>
-      <Box pl={isReply && 12} pt={5}>
+      <Box pl={replyTo && 12} pt={5}>
         <Flex justify="start"></Flex>
         <Flex justify={"start"} align="center">
           <Avatar
-            id={id}
+            id={_id}
             width={"40px"}
             height={"40px"}
             name="Profile Photo"
@@ -40,6 +37,7 @@ export default function Comment({
           <Text>{text}</Text>
         </Flex>
         <Flex pl={12} pt="12px" align="center">
+          {/*
           <Voting
             upvotes={upvotes}
             downvotes={downvotes}
@@ -48,6 +46,7 @@ export default function Comment({
             }
             upvoted
           />
+          */}
           <Button colorScheme="gray" variant="ghost" height={6} ml={1}>
             <Image
               src="/icons/Comment.svg"
@@ -60,7 +59,7 @@ export default function Comment({
         </Flex>
       </Box>
       {replies.map((comment, idx) => (
-        <Comment key={`${id}_reply_${idx}`} {...comment} />
+        <Comment key={`${_id}_reply_${idx}`} {...comment} />
       ))}
     </>
   );

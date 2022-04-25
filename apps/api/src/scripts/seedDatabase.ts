@@ -4,16 +4,15 @@ dotenv.config({ path: '../../.env' });
 import { faker } from '@faker-js/faker';
 import axios, { AxiosRequestConfig } from 'axios';
 import {
-  Experiment,
-  ExperimentDocument,
-  ExperimentStatus,
-  ResultHistory,
-} from '../modules/experiments/entities/experiment.entity';
-import {
   Comment,
   CommentDocument,
 } from '../modules/comments/entities/comment.entity';
 import { experimentResultMarkers } from '../common/data/markers';
+import {
+  IExperiment,
+  ExperimentStatus,
+  IResultHistory,
+} from '@reputable/types';
 
 export const communities = [
   'Sleep',
@@ -90,10 +89,10 @@ export const generateExperimentResultHistory = (
   length: number,
   startDate: Date,
   endDate: Date,
-): ResultHistory[] => {
+): IResultHistory[] => {
   return [...new Array(length)].map(() =>
     generateResultHistory(startDate, endDate),
-  ) as ResultHistory[];
+  ) as IResultHistory[];
 };
 
 function getRandomSubarray(arr: any[], size: number) {
@@ -113,6 +112,9 @@ function getRandomSubarray(arr: any[], size: number) {
 
 async function main() {
   console.log('Starting script...');
+  console.log(ExperimentStatus);
+  console.log(Object.keys(ExperimentStatus));
+  console.log(Object.values(ExperimentStatus));
   const client = new MongoClient(process.env.DB_URL);
   await client.connect();
   const db = client.db();
@@ -138,7 +140,7 @@ async function main() {
   );
   const experiments = await db
     .collection('experiments')
-    .find<ExperimentDocument>({})
+    .find<IExperiment>({})
     .toArray();
   console.log('Retrieved experiments, generating comments...');
   const newComments = await Promise.all(
@@ -165,16 +167,15 @@ export const generateExperiment = async (users) => {
   const startDate = faker.date.recent(30);
   const endDate = faker.date.soon(30);
 
-  const randomExperiment: Omit<Experiment, 'createdAt' | 'updatedAt' | '_id'> =
+  const randomExperiment: Omit<IExperiment, 'createdAt' | 'updatedAt' | '_id'> =
     {
       title: faker.lorem.sentence(6),
-      status:
-        Object.values(ExperimentStatus)[
-          faker.datatype.number({
-            min: 0,
-            max: Object.values(ExperimentStatus).length - 1,
-          })
-        ],
+      status: Object.values(ExperimentStatus)[
+        faker.datatype.number({
+          min: 0,
+          max: Object.values(ExperimentStatus).length - 1,
+        })
+      ] as ExperimentStatus,
       startDate,
       endDate,
       communities: getRandomSubarray(
@@ -208,7 +209,7 @@ export const generateExperiment = async (users) => {
  * @param users A list of available users that will be linked to generated comments.
  */
 export const generateComment = (
-  experiments: ExperimentDocument[],
+  experiments: IExperiment[],
   users: Record<string, any>[],
   replyToComments: CommentDocument[] = [],
 ): Omit<Comment, 'createdAt' | '_id'> => {

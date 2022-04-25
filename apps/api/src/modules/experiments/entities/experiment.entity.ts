@@ -13,24 +13,22 @@ import {
   prop,
   Ref,
 } from '@typegoose/typegoose';
+import {
+  ExperimentStatus,
+  IExperiment,
+  IExperimentResult,
+  IExperimentResultMarker,
+  IMarkerValueChange,
+  IResultHistory,
+  MarkerValueChangeType,
+} from '@reputable/types';
 import { convertMinsToHrsMins, XOR } from '../../../common/helpers';
 import { Comment } from '../../comments/entities/comment.entity';
 import { TransformQueries } from '../../../decorators';
+import { User } from '../../../modules/users/entities/user.entity';
 
 interface MarkerPrettifiers {
   [k: string]: (value: number) => string;
-}
-
-export enum ExperimentStatus {
-  ACTIVE = 'active',
-  RESULTS_PENDING = 'results_pending',
-  IN_DESIGN = 'in_design',
-  CLOSED = 'closed',
-}
-
-export enum MarkerValueChangeType {
-  POSITIVE = 'positive',
-  NEGATIVE = 'negative',
 }
 
 registerEnumType(ExperimentStatus, {
@@ -42,7 +40,7 @@ registerEnumType(MarkerValueChangeType, {
 });
 
 @ObjectType()
-export class ExperimentResultMarker {
+export class ExperimentResultMarker implements IExperimentResultMarker {
   @Field()
   @prop()
   name: string;
@@ -58,7 +56,7 @@ export class ExperimentResultMarker {
 }
 
 @ObjectType()
-export class ResultHistory {
+export class ResultHistory implements IResultHistory {
   @Field(() => GraphQLISODateTime)
   @prop()
   date: Date;
@@ -73,7 +71,7 @@ export class ResultHistory {
 }
 
 @ObjectType()
-export class MarkerValueChange {
+export class MarkerValueChange implements IMarkerValueChange {
   @Field(() => MarkerValueChangeType)
   type: MarkerValueChangeType;
   @Field(() => Float)
@@ -83,7 +81,7 @@ export class MarkerValueChange {
 }
 
 @ObjectType()
-export class ExperimentResult {
+export class ExperimentResult implements IExperimentResult {
   @Field(() => ExperimentResultMarker)
   @prop({ type: () => ExperimentResultMarker, _id: false })
   marker: ExperimentResultMarker;
@@ -103,7 +101,7 @@ export class ExperimentResult {
 @ObjectType({ description: 'experiment' })
 @TransformQueries(Experiment)
 @index({ communites: 1 })
-export class Experiment extends BaseMongoEntity {
+export class Experiment extends BaseMongoEntity implements IExperiment {
   /** Define possible markers here for now. */
   static markerPrettifiers: MarkerPrettifiers = {
     'resting-heart-rate': (value) => `${value.toFixed(1)} BPM`,
@@ -120,7 +118,7 @@ export class Experiment extends BaseMongoEntity {
     enum: ExperimentStatus,
   })
   public status: ExperimentStatus;
-  @Field()
+  @Field(() => User)
   @prop({
     required: true,
   })
@@ -128,12 +126,9 @@ export class Experiment extends BaseMongoEntity {
   @Field(() => [String])
   @prop({ type: () => [String], required: true })
   public communities: string[];
-  /*
-  comments: IComment[];
-  */
   @Field()
   @prop({ required: true })
-  public description?: string;
+  public description: string;
   @Field(() => [ExperimentResult])
   @prop({ type: () => ExperimentResult })
   public results: ExperimentResult[];
@@ -149,7 +144,7 @@ export class Experiment extends BaseMongoEntity {
     foreignField: 'experiment',
     localField: '_id',
   })
-  public comments?: Ref<Comment>[];
+  public comments?: Comment[];
 
   public prettifyResult? = (result: ExperimentResult) => {
     const history = (result.history || []).map((h) => ({
@@ -175,6 +170,10 @@ export class Experiment extends BaseMongoEntity {
       lastChange,
     };
   };
+}
+
+export interface PopulatedExperiment extends Omit<Experiment, 'createdBy'> {
+  createdBy: User;
 }
 
 export type ExperimentDocument = DocumentType<Experiment>;
