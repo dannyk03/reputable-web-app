@@ -1,7 +1,7 @@
 import React from "react";
-import { dehydrate, QueryClient } from "react-query";
+import { dehydrate } from "react-query";
 import ExperimentsListView from "../../containers/Experiments/List";
-import { communities, experiment } from "../../mockData";
+import { communities } from "../../mockData";
 import { useExperiments, prefetchExperiments } from "../../_api/Experiments";
 
 export async function getStaticProps() {
@@ -18,10 +18,5 @@ export default function Experiments() {
     community: "sleep",
   });
   console.log("data", data);
-  return (
-    <ExperimentsListView
-      experiments={[experiment]}
-      community={communities[0]}
-    />
-  );
+  return <ExperimentsListView experiments={data} community={communities[0]} />;
 }

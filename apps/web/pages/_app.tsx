@@ -5,6 +5,7 @@ import reputableTheme from "../theme";
 import axios from "axios";
 import React from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
+import { GraphqlClientProvider } from "../providers/GraphqlClient";
 
 axios.defaults.baseURL = process.env.API_URL;
 
@@ -16,15 +17,17 @@ function Reputable({ Component, pageProps }) {
       clientId={process.env.AUTH0_CLIENT_ID}
       redirectUri={process.env.AUTH0_REDIRECT_URL}
     >
-      <QueryClientProvider client={queryClient}>
-        <ChakraProvider theme={reputableTheme}>
-          <MainLayout>
-            <Hydrate state={pageProps.dehydratedState}>
-              <Component {...pageProps} />
-            </Hydrate>
-          </MainLayout>
-        </ChakraProvider>
-      </QueryClientProvider>
+      <GraphqlClientProvider>
+        <QueryClientProvider client={queryClient}>
+          <ChakraProvider theme={reputableTheme}>
+            <MainLayout>
+              <Hydrate state={pageProps.dehydratedState}>
+                <Component {...pageProps} />
+              </Hydrate>
+            </MainLayout>
+          </ChakraProvider>
+        </QueryClientProvider>
+      </GraphqlClientProvider>
     </Auth0Provider>
   );
 }

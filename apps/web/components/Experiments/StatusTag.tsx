@@ -13,6 +13,7 @@ type statusToPropMapper = {
 export default function StatusTag({
   status,
 }: React.PropsWithChildren<StatusTagProps>) {
+  console.log("status", status);
   const statusToProps: statusToPropMapper = {
     [ExperimentStatus.ACTIVE]: { backgroundColor: "green.400", text: "Active" },
     [ExperimentStatus.CLOSED]: { backgroundColor: "red.400", text: "Closed" },

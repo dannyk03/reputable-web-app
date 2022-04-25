@@ -8,7 +8,7 @@ import {
 } from '@typegoose/typegoose';
 import { BaseMongoEntity } from '../../../common/entities/mongo';
 import { Experiment } from '../../../modules/experiments/entities/experiment.entity';
-import { TransformQueries } from 'src/decorators';
+import { TransformQueries } from '../../../decorators';
 
 @ObjectType({ description: 'Comment' })
 @TransformQueries(Comment)

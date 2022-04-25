@@ -126,6 +126,7 @@ async function main() {
   axios.defaults.headers['Authorization'] = `Bearer  ${accessToken}`;
   console.log('Retrieving possible users we can sample from');
   const users = await getUsers();
+  console.log(users);
   console.log('Retrieved', users.length, 'users');
   const newExperiments = await Promise.all(
     [...new Array(40)].map(() => generateExperiment(users)),

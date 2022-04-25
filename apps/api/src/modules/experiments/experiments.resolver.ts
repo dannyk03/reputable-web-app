@@ -16,13 +16,18 @@ import { CommentsService } from '../comments/comments.service';
 import { Comment } from '../comments/entities/comment.entity';
 import * as DataLoader from 'dataloader';
 import { mapFromArray } from 'src/common/helpers';
+import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
+import { create } from 'domain';
 
 @Resolver(() => Experiment)
 export class ExperimentsResolver {
   private commentsLoader: DataLoader<string, Comment>;
+  private usersLoader: DataLoader<string, User>;
   constructor(
     private readonly experimentsService: ExperimentsService,
     private readonly commentsService: CommentsService,
+    private readonly usersService: UsersService,
   ) {
     this.commentsLoader = new DataLoader<string, Comment>(async (_ids) => {
       const comments = await commentsService.query({
@@ -33,6 +38,13 @@ export class ExperimentsResolver {
         (c) => c.experiment as string,
       );
       return _ids.map((_id) => commentsMap[_id]);
+    });
+    this.usersLoader = new DataLoader<string, User>(async (emails) => {
+      const users = await Promise.all(
+        emails.map((email) => usersService.findOne(email)),
+      );
+      const usersMap = mapFromArray<User>(users, (u) => u.email);
+      return emails.map((email) => usersMap.get(email));
     });
   }
 
@@ -57,6 +69,11 @@ export class ExperimentsResolver {
   @ResolveField('comments', (returns) => [Comment])
   getComments(@Parent() experiment: Experiment) {
     return this.commentsLoader.load(experiment._id);
+  }
+
+  @ResolveField('createdBy', (returns) => User)
+  getUser(@Parent() experiment: Experiment) {
+    return this.usersLoader.load(experiment.createdBy);
   }
 
   @Mutation(() => Experiment)

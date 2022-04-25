@@ -20,36 +20,26 @@ export class ExperimentsService {
   }
 
   findAll() {
-    return (
-      this.experimentModel
-        .find({})
-        // .populate('comments')
-        .lean({ virtuals: true, getters: true })
-        .limit(25)
-        .orFail()
-        .exec()
-        .then((experiments) => {
-          return experiments.map((experiment, i) => {
-            return {
-              ...experiment,
-              results: experiment.results.map((result, j) =>
-                experiment.prettifyResult(result),
-              ),
-            };
-          });
-        })
-    );
+    return this.experimentModel
+      .find({})
+      .lean({ virtuals: true, getters: true })
+      .limit(25)
+      .orFail()
+      .exec()
+      .then((experiments) => {
+        return experiments.map((experiment, i) => {
+          return {
+            ...experiment,
+            results: experiment.results.map((result, j) =>
+              experiment.prettifyResult(result),
+            ),
+          };
+        });
+      });
   }
 
   findOne(_id: string) {
-    return (
-      this.experimentModel
-        .findById(_id)
-        //.populate('comments')
-        .orFail()
-        .lean()
-        .exec()
-    );
+    return this.experimentModel.findById(_id).orFail().lean().exec();
   }
 
   update(_id: string, updateExperimentInput: UpdateExperimentInput) {

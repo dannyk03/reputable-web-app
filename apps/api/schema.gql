@@ -59,7 +59,7 @@ type Experiment {
   _id: ID!
   title: String!
   status: ExperimentStatus!
-  createdBy: String!
+  createdBy: User!
   communities: [String!]!
   description: String!
   results: [ExperimentResult!]!
@@ -75,11 +75,20 @@ enum ExperimentStatus {
   CLOSED
 }
 
+type User {
+  created_at: DateTime!
+  email: String!
+  email_verified: Boolean!
+  picture: String!
+  name: String!
+}
+
 type Query {
   experiments: [Experiment!]!
   experiment(_id: String!): Experiment!
   comments: [Comment!]!
   comment(_id: String!): Comment!
+  users: [User!]!
 }
 
 type Mutation {

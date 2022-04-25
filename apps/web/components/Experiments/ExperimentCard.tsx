@@ -1,14 +1,14 @@
 import { Avatar, Box, HStack, Link, Spacer, Text } from "@chakra-ui/react";
 import React from "react";
 import makeAvatar from "../../helpers/makeAvatar";
-import { IExperiment } from "../../types";
 import StatusTag from "./StatusTag";
 import NextLink from "next/link";
 import Tag from "../Tag";
 import Card from "../Card";
+import { Experiment } from "api/src/modules/experiments/entities/experiment.entity";
 
 export interface ExperimentCardProps {
-  experiment: IExperiment;
+  experiment: Experiment;
 }
 
 export default function ExperimentCard({
@@ -63,16 +63,10 @@ export default function ExperimentCard({
         textOverflow="ellipsis"
         overflow="hidden"
         maxH="130px"
-      >
-        {experiment.content.map((content, index) => (
-          <Text
-            key={`experiment_${experiment._id}_content_${index}`}
-            mt={index !== 0 && 3}
-          >{`${content.heading}: ${content.body}`}</Text>
-        ))}
-      </Box>
+        dangerouslySetInnerHTML={{ __html: experiment.description }}
+      />
       <HStack mt={3}>
-        {experiment.tags.map((tag, idx) => (
+        {experiment.communities.map((tag, idx) => (
           <Tag key={`${experiment._id}_tag_${idx}`}>{tag}</Tag>
         ))}
       </HStack>

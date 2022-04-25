@@ -1,5 +1,7 @@
-import axios, { AxiosError, AxiosResponse } from "axios";
+import { gql, request } from "graphql-request";
 import { useQuery, QueryClient } from "react-query";
+import { useGraphqlClient } from "../../providers/GraphqlClient";
+import { Experiment } from "api/src/modules/experiments/entities/experiment.entity";
 
 export interface ExperimentsParams {
   GET: {
@@ -7,26 +9,41 @@ export interface ExperimentsParams {
   };
 }
 
-export const getExperiments = async (params: ExperimentsParams["GET"]) => {
-  const { community } = params;
-  return axios
-    .get("/experiments")
-    .then((resp: AxiosResponse<any>) => resp.data)
-    .catch((err: AxiosError<any>) => err.response.data);
-};
+const query = gql`
+  query {
+    experiments {
+      title
+      communities
+      createdBy
+      startDate
+      status
+      description
+      _id
+    }
+  }
+`;
 
 export const useExperiments = (params: ExperimentsParams["GET"]) => {
+  const client = useGraphqlClient();
   const { community } = params;
-  return useQuery<any>(["/experiments", { community }], () =>
-    getExperiments(params)
+
+  return useQuery<Experiment[]>(["experiments", { community }], () =>
+    client.request(query).then((r) => {
+      console.log(r);
+      return r.data.experiments;
+    })
   );
 };
 
 export const prefetchExperiments = async (params: ExperimentsParams["GET"]) => {
   const { community } = params;
   const queryClient = new QueryClient();
-  await queryClient.prefetchQuery(["/experiments", { community }], () =>
-    getExperiments(params)
+  await queryClient.prefetchQuery<Experiment[]>(
+    ["experiments", { community }],
+    () =>
+      request(`${process.env.API_URL}/graphql`, query).then((r) => {
+        return r.data.experiments;
+      })
   );
   return queryClient;
 };

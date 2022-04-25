@@ -8,16 +8,16 @@ import {
   Heading,
   Spacer,
 } from "@chakra-ui/react";
+import { Experiment } from "api/src/modules/experiments/entities/experiment.entity";
 import React from "react";
 import { PrimaryButton } from "../../components/Button";
 import CommunityCard from "../../components/Communities/CommunityCard";
 import { ExperimentCard } from "../../components/Experiments";
 import SearchBar from "../../components/SearchBar";
-import { ICommunity, IExperiment } from "../../types";
 
 export interface ExperimentsListViewProps {
-  experiments: IExperiment[];
-  community: ICommunity;
+  experiments: Experiment[];
+  community: string;
 }
 
 export default function ExperimentsListView({
@@ -27,7 +27,7 @@ export default function ExperimentsListView({
   return (
     <Flex direction="row">
       <VStack w="260px" gap={5}>
-        <CommunityCard community={community} />
+        {/*<CommunityCard community={community} />*/}
         <PrimaryButton
           text="Create new experiment"
           leftIcon={<AddIcon width="12px" height="12px" />}

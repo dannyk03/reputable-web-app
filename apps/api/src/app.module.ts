@@ -8,6 +8,7 @@ import { upperDirectiveTransformer } from './common/directives/upper-case.direct
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
+import { UsersModule } from './modules/users/users.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
     }),
     MongooseModule.forRoot(process.env.DB_URL),
     ExperimentsModule,
+    UsersModule,
   ],
   providers: [
     {
