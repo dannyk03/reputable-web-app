@@ -1,9 +1,20 @@
 import { CreateExperimentInput } from './create-experiment.input';
-import { InputType, Field, PartialType } from '@nestjs/graphql';
-import { ResultHistory } from '../entities/experiment.entity';
+import {
+  InputType,
+  PartialType,
+  PickType,
+  IntersectionType,
+  Field,
+} from '@nestjs/graphql';
+import { Experiment } from '../entities/experiment.entity';
 
 @InputType()
-export class UpdateExperimentInput extends PartialType(CreateExperimentInput) {
-  @Field(() => [ResultHistory])
-  results: ResultHistory[];
+export class UpdateExperimentInput extends PartialType(
+  IntersectionType(
+    PickType(Experiment, ['results'] as const),
+    CreateExperimentInput,
+  ),
+) {
+  @Field()
+  title?: string;
 }

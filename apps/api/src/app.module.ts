@@ -8,7 +8,6 @@ import { upperDirectiveTransformer } from './common/directives/upper-case.direct
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
-import { CommentsModule } from './modules/comments/comments.module';
 
 @Module({
   imports: [
@@ -34,7 +33,6 @@ import { CommentsModule } from './modules/comments/comments.module';
     }),
     MongooseModule.forRoot(process.env.DB_URL),
     ExperimentsModule,
-    CommentsModule,
   ],
   providers: [
     {

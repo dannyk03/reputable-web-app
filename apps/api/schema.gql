@@ -4,6 +4,23 @@
 
 directive @upper on FIELD_DEFINITION
 
+"""Comment"""
+type Comment {
+  createdAt: DateTime
+  updatedAt: DateTime
+  _id: ID!
+  author: String!
+  replyTo: ID
+  text: String!
+  experiment: ID
+  replies: [Comment!]
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type ExperimentResultMarker {
   name: String!
   unit: String!
@@ -15,12 +32,8 @@ type ResultHistory {
   date: DateTime!
   markerValue: Float!
   imageLink: String!
+  prettified: String
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type MarkerValueChange {
   type: MarkerValueChangeType!
@@ -52,6 +65,7 @@ type Experiment {
   results: [ExperimentResult!]!
   startDate: DateTime!
   endDate: DateTime!
+  comments: [Comment!]!
 }
 
 enum ExperimentStatus {
@@ -63,21 +77,38 @@ enum ExperimentStatus {
 
 type Query {
   experiments: [Experiment!]!
-  experiment(id: Int!): Experiment!
+  experiment(_id: String!): Experiment!
+  comments: [Comment!]!
+  comment(_id: String!): Comment!
 }
 
 type Mutation {
-  createExperiment(createExperimentInput: CreateExperimentInput!): Experiment!
-  updateExperiment(updateExperimentInput: UpdateExperimentInput!): Experiment!
+  createExperiment(experiment: CreateExperimentInput!): Experiment!
+  updateExperiment(_id: String!, experiment: UpdateExperimentInput!): Experiment!
   removeExperiment(id: Int!): Experiment!
+  createComment(createCommentInput: CreateCommentInput!): Comment!
+  updateComment(_id: String!, comment: UpdateCommentInput!): Comment!
+  removeComment(_id: String!): Comment!
 }
 
 input CreateExperimentInput {
+  title: String!
+  description: String!
+  startDate: DateTime!
+  endDate: DateTime!
+  createdBy: String!
+}
+
+input UpdateExperimentInput {
+  title: String!
+}
+
+input CreateCommentInput {
   """Example field (placeholder)"""
   exampleField: Int!
 }
 
-input UpdateExperimentInput {
+input UpdateCommentInput {
   """Example field (placeholder)"""
   exampleField: Int
   id: Int!

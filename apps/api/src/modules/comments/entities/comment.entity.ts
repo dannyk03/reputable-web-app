@@ -1,44 +1,35 @@
-import { ObjectType, Field } from '@nestjs/graphql';
+import { ObjectType, Field, ID } from '@nestjs/graphql';
 import {
   index,
-  modelOptions,
-  plugin,
   prop,
   DocumentType,
   buildSchema,
+  Ref,
 } from '@typegoose/typegoose';
-import { BaseMongoEntity } from 'src/common/entities/mongo';
-import { mongooseLeanGetters, mongooseLeanVirtuals } from '../../../plugins';
+import { BaseMongoEntity } from '../../../common/entities/mongo';
+import { Experiment } from '../../../modules/experiments/entities/experiment.entity';
+import { TransformQueries } from 'src/decorators';
 
-@ObjectType()
-@ObjectType({ description: 'experiment' })
-@modelOptions({
-  schemaOptions: {
-    timestamps: true,
-    toJSON: {
-      virtuals: true,
-      getters: true,
-    },
-    toObject: {
-      virtuals: true,
-      getters: true,
-    },
-  },
-})
-@plugin(mongooseLeanGetters)
-@plugin(mongooseLeanVirtuals)
+@ObjectType({ description: 'Comment' })
+@TransformQueries(Comment)
 @index({ author: 1 })
 @index({ replyTo: 1 })
 export class Comment extends BaseMongoEntity {
   @Field()
   @prop({ required: true })
   author: string;
-  @Field()
-  @prop()
-  replyTo?: boolean;
+  @Field(() => ID, { nullable: true })
+  @prop({ ref: () => Comment })
+  replyTo?: Ref<Comment>;
   @Field()
   @prop({ required: true })
   text: string;
+  @Field(() => ID, { nullable: true })
+  @prop({ ref: 'Experiment' })
+  experiment: Ref<Experiment>;
+  @Field(() => [Comment], { nullable: true })
+  @prop({ ref: () => 'Comment', localField: '_id', foreignField: 'replyTo' })
+  replies?: Ref<Comment>[];
 }
 
 export type CommentDocument = DocumentType<Comment>;

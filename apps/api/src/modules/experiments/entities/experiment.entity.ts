@@ -10,13 +10,12 @@ import {
   buildSchema,
   DocumentType,
   index,
-  modelOptions,
-  plugin,
-  post,
   prop,
+  Ref,
 } from '@typegoose/typegoose';
 import { convertMinsToHrsMins, XOR } from '../../../common/helpers';
-import { mongooseLeanGetters, mongooseLeanVirtuals } from '../../../plugins';
+import { Comment } from '../../comments/entities/comment.entity';
+import { TransformQueries } from '../../../decorators';
 
 interface MarkerPrettifiers {
   [k: string]: (value: number) => string;
@@ -102,21 +101,7 @@ export class ExperimentResult {
 }
 
 @ObjectType({ description: 'experiment' })
-@modelOptions({
-  schemaOptions: {
-    timestamps: true,
-    toJSON: {
-      virtuals: true,
-      getters: true,
-    },
-    toObject: {
-      virtuals: true,
-      getters: true,
-    },
-  },
-})
-@plugin(mongooseLeanGetters)
-@plugin(mongooseLeanVirtuals)
+@TransformQueries(Experiment)
 @index({ communites: 1 })
 export class Experiment extends BaseMongoEntity {
   /** Define possible markers here for now. */
@@ -158,6 +143,13 @@ export class Experiment extends BaseMongoEntity {
   @Field(() => GraphQLISODateTime)
   @prop()
   public endDate: Date;
+  @Field(() => [Comment], { nullable: true })
+  @prop({
+    ref: () => 'Comment',
+    foreignField: 'experiment',
+    localField: '_id',
+  })
+  public comments?: Ref<Comment>[];
 
   public prettifyResult? = (result: ExperimentResult) => {
     const history = (result.history || []).map((h) => ({

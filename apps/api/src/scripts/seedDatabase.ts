@@ -5,10 +5,14 @@ import { faker } from '@faker-js/faker';
 import axios, { AxiosRequestConfig } from 'axios';
 import {
   Experiment,
-  ExperimentResultMarker,
+  ExperimentDocument,
   ExperimentStatus,
   ResultHistory,
 } from '../modules/experiments/entities/experiment.entity';
+import {
+  Comment,
+  CommentDocument,
+} from '../modules/comments/entities/comment.entity';
 import { experimentResultMarkers } from '../common/data/markers';
 
 export const communities = [
@@ -22,6 +26,15 @@ export const communities = [
   'Cardiovascular',
   'Blood Sugar',
 ];
+
+const pickRandomFromArray = (arr: any[]) => {
+  return arr[
+    faker.datatype.number({
+      min: 0,
+      max: Math.max(arr.length - 1, 0),
+    })
+  ];
+};
 
 const getAuth0ManagementAccessToken = () => {
   const options: AxiosRequestConfig = {
@@ -99,10 +112,14 @@ function getRandomSubarray(arr: any[], size: number) {
 }
 
 async function main() {
+  console.log('Starting script...');
   const client = new MongoClient(process.env.DB_URL);
   await client.connect();
   const db = client.db();
   console.log('Connected to database');
+  console.log('Dropping collections...');
+  await db.dropCollection('experiments');
+  await db.dropCollection('comments');
   console.log('Starting experiment seeding');
   const accessToken = await getAuth0ManagementAccessToken();
   console.log('Retrieved access token for auth0');
@@ -110,11 +127,37 @@ async function main() {
   console.log('Retrieving possible users we can sample from');
   const users = await getUsers();
   console.log('Retrieved', users.length, 'users');
-  const experiments = await Promise.all(
-    [...new Array(400)].map(() => generateExperiment(users)),
+  const newExperiments = await Promise.all(
+    [...new Array(40)].map(() => generateExperiment(users)),
   );
-  await db.collection('experiments').insertMany(experiments);
+  await db.collection('experiments').insertMany(newExperiments);
   console.log('Inserted documents to db');
+  console.log(
+    'Will insert comments... Retrieving sample experiments to attach comments',
+  );
+  const experiments = await db
+    .collection('experiments')
+    .find<ExperimentDocument>({})
+    .toArray();
+  console.log('Retrieved experiments, generating comments...');
+  const newComments = await Promise.all(
+    [...new Array(120)].map(() => generateComment(experiments, users)),
+  );
+  await db.collection('comments').insertMany(newComments);
+  console.log('Will add some replies now');
+  const comments = await db
+    .collection('comments')
+    .find<CommentDocument>({})
+    .toArray();
+  const replies = await Promise.all(
+    [...new Array(240)].map(() =>
+      generateComment(experiments, users, comments),
+    ),
+  );
+  await db.collection('comments').insertMany(replies);
+  console.log('Added replies!');
+  console.log('Script is done. Exiting...');
+  process.exit(1);
 }
 
 export const generateExperiment = async (users) => {
@@ -156,6 +199,30 @@ export const generateExperiment = async (users) => {
       ],
     };
   return randomExperiment;
+};
+
+/**
+ * Generates a random comment and relates them to random experiments and users.
+ * @param experiments A list of available experiments that will be linked to generated comments
+ * @param users A list of available users that will be linked to generated comments.
+ */
+export const generateComment = (
+  experiments: ExperimentDocument[],
+  users: Record<string, any>[],
+  replyToComments: CommentDocument[] = [],
+): Omit<Comment, 'createdAt' | '_id'> => {
+  const randomReplyComment = pickRandomFromArray(replyToComments);
+  const randomAuthor = pickRandomFromArray(users);
+  const randomExperiment = pickRandomFromArray(experiments);
+  return {
+    text: faker.lorem.paragraph(3),
+    author: randomAuthor.email,
+    replyTo: replyToComments.length > 0 ? randomReplyComment._id : undefined,
+    experiment:
+      replyToComments.length === 0
+        ? randomExperiment._id
+        : randomReplyComment.experiment,
+  };
 };
 
 main();

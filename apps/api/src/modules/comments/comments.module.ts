@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CommentsResolver } from './comments.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
-import { CommentSchema } from './entities/comment.entity';
+import { CommentSchema, Comment } from './entities/comment.entity';
 
 @Module({
   imports: [
@@ -14,5 +14,6 @@ import { CommentSchema } from './entities/comment.entity';
     ]),
   ],
   providers: [CommentsResolver, CommentsService],
+  exports: [CommentsService],
 })
 export class CommentsModule {}

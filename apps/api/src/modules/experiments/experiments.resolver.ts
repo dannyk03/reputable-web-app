@@ -1,13 +1,40 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import {
+  Resolver,
+  Query,
+  Mutation,
+  Args,
+  Int,
+  ResolveField,
+  Parent,
+} from '@nestjs/graphql';
 import { ExperimentsService } from './experiments.service';
 import { Experiment } from './entities/experiment.entity';
 import { CreateExperimentInput } from './dto/create-experiment.input';
 import { UpdateExperimentInput } from './dto/update-experiment.input';
 import { Public } from 'src/decorators';
+import { CommentsService } from '../comments/comments.service';
+import { Comment } from '../comments/entities/comment.entity';
+import * as DataLoader from 'dataloader';
+import { mapFromArray } from 'src/common/helpers';
 
 @Resolver(() => Experiment)
 export class ExperimentsResolver {
-  constructor(private readonly experimentsService: ExperimentsService) {}
+  private commentsLoader: DataLoader<string, Comment>;
+  constructor(
+    private readonly experimentsService: ExperimentsService,
+    private readonly commentsService: CommentsService,
+  ) {
+    this.commentsLoader = new DataLoader<string, Comment>(async (_ids) => {
+      const comments = await commentsService.query({
+        experiment: { $in: _ids },
+      });
+      const commentsMap = mapFromArray<Comment>(
+        comments,
+        (c) => c.experiment as string,
+      );
+      return _ids.map((_id) => commentsMap[_id]);
+    });
+  }
 
   @Mutation(() => Experiment)
   createExperiment(
@@ -25,6 +52,11 @@ export class ExperimentsResolver {
   @Query(() => Experiment, { name: 'experiment' })
   findOne(@Args('_id', { type: () => String }) _id: string) {
     return this.experimentsService.findOne(_id);
+  }
+
+  @ResolveField('comments', (returns) => [Comment])
+  getComments(@Parent() experiment: Experiment) {
+    return this.commentsLoader.load(experiment._id);
   }
 
   @Mutation(() => Experiment)

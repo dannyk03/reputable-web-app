@@ -3,6 +3,7 @@ import { ExperimentsService } from './experiments.service';
 import { ExperimentsResolver } from './experiments.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Experiment, ExperimentSchema } from './entities/experiment.entity';
+import { CommentsModule } from '../comments/comments.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { Experiment, ExperimentSchema } from './entities/experiment.entity';
         schema: ExperimentSchema,
       },
     ]),
+    CommentsModule,
   ],
   providers: [ExperimentsResolver, ExperimentsService],
 })
