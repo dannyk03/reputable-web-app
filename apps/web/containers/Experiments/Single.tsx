@@ -22,17 +22,22 @@ import ExperimentResults from "../../components/Experiments/Results";
 import TextLink from "../../components/TextLink";
 
 interface ExperimentsSingleViewProps {
-  data: PopulatedExperiment;
+  experiment: PopulatedExperiment;
 }
 
 export default function ExperimentsSingleView({
   children,
-  data,
+  experiment: data,
 }: React.PropsWithChildren<ExperimentsSingleViewProps>) {
   return (
     <Flex direction={"row"} gap="90px">
       <Box flexGrow={1}>
-        <TextLink icon={<ArrowBackIcon />} href="/experiments" />
+        <TextLink
+          _focus={{ outline: "none" }}
+          label="Back to experiments"
+          icon={<ArrowBackIcon />}
+          href="/experiments"
+        />
 
         <Heading color="gray.800" fontSize="36px" pt={4} lineHeight="40px">
           {data.title}
@@ -40,15 +45,21 @@ export default function ExperimentsSingleView({
         <Flex pt={5}>
           <Flex gap={2} align="center" height={7}>
             <StatusTag status={data.status} />
-            <Image
-              alt="Sleep Community"
-              src={data.communities[0].icon}
-              width="28px"
-              height="28px"
-            />
-            <Text color="gray.700" fontSize="18px" fontWeight={400}>
-              {`${data.communities[0].name} by`}
-            </Text>
+            {/* 
+            {(data.communities || []).map((comm, idx) => (
+              <Box key={`communityTag_${idx}`}>
+                <Image
+                  alt="Sleep Community"
+                  src={comm.icon}
+                  width="28px"
+                  height="28px"
+                />
+                <Text color="gray.700" fontSize="18px" fontWeight={400}>
+                  {`${comm.name} by`}
+                </Text>
+              </Box>
+            ))}
+            */}
             <Text color="gray.700" fontSize="18px" fontWeight={600}>
               {data.createdBy.firstName}
             </Text>
@@ -88,7 +99,7 @@ export default function ExperimentsSingleView({
         </Box>
       </Box>
 
-      <Flex direction="column" gap={6}>
+      <Flex minW="440px" direction="column" gap={6}>
         <Box>
           <AboutExperiment
             startDate={data.startDate}

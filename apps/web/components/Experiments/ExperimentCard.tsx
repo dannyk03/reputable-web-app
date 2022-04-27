@@ -31,7 +31,7 @@ export default function ExperimentCard({
           width={"32px"}
           height={"32px"}
           name="Profile Photo"
-          src={experiment.createdBy.picture ?? makeAvatar("tolga")}
+          src={experiment.createdBy.picture ?? makeAvatar("Some name")}
         />
         <Text color="gray.700" fontWeight={600} lineHeight="28px" fontSize={18}>
           {experiment.createdBy.name}

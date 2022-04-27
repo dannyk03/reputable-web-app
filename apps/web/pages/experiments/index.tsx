@@ -2,7 +2,10 @@ import React from "react";
 import { dehydrate } from "react-query";
 import ExperimentsListView from "../../containers/Experiments/List";
 import { communities } from "../../mockData";
-import { useExperiments, prefetchExperiments } from "../../_api/Experiments";
+import {
+  useExperiments,
+  prefetchExperiments,
+} from "../../_api/Experiments/all";
 
 export async function getStaticProps() {
   const queryClient = await prefetchExperiments({ community: "sleep" });

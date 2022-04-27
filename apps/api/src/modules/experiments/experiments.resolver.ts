@@ -61,6 +61,7 @@ export class ExperimentsResolver {
     return this.experimentsService.findAll();
   }
 
+  @Public()
   @Query(() => Experiment, { name: 'experiment' })
   findOne(@Args('_id', { type: () => String }) _id: string) {
     return this.experimentsService.findOne(_id);

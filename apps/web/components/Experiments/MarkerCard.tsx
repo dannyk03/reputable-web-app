@@ -1,14 +1,14 @@
 import { Box, Flex, Text, Icon } from "@chakra-ui/react";
 import React from "react";
 import { BiHeart } from "react-icons/bi";
-import { ExperimentResult, MarkerValueChangeType } from "../../types";
+import { IExperimentResult, MarkerValueChangeType } from "@reputable/types";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 
 export default function MarkerCard({
   marker,
   history = [],
   lastChange,
-}: React.PropsWithChildren<ExperimentResult>) {
+}: React.PropsWithChildren<IExperimentResult>) {
   const color =
     lastChange?.type === MarkerValueChangeType.POSITIVE
       ? "green.400"
@@ -43,7 +43,7 @@ export default function MarkerCard({
             lineHeight="32px"
             color="primary.500"
           >
-            {history[0].markerValue.prettified}
+            {history[0].prettified}
           </Text>
           {lastChange && (
             <Flex align="center" ml={2}>
@@ -58,13 +58,15 @@ export default function MarkerCard({
             </Flex>
           )}
         </Flex>
-        <Flex>
-          <Text
-            color="gray.600"
-            fontWeight={600}
-            fontSize="14px"
-          >{`(%${Math.abs(lastChange.percentage)} ${text})`}</Text>
-        </Flex>
+        {lastChange && (
+          <Flex>
+            <Text
+              color="gray.600"
+              fontWeight={600}
+              fontSize="14px"
+            >{`(%${Math.abs(lastChange.percentage)} ${text})`}</Text>
+          </Flex>
+        )}
       </Box>
     </Box>
   );
