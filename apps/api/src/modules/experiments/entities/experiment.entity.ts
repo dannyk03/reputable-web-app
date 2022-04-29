@@ -99,7 +99,10 @@ export class ExperimentResult implements IExperimentResult {
 }
 
 @ObjectType({ description: 'experiment' })
-@TransformQueries(Experiment)
+@TransformQueries(Experiment, (doc: Experiment) => ({
+  ...doc,
+  results: doc.results.map((result, j) => doc.prettifyResult(result)),
+}))
 @index({ communites: 1 })
 export class Experiment extends BaseMongoEntity implements IExperiment {
   /** Define possible markers here for now. */

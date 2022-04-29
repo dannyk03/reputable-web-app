@@ -18,7 +18,6 @@ import * as DataLoader from 'dataloader';
 import { mapFromArray } from 'src/common/helpers';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
-import { create } from 'domain';
 
 @Resolver(() => Experiment)
 export class ExperimentsResolver {

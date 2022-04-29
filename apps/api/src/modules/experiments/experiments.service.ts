@@ -25,17 +25,7 @@ export class ExperimentsService {
       .lean({ virtuals: true, getters: true })
       .limit(25)
       .orFail()
-      .exec()
-      .then((experiments) => {
-        return experiments.map((experiment, i) => {
-          return {
-            ...experiment,
-            results: experiment.results.map((result, j) =>
-              experiment.prettifyResult(result),
-            ),
-          };
-        });
-      });
+      .exec();
   }
 
   findOne(_id: string) {

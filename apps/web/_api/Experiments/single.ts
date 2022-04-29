@@ -28,7 +28,7 @@ const query = gql`
         }
         history {
           date
-          value
+          markerValue
           imageLink
           prettified
         }
