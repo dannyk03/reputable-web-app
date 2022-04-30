@@ -3,7 +3,7 @@ import moment from "moment";
 import makeAvatar from "../../helpers/makeAvatar";
 import Image from "next/image";
 import React from "react";
-import { IComment } from "types";
+import { IComment } from "@reputable/types";
 
 export default function Comment({
   _id,

@@ -6,13 +6,7 @@ import {
   Float,
 } from '@nestjs/graphql';
 import { BaseMongoEntity } from '../../../common/entities/mongo';
-import {
-  buildSchema,
-  DocumentType,
-  index,
-  prop,
-  Ref,
-} from '@typegoose/typegoose';
+import { buildSchema, DocumentType, index, prop } from '@typegoose/typegoose';
 import {
   ExperimentStatus,
   IExperiment,
@@ -26,6 +20,7 @@ import { convertMinsToHrsMins, XOR } from '../../../common/helpers';
 import { Comment } from '../../comments/entities/comment.entity';
 import { TransformQueries } from '../../../decorators';
 import { User } from '../../../modules/users/entities/user.entity';
+import { Tip } from '../../../common/entities/tip';
 
 interface MarkerPrettifiers {
   [k: string]: (value: number) => string;
@@ -99,10 +94,12 @@ export class ExperimentResult implements IExperimentResult {
 }
 
 @ObjectType({ description: 'experiment' })
-@TransformQueries(Experiment, (doc: Experiment) => ({
-  ...doc,
-  results: doc.results.map((result, j) => doc.prettifyResult(result)),
-}))
+@TransformQueries(Experiment, (docs: Experiment[]) => {
+  return docs.map((doc) => ({
+    ...doc,
+    results: doc.results.map((result, j) => doc.prettifyResult(result)),
+  }));
+})
 @index({ communites: 1 })
 export class Experiment extends BaseMongoEntity implements IExperiment {
   /** Define possible markers here for now. */
@@ -141,12 +138,15 @@ export class Experiment extends BaseMongoEntity implements IExperiment {
   @Field(() => GraphQLISODateTime)
   @prop()
   public endDate: Date;
-  @Field(() => [Comment], { nullable: true })
+  @Field(() => [Tip], { nullable: true })
+  @prop({ type: () => Tip })
+  public tips: Tip[];
   @prop({
     ref: () => 'Comment',
     foreignField: 'experiment',
     localField: '_id',
   })
+  @Field(() => [Comment], { nullable: true, defaultValue: [] })
   public comments?: Comment[];
 
   public prettifyResult? = (result: ExperimentResult) => {

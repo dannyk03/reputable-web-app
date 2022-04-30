@@ -65,4 +65,14 @@ export class UsersService {
         return plainToClass(User, r.data[0]);
       });
   }
+
+  /*
+  async tipUser(user: User, tip: ITip) {
+    return this.client.patch<User>(`/users/${userId}`, {
+      user_metadata: {
+        tips: [...(user.user_metadata?.tips || []), tip],
+      },
+    });
+  }
+  */
 }

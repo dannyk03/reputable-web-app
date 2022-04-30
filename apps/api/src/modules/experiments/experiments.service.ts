@@ -5,6 +5,7 @@ import { UpdateExperimentInput } from './dto/update-experiment.input';
 import { Experiment, ExperimentDocument } from './entities/experiment.entity';
 import { Model } from 'mongoose';
 import { plainToClass } from 'class-transformer';
+import { ITip, IUser } from '@reputable/types';
 
 @Injectable()
 export class ExperimentsService {
@@ -19,7 +20,19 @@ export class ExperimentsService {
       .then((experiment) => plainToClass(Experiment, experiment.toJSON()));
   }
 
-  findAll() {
+  async tipExperiment(experimentId: string, user: IUser, tip: ITip) {
+    return this.experimentModel
+      .findByIdAndUpdate(experimentId, {
+        $push: { tips: tip },
+      })
+      .orFail()
+      .exec()
+      .then((experiment: ExperimentDocument) =>
+        plainToClass(Experiment, experiment.toJSON()),
+      );
+  }
+
+  async findAll() {
     return this.experimentModel
       .find({})
       .lean({ virtuals: true, getters: true })

@@ -4,6 +4,11 @@ export interface BaseMongoEntity {
   updatedAt?: Date;
 }
 
+export interface ITip {
+  userId: string;
+  amount: number;
+}
+
 export enum ExperimentStatus {
   ACTIVE = "ACTIVE",
   RESULTS_PENDING = "RESULTS_PENDING",
@@ -22,6 +27,7 @@ export interface IUser {
   email_verified: boolean;
   picture: string;
   name: string;
+  tips?: ITip[];
 }
 
 export interface IComment extends BaseMongoEntity {
@@ -68,11 +74,12 @@ export interface IExperiment extends BaseMongoEntity {
   startDate: Date;
   endDate: Date;
   comments?: IComment[];
+  tips?: ITip[];
   prettifyResult?: (result: IExperimentResult) => IExperimentResult;
 }
 
 export interface PopulatedExperiment extends Omit<IExperiment, "createdBy"> {
-  createdBy: IUser;
+  createdBy?: IUser;
 }
 export interface PopulatedComment extends Omit<IComment, "author"> {
   author: IUser;

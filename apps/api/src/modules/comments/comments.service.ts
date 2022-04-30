@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { CreateCommentInput } from './dto/create-comment.input';
 import { UpdateCommentInput } from './dto/update-comment.input';
-import { Comment, CommentDocument } from './entities/comment.entity';
+import { Comment } from './entities/comment.entity';
 import { plainToClass } from 'class-transformer';
 import { FilterQuery } from 'mongoose';
 
@@ -21,14 +21,20 @@ export class CommentsService {
   }
 
   query(selector: FilterQuery<Comment>) {
-    return this.commentsModel.find(selector).lean().exec();
+    return this.commentsModel
+      .find(selector)
+      .lean()
+      .exec()
+      .then((r) => {
+        return r;
+      });
   }
 
   findAll() {
     return this.commentsModel
       .find({})
       .populate('replies')
-      .lean({ virtuals: true, getters: true })
+      .lean()
       .limit(25)
       .orFail()
       .exec();

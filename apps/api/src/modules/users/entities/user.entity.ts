@@ -1,5 +1,12 @@
 import { ObjectType, Field, GraphQLISODateTime } from '@nestjs/graphql';
-import { IUser } from 'types';
+import { Tip } from '../../../common/entities/tip';
+import { IUser } from '@reputable/types';
+
+@ObjectType()
+export class UserMetaData {
+  @Field(() => [Tip])
+  tips?: Tip[];
+}
 
 @ObjectType()
 export class User implements IUser {
@@ -13,4 +20,6 @@ export class User implements IUser {
   picture: string;
   @Field()
   name: string;
+  @Field()
+  user_id: string;
 }

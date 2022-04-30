@@ -9,7 +9,7 @@ export class BaseMongoEntity {
   @Field(() => GraphQLISODateTime, { nullable: true })
   updatedAt?: Date;
 
-  @Field(() => ID)
+  @Field(() => ID, { nullable: true })
   @Expose()
   // makes sure that when deserializing from a Mongoose Object, ObjectId is serialized into a string
   @Transform((value) => {

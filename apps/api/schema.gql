@@ -4,22 +4,10 @@
 
 directive @upper on FIELD_DEFINITION
 
-"""Comment"""
-type Comment {
-  createdAt: DateTime
-  updatedAt: DateTime
-  _id: ID!
-  author: String!
-  replyTo: ID
-  text: String!
-  experiment: ID
-  replies: [Comment!]
+type Tip {
+  userId: String!
+  amount: Int!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type User {
   created_at: DateTime!
@@ -27,6 +15,24 @@ type User {
   email_verified: Boolean!
   picture: String!
   name: String!
+  user_id: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+"""Comment"""
+type Comment {
+  createdAt: DateTime
+  updatedAt: DateTime
+  _id: ID
+  author: User
+  replyTo: ID
+  text: String
+  experiment: ID
+  replies: [Comment!]
 }
 
 type ExperimentResultMarker {
@@ -64,7 +70,7 @@ type ExperimentResult {
 type Experiment {
   createdAt: DateTime
   updatedAt: DateTime
-  _id: ID!
+  _id: ID
   title: String!
   status: ExperimentStatus!
   createdBy: User!
@@ -73,6 +79,7 @@ type Experiment {
   results: [ExperimentResult!]!
   startDate: DateTime!
   endDate: DateTime!
+  tips: [Tip!]
   comments: [Comment!]!
 }
 
