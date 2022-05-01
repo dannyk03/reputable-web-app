@@ -18,7 +18,7 @@ import * as DataLoader from 'dataloader';
 import { makeArray, mapFromArray } from '../../common/helpers';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
-import { classToPlain, instanceToPlain } from 'class-transformer';
+import { instanceToPlain } from 'class-transformer';
 
 @Resolver(() => Experiment)
 export class ExperimentsResolver {
@@ -71,17 +71,10 @@ export class ExperimentsResolver {
 
   @ResolveField('comments', (returns) => [Comment])
   async getComments(@Parent() experiment: Experiment) {
-    console.log('experimentID', experiment._id);
-    return this.commentsLoader
-      .load(experiment._id)
-      .then((r) => {
-        const returned = instanceToPlain(r, { exposeUnsetFields: false });
-        console.log(r.length);
-        return returned;
-      })
-      .catch((err) => {
-        console.error('Errorrrr', err);
-      });
+    return this.commentsLoader.load(experiment._id).then((r) => {
+      const returned = instanceToPlain(r, { exposeUnsetFields: false });
+      return returned;
+    });
   }
 
   @Public()

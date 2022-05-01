@@ -23,6 +23,7 @@ export class CommentsService {
   query(selector: FilterQuery<Comment>) {
     return this.commentsModel
       .find(selector)
+      .populate('replies')
       .lean()
       .exec()
       .then((r) => {

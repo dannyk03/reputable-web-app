@@ -7,6 +7,15 @@ export interface ITip {
     userId: string;
     amount: number;
 }
+export interface ITransaction {
+    amount: number;
+    from: string;
+    to: string;
+}
+export interface UserMetaData {
+    transactions?: ITransaction[];
+    tokens: number;
+}
 export declare enum ExperimentStatus {
     ACTIVE = "ACTIVE",
     RESULTS_PENDING = "RESULTS_PENDING",

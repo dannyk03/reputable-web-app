@@ -8,8 +8,14 @@ export function convertMinsToHrsMins(mins: number) {
   return `${h} hr ${m} min`;
 }
 
+/**
+ * Returns an array of given parameter, filters undefined values.
+ * @param v Any type of value
+ * @returns
+ */
 export const makeArray = (v: any) => {
-  return Array.isArray(v) ? v : [v];
+  const asArray = Array.isArray(v) ? v : [v];
+  return asArray.filter((v) => v);
 };
 
 export function mapFromArray<T extends Record<string, any>>(

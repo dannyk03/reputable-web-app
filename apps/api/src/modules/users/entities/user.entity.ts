@@ -1,11 +1,13 @@
-import { ObjectType, Field, GraphQLISODateTime } from '@nestjs/graphql';
-import { Tip } from '../../../common/entities/tip';
+import { ObjectType, Field, GraphQLISODateTime, Int } from '@nestjs/graphql';
 import { IUser } from '@reputable/types';
+import { Transaction } from 'src/common/entities/transaction';
 
 @ObjectType()
 export class UserMetaData {
-  @Field(() => [Tip])
-  tips?: Tip[];
+  @Field(() => Int)
+  tokens?: number;
+  @Field(() => Transaction, { nullable: true, defaultValue: [] })
+  transactions?: Transaction[];
 }
 
 @ObjectType()
@@ -16,10 +18,12 @@ export class User implements IUser {
   email: string;
   @Field(() => Boolean)
   email_verified: boolean;
-  @Field()
+  @Field({ nullable: true })
   picture: string;
   @Field()
   name: string;
   @Field()
   user_id: string;
+  @Field(() => UserMetaData, { nullable: true })
+  user_metadata?: UserMetaData;
 }

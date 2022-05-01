@@ -4,18 +4,25 @@
 
 directive @upper on FIELD_DEFINITION
 
-type Tip {
-  userId: String!
+type Transaction {
+  from: String!
+  to: String!
   amount: Int!
+}
+
+type UserMetaData {
+  tokens: Int!
+  transactions: Transaction
 }
 
 type User {
   created_at: DateTime!
   email: String!
   email_verified: Boolean!
-  picture: String!
+  picture: String
   name: String!
   user_id: String!
+  user_metadata: UserMetaData
 }
 
 """
@@ -33,6 +40,11 @@ type Comment {
   text: String
   experiment: ID
   replies: [Comment!]
+}
+
+type Tip {
+  userId: String!
+  amount: Int!
 }
 
 type ExperimentResultMarker {
@@ -90,6 +102,10 @@ enum ExperimentStatus {
   CLOSED
 }
 
+type MessageResponse {
+  message: String!
+}
+
 type Query {
   experiments: [Experiment!]!
   experiment(_id: String!): Experiment!
@@ -105,6 +121,7 @@ type Mutation {
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(_id: String!, comment: UpdateCommentInput!): Comment!
   removeComment(_id: String!): Comment!
+  makeTransaction(from: String!, to: String!, amount: Float!): MessageResponse!
 }
 
 input CreateExperimentInput {

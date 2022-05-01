@@ -1,4 +1,5 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { ITip } from '@reputable/types';
 import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 import { plainToClass } from 'class-transformer';
 import { User } from './entities/user.entity';
@@ -66,13 +67,29 @@ export class UsersService {
       });
   }
 
-  /*
-  async tipUser(user: User, tip: ITip) {
-    return this.client.patch<User>(`/users/${userId}`, {
-      user_metadata: {
-        tips: [...(user.user_metadata?.tips || []), tip],
-      },
+  async makeTransaction(from: string, to: string, amount: number) {
+    return this.client.get<User>(`users/${from}`).then(async (response) => {
+      if (response.data.user_metadata.tokens - amount < 0) {
+        throw new BadRequestException(
+          'Insufficient funds to perform transaction.',
+        );
+      }
+      const fromUser = response.data;
+      // Normally this should be a transaction operation with rollbacks if any
+      // operation fails in the process
+      await this.client.patch<User>(`/users/${from}`, {
+        user_metadata: {
+          tokens: fromUser.user_metadata.tokens - amount,
+        },
+      });
+      await this.client.patch<User>(`/users/${to}`, {
+        user_metadata: {
+          tokens: fromUser.user_metadata.tokens + amount,
+        },
+      });
+      return {
+        message: 'Transaction successful!',
+      };
     });
   }
-  */
 }
