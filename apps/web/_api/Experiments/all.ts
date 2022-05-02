@@ -19,7 +19,7 @@ const query = gql`
         email
         picture
       }
-      startDate
+      experimentPeriod
       status
       description
       _id
@@ -33,7 +33,6 @@ export const useExperiments = (params: ExperimentsParams["GET"]) => {
 
   return useQuery<PopulatedExperiment[]>(["experiments", { community }], () =>
     client.request(query).then((r) => {
-      console.log(r);
       return r.experiments;
     })
   );
@@ -46,7 +45,6 @@ export const prefetchExperiments = async (params: ExperimentsParams["GET"]) => {
     ["experiments", { community }],
     () =>
       request(`${process.env.API_URL}/graphql`, query).then((r) => {
-        console.log(r);
         return r.experiments;
       })
   );

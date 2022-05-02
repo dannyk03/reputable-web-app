@@ -13,6 +13,7 @@ import Logo from "../components/Icons/Logo";
 import { useAuth0 } from "@auth0/auth0-react";
 import makeAvatar from "../helpers/makeAvatar";
 import { BiBell } from "react-icons/bi";
+import Image from "next/image";
 
 export default function Navbar() {
   const theme = useTheme();
@@ -49,6 +50,28 @@ export default function Navbar() {
         ) : (
           <>
             <HStack>
+              <HStack
+                py={2}
+                px={4}
+                border="1px solid"
+                borderColor="gray.200"
+                borderRadius="24px"
+              >
+                <Image
+                  width={"24px"}
+                  height={"24px"}
+                  alt="User Tokens"
+                  src="/LogoVector.svg"
+                />
+                <Text
+                  color="gray.700"
+                  lineHeight="24px"
+                  fontSize="16px"
+                  fontWeight={600}
+                >
+                  2838 REPT
+                </Text>
+              </HStack>
               <HStack
                 py={2}
                 px={4}

@@ -8,18 +8,23 @@ import {
   Heading,
   IconButton,
   Spacer,
+  Icon,
   Text,
+  HStack,
+  VStack,
 } from "@chakra-ui/react";
 import { BsThreeDots } from "react-icons/bs";
 import { FcDonate, FcShare } from "react-icons/fc";
-import Image from "next/image";
 import Comments from "../../containers/Comments";
 import React from "react";
 import { PopulatedExperiment } from "types";
 import { StatusTag } from "../../components/Experiments";
 import AboutExperiment from "../../components/Experiments/About";
-import ExperimentResults from "../../components/Experiments/Results";
 import TextLink from "../../components/TextLink";
+import ExperimentMarkerInfo from "../../components/Experiments/ExperimentMarkerInfo";
+import { PrimaryButton } from "../../components/Button";
+import ReputableLogo from "../../components/Icons/ReputableLogo";
+import { ITip } from "@reputable/types";
 
 interface ExperimentsSingleViewProps {
   experiment: PopulatedExperiment;
@@ -99,19 +104,21 @@ export default function ExperimentsSingleView({
         </Box>
       </Box>
 
-      <Flex minW="440px" direction="column" gap={6}>
+      <Flex minW="400px" direction="column" gap={6}>
+        <VStack gap={4}>
+          <PrimaryButton w='100%' text='Tip REPT' leftIcon={<Icon as={ReputableLogo} color='white' width='16px' height='16px'/>}/>
+          <HStack align='center'>
+            <Icon as={ReputableLogo} width='18px' height='18px'/>
+            <Text size='18px' fontWeight={600} lineHeight='28px'>
+              {data.tips.reduce((prev:number,curr:ITip)=>prev+=curr.amount,0)} REPT received
+            </Text>
+          </HStack>
+        </VStack>
         <Box>
-          <AboutExperiment
-            startDate={data.startDate}
-            endDate={data.endDate}
-            tags={data.tags}
-          />
+          <AboutExperiment experimentId={data._id} experimentPeriod={28} />
         </Box>
         <Box>
-          <ExperimentResults
-            results={data.results}
-            updatedAt={data.updatedAt}
-          />
+          <ExperimentMarkerInfo markers={data.markers} />
         </Box>
       </Flex>
     </Flex>

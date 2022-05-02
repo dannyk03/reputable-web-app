@@ -1,5 +1,5 @@
 export interface BaseMongoEntity {
-    createdAt: Date;
+    createdAt?: Date;
     _id: string;
     updatedAt?: Date;
 }
@@ -11,6 +11,12 @@ export interface ITransaction {
     amount: number;
     from: string;
     to: string;
+}
+export interface ICommunity extends BaseMongoEntity {
+    name: string;
+    icon: string;
+    memberCount: number;
+    slug: string;
 }
 export interface UserMetaData {
     transactions?: ITransaction[];
@@ -43,9 +49,8 @@ export interface IComment extends BaseMongoEntity {
 }
 export interface IExperimentResultMarker {
     name: string;
-    unit: string;
     slug: string;
-    more_is_better: boolean;
+    devices?: string[];
 }
 export interface IResultHistory {
     date: Date;
@@ -69,9 +74,8 @@ export interface IExperiment extends BaseMongoEntity {
     createdBy: string;
     communities: string[];
     description: string;
-    results: IExperimentResult[];
-    startDate: Date;
-    endDate: Date;
+    markers: IExperimentResultMarker[];
+    experimentPeriod: number;
     comments?: IComment[];
     tips?: ITip[];
     prettifyResult?: (result: IExperimentResult) => IExperimentResult;
@@ -79,7 +83,10 @@ export interface IExperiment extends BaseMongoEntity {
 export interface PopulatedExperiment extends Omit<IExperiment, "createdBy"> {
     createdBy?: IUser;
 }
-export interface PopulatedComment extends Omit<IComment, "author"> {
+export interface PopulatedComment extends Omit<IComment, "author" | "replies"> {
     author: IUser;
+    replies?: {
+        author?: IUser;
+    } & Omit<IComment, "author">[];
 }
 //# sourceMappingURL=index.d.ts.map

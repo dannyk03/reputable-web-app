@@ -8,29 +8,38 @@ const query = gql`
     experiment(_id: $_id) {
       title
       communities
+      tips {
+        amount
+      }
+      experimentPeriod
+      markers {
+        name
+        slug
+        devices
+      }
       createdBy {
         name
+        user_id
         email
         picture
       }
-      startDate
-      endDate
-      results {
-        marker {
+      comments {
+        replyTo
+        text
+        author {
           name
-          unit
-          slug
+          user_id
+          email
+          picture
         }
-        lastChange {
-          type
-          percentage
-          value
-        }
-        history {
-          date
-          markerValue
-          imageLink
-          prettified
+        replies {
+          author {
+            name
+            user_id
+            email
+            picture
+          }
+          text
         }
       }
       status

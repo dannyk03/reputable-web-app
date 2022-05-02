@@ -7,7 +7,7 @@ import {
   Comment,
   CommentDocument,
 } from '../modules/comments/entities/comment.entity';
-import { experimentResultMarkers } from '../common/data/markers';
+import { experimentResultMarkers } from '../common/data';
 import {
   IExperiment,
   ExperimentStatus,
@@ -176,8 +176,8 @@ export const generateExperiment = async (users) => {
           max: Object.values(ExperimentStatus).length - 1,
         })
       ] as ExperimentStatus,
-      startDate,
-      endDate,
+      experimentPeriod: faker.datatype.number({min:10,max:60}),
+      markers: getRandomSubarray(experimentResultMarkers,faker.datatype.number({min: 1, max: 3})),
       communities: getRandomSubarray(
         communities,
         faker.datatype.number({ min: 1, max: 3 }),
@@ -185,20 +185,6 @@ export const generateExperiment = async (users) => {
       description: faker.lorem.paragraphs(5, '<br/>'),
       createdBy:
         users[faker.datatype.number({ min: 0, max: users.length - 1 })].email,
-      results: [
-        {
-          marker: experimentResultMarkers[0],
-          history: generateExperimentResultHistory(10, startDate, endDate),
-        },
-        {
-          marker: experimentResultMarkers[1],
-          history: generateExperimentResultHistory(10, startDate, endDate),
-        },
-        {
-          marker: experimentResultMarkers[2],
-          history: generateExperimentResultHistory(10, startDate, endDate),
-        },
-      ],
     };
   return randomExperiment;
 };

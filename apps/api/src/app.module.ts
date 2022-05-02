@@ -9,6 +9,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { UsersModule } from './modules/users/users.module';
+import { CommunitiesModule } from './modules/communities/communities.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { UsersModule } from './modules/users/users.module';
     MongooseModule.forRoot(process.env.DB_URL),
     ExperimentsModule,
     UsersModule,
+    CommunitiesModule,
   ],
   providers: [
     {

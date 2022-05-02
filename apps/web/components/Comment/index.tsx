@@ -3,20 +3,27 @@ import moment from "moment";
 import makeAvatar from "../../helpers/makeAvatar";
 import Image from "next/image";
 import React from "react";
-import { IComment } from "@reputable/types";
+import { PopulatedComment } from "@reputable/types";
+
+interface CommentProps {
+  data: Partial<PopulatedComment>
+}
 
 export default function Comment({
-  _id,
-  author,
-  replyTo,
-  text,
-  replies = [],
-  updatedAt,
-}: React.PropsWithChildren<IComment>) {
+  data: {
+    updatedAt,
+    replyTo,
+    _id,
+    author,
+    text,
+    replies
+  },
+  ...restProps
+}: React.PropsWithChildren<CommentProps>) {
   const timeAgo = moment(updatedAt).fromNow();
   return (
     <>
-      <Box pl={replyTo && 12} pt={5}>
+      <Box {...restProps} pl={replyTo && 12} pt={5}>
         <Flex justify="start"></Flex>
         <Flex justify={"start"} align="center">
           <Avatar
@@ -24,7 +31,7 @@ export default function Comment({
             width={"40px"}
             height={"40px"}
             name="Profile Photo"
-            src={author.profileImage ?? makeAvatar("tolga")}
+            src={author.picture ?? makeAvatar("User")}
           />
           <Text pl="2" fontWeight={600} color="gray.700">
             Tolga Oguz

@@ -5,49 +5,27 @@ import Card from "../Card";
 import Tag from "../Tag";
 
 export interface AboutExperimentProps {
-  startDate: Date;
-  endDate: Date;
-  tags: string[];
+  experimentId: string;
+  experimentPeriod: number;
 }
 
 export default function AboutExperiment({
-  startDate,
-  endDate,
-  tags = ["Sleep", "Meditation", "Stress"],
+  experimentId,
+  experimentPeriod,
 }: React.PropsWithChildren<AboutExperimentProps>) {
-  const startMoment = moment(startDate);
-  const endMoment = moment(endDate);
-  const currentMoment = moment(new Date());
-  const totalDays = endMoment.diff(startMoment, "days") + 1;
-  const daysPassed = Math.min(
-    currentMoment.diff(startMoment, "days") + 1,
-    totalDays
-  );
   return (
     <Card noShadow>
       <Heading size="sm">About the experiment</Heading>
       <Divider my="4" />
-      <Heading fontSize="30px" fontWeight={600} color="primary.500">
-        Day {daysPassed}/{totalDays}
-      </Heading>
-      <Box pt="5">
-        <Flex>
-          <Text fontWeight={700} color="gray.700">
-            Start Date:
-          </Text>{" "}
-          <Text pl="1">{startMoment.format("LL")}</Text>
-        </Flex>
-        <Flex>
-          <Text fontWeight={700} color="gray.700">
-            End Date:
-          </Text>{" "}
-          <Text pl="1">{endMoment.format("LL")}</Text>
-        </Flex>
-        <Flex pt={5} gap={2}>
-          {tags.map((tag) => (
-            <Tag key={`tag_${tag}`}>{tag}</Tag>
-          ))}
-        </Flex>
+      <Box mt={3} display="inline">
+        <Text size="18px" lineHeight="28px">
+          <b>Time period:</b> {experimentPeriod}
+        </Text>
+      </Box>
+      <Box mt={3}>
+        <Text size="18px" lineHeight="28px">
+          <b>Experiment ID:</b> {experimentId}
+        </Text>
       </Box>
     </Card>
   );

@@ -2,19 +2,14 @@ import {
   ObjectType,
   Field,
   registerEnumType,
-  GraphQLISODateTime,
-  Float,
+  Int,
 } from '@nestjs/graphql';
 import { BaseMongoEntity } from '../../../common/entities/mongo';
 import { buildSchema, DocumentType, index, prop } from '@typegoose/typegoose';
 import {
   ExperimentStatus,
   IExperiment,
-  IExperimentResult,
   IExperimentResultMarker,
-  IMarkerValueChange,
-  IResultHistory,
-  MarkerValueChangeType,
 } from '@reputable/types';
 import { convertMinsToHrsMins, XOR } from '../../../common/helpers';
 import { Comment } from '../../comments/entities/comment.entity';
@@ -30,9 +25,11 @@ registerEnumType(ExperimentStatus, {
   name: 'ExperimentStatus',
 });
 
+/*
 registerEnumType(MarkerValueChangeType, {
   name: 'MarkerValueChangeType',
 });
+*/
 
 @ObjectType()
 export class ExperimentResultMarker implements IExperimentResultMarker {
@@ -41,15 +38,24 @@ export class ExperimentResultMarker implements IExperimentResultMarker {
   name: string;
   @Field()
   @prop()
-  unit: string;
-  @Field()
-  @prop()
   slug: string;
-  @Field(() => Boolean)
+  @Field(() => [String], { nullable: true, defaultValue: [] })
   @prop()
-  more_is_better: boolean;
+  devices?: string[];
+  /*
+  @Field(() => Boolean, {
+    nullable: true,
+    description: 'Not available until MVP v2',
+  })
+  @prop()
+  more_is_better?: boolean;
+  @Field({ nullable: true, description: 'Not available until MVP v2' })
+  @prop()
+  unit?: string;
+  */
 }
 
+/*
 @ObjectType()
 export class ResultHistory implements IResultHistory {
   @Field(() => GraphQLISODateTime)
@@ -64,7 +70,9 @@ export class ResultHistory implements IResultHistory {
   @Field({ nullable: true })
   prettified?: string;
 }
+*/
 
+/*
 @ObjectType()
 export class MarkerValueChange implements IMarkerValueChange {
   @Field(() => MarkerValueChangeType)
@@ -74,7 +82,9 @@ export class MarkerValueChange implements IMarkerValueChange {
   @Field(() => Float)
   value: number;
 }
+*/
 
+/*
 @ObjectType()
 export class ExperimentResult implements IExperimentResult {
   @Field(() => ExperimentResultMarker)
@@ -92,14 +102,10 @@ export class ExperimentResult implements IExperimentResult {
   @Field(() => MarkerValueChange, { nullable: true })
   lastChange?: MarkerValueChange;
 }
+*/
 
 @ObjectType({ description: 'experiment' })
-@TransformQueries(Experiment, (docs: Experiment[]) => {
-  return docs.map((doc) => ({
-    ...doc,
-    results: doc.results.map((result, j) => doc.prettifyResult(result)),
-  }));
-})
+@TransformQueries(Experiment)
 @index({ communites: 1 })
 export class Experiment extends BaseMongoEntity implements IExperiment {
   /** Define possible markers here for now. */
@@ -129,16 +135,25 @@ export class Experiment extends BaseMongoEntity implements IExperiment {
   @Field()
   @prop({ required: true })
   public description: string;
-  @Field(() => [ExperimentResult])
-  @prop({ type: () => ExperimentResult })
-  public results: ExperimentResult[];
+  @Field(() => [ExperimentResultMarker])
+  @prop({ required: true })
+  public markers: ExperimentResultMarker[];
+  @Field(()=>Int)
+  @prop({required:true})
+  public experimentPeriod: number
+  /*
+    Results wont be used for MVP
+    @Field(() => [ExperimentResult])
+    @prop({ type: () => ExperimentResult })
+    public results: ExperimentResult[];
   @Field(() => GraphQLISODateTime)
   @prop()
   public startDate: Date;
   @Field(() => GraphQLISODateTime)
   @prop()
+  */
   public endDate: Date;
-  @Field(() => [Tip], { nullable: true })
+  @Field(() => [Tip], { nullable: true, defaultValue: [] })
   @prop({ type: () => Tip })
   public tips: Tip[];
   @prop({
@@ -149,6 +164,7 @@ export class Experiment extends BaseMongoEntity implements IExperiment {
   @Field(() => [Comment], { nullable: true, defaultValue: [] })
   public comments?: Comment[];
 
+  /*
   public prettifyResult? = (result: ExperimentResult) => {
     const history = (result.history || []).map((h) => ({
       ...h,
@@ -173,6 +189,7 @@ export class Experiment extends BaseMongoEntity implements IExperiment {
       lastChange,
     };
   };
+  */
 }
 
 export interface PopulatedExperiment extends Omit<Experiment, 'createdBy'> {

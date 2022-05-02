@@ -10,7 +10,6 @@ export function GraphqlClientProvider({
   children,
 }: React.PropsWithChildren<{}>) {
   const { isAuthenticated, getAccessTokenSilently } = useAuth0();
-  console.log("isAuthenticated", isAuthenticated);
   React.useEffect(() => {
     if (isAuthenticated)
       getAccessTokenSilently().then((token) =>

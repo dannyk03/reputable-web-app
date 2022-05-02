@@ -49,33 +49,8 @@ type Tip {
 
 type ExperimentResultMarker {
   name: String!
-  unit: String!
   slug: String!
-  more_is_better: Boolean!
-}
-
-type ResultHistory {
-  date: DateTime!
-  markerValue: Float!
-  imageLink: String!
-  prettified: String
-}
-
-type MarkerValueChange {
-  type: MarkerValueChangeType!
-  percentage: Float!
-  value: Float!
-}
-
-enum MarkerValueChangeType {
-  POSITIVE
-  NEGATIVE
-}
-
-type ExperimentResult {
-  marker: ExperimentResultMarker!
-  history: [ResultHistory!]!
-  lastChange: MarkerValueChange
+  devices: [String!]
 }
 
 """experiment"""
@@ -88,9 +63,8 @@ type Experiment {
   createdBy: User!
   communities: [String!]!
   description: String!
-  results: [ExperimentResult!]!
-  startDate: DateTime!
-  endDate: DateTime!
+  markers: [ExperimentResultMarker!]!
+  experimentPeriod: Int!
   tips: [Tip!]
   comments: [Comment!]!
 }
@@ -106,12 +80,24 @@ type MessageResponse {
   message: String!
 }
 
+type Community {
+  createdAt: DateTime
+  updatedAt: DateTime
+  _id: ID
+  name: String!
+  icon: String!
+  memberCount: Int!
+  slug: String!
+}
+
 type Query {
   experiments: [Experiment!]!
   experiment(_id: String!): Experiment!
   comments: [Comment!]!
   comment(_id: String!): Comment!
   users: [User!]!
+  communities: [Community!]!
+  community(slug: String!): Community!
 }
 
 type Mutation {
@@ -134,6 +120,10 @@ input CreateExperimentInput {
 
 input UpdateExperimentInput {
   title: String!
+  description: String
+  startDate: DateTime
+  endDate: DateTime
+  createdBy: String
 }
 
 input CreateCommentInput {

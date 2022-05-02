@@ -56,15 +56,15 @@ export default function Comments({
           width={"40px"}
           height={"40px"}
           name="Profile Photo"
-          src={user.profileImage ?? makeAvatar(user.given_name ?? "User")}
+          src={user.picture ?? makeAvatar(user.given_name ?? "User")}
         />
         <Textarea ml={3} placeholder="Add a comment" />
       </Flex>
       <Xwrapper>
-        {comments.map((comment, index) => {
+        {comments.map((comment = {}, index) => {
           return (
             <Box key={`parent_comment_${index}`}>
-              <Comment id={`comment_${index}`} {...comment} />
+              <Comment id={`comment_${index}`} data={comment} />
               {index !== 0 && (
                 <Xarrow
                   start={`comment_${index - 1}`}
