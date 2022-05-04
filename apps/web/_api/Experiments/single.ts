@@ -25,6 +25,8 @@ const query = gql`
       }
       comments {
         replyTo
+        createdAt
+        updatedAt
         text
         author {
           name
@@ -33,6 +35,8 @@ const query = gql`
           picture
         }
         replies {
+          createdAt
+          updatedAt
           author {
             name
             user_id

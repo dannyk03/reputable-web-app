@@ -6,28 +6,32 @@ import React from "react";
 import { PopulatedComment } from "@reputable/types";
 
 interface CommentProps {
-  data: Partial<PopulatedComment>
+  data: Partial<PopulatedComment>;
+  /** Used to draw arrows from avatar to avatar */
+  id?: string;
 }
 
 export default function Comment({
-  data: {
-    updatedAt,
+  data,
+  id,
+  ...restProps
+}: React.PropsWithChildren<CommentProps>) {
+  const {
+    updatedAt = data.createdAt,
     replyTo,
     _id,
     author,
     text,
-    replies
-  },
-  ...restProps
-}: React.PropsWithChildren<CommentProps>) {
-  const timeAgo = moment(updatedAt).fromNow();
+    replies = [],
+  } = data;
+  const timeAgo = moment(new Date(updatedAt)).fromNow();
   return (
     <>
       <Box {...restProps} pl={replyTo && 12} pt={5}>
         <Flex justify="start"></Flex>
         <Flex justify={"start"} align="center">
           <Avatar
-            id={_id}
+            id={id}
             width={"40px"}
             height={"40px"}
             name="Profile Photo"
@@ -66,7 +70,7 @@ export default function Comment({
         </Flex>
       </Box>
       {replies.map((comment, idx) => (
-        <Comment key={`${_id}_reply_${idx}`} {...comment} />
+        <Comment key={`${_id}_reply_${idx}`} data={comment} />
       ))}
     </>
   );

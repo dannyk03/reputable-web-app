@@ -176,8 +176,11 @@ export const generateExperiment = async (users) => {
           max: Object.values(ExperimentStatus).length - 1,
         })
       ] as ExperimentStatus,
-      experimentPeriod: faker.datatype.number({min:10,max:60}),
-      markers: getRandomSubarray(experimentResultMarkers,faker.datatype.number({min: 1, max: 3})),
+      experimentPeriod: faker.datatype.number({ min: 10, max: 60 }),
+      markers: getRandomSubarray(
+        experimentResultMarkers,
+        faker.datatype.number({ min: 1, max: 3 }),
+      ),
       communities: getRandomSubarray(
         communities,
         faker.datatype.number({ min: 1, max: 3 }),
@@ -198,7 +201,7 @@ export const generateComment = (
   experiments: IExperiment[],
   users: Record<string, any>[],
   replyToComments: CommentDocument[] = [],
-): Omit<Comment, 'createdAt' | '_id'> => {
+): Omit<Comment, '_id'> => {
   const randomReplyComment = pickRandomFromArray(replyToComments);
   const randomAuthor = pickRandomFromArray(users);
   const randomExperiment = pickRandomFromArray(experiments);
@@ -210,6 +213,7 @@ export const generateComment = (
       replyToComments.length === 0
         ? randomExperiment._id
         : randomReplyComment.experiment,
+    createdAt: faker.date.recent(4),
   };
 };
 

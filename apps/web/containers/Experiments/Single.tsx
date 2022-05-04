@@ -25,6 +25,8 @@ import ExperimentMarkerInfo from "../../components/Experiments/ExperimentMarkerI
 import { PrimaryButton } from "../../components/Button";
 import ReputableLogo from "../../components/Icons/ReputableLogo";
 import { ITip } from "@reputable/types";
+import ContributionsTooltip from "../../components/Experiments/ContributionsTooltip";
+import { experiment } from "../../mockData";
 
 interface ExperimentsSingleViewProps {
   experiment: PopulatedExperiment;
@@ -106,12 +108,38 @@ export default function ExperimentsSingleView({
 
       <Flex minW="400px" direction="column" gap={6}>
         <VStack gap={4}>
-          <PrimaryButton w='100%' text='Tip REPT' leftIcon={<Icon as={ReputableLogo} color='white' width='16px' height='16px'/>}/>
-          <HStack align='center'>
-            <Icon as={ReputableLogo} width='18px' height='18px'/>
-            <Text size='18px' fontWeight={600} lineHeight='28px'>
-              {data.tips.reduce((prev:number,curr:ITip)=>prev+=curr.amount,0)} REPT received
+          <PrimaryButton
+            w="100%"
+            text="Tip REPT"
+            leftIcon={
+              <Icon
+                as={ReputableLogo}
+                color="white"
+                width="16px"
+                height="16px"
+              />
+            }
+          />
+          <HStack align="center">
+            <Icon as={ReputableLogo} width="18px" height="18px" />
+            <Text size="18px" fontWeight={600} lineHeight="28px">
+              {data.tips.reduce(
+                (prev: number, curr: ITip) => (prev += curr.amount),
+                0
+              )}{" "}
+              REPT received
             </Text>
+            <ContributionsTooltip tips={experiment.tips || []}>
+              <Text
+                color="primary.700"
+                lineHeight="28px"
+                fontWeight={600}
+                size="18px"
+                cursor="pointer"
+              >
+                See contributions
+              </Text>
+            </ContributionsTooltip>
           </HStack>
         </VStack>
         <Box>
