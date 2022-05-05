@@ -13,7 +13,7 @@ import { UsersModule } from '../users/users.module';
         schema: CommentSchema,
       },
     ]),
-    UsersModule
+    UsersModule,
   ],
   providers: [CommentsResolver, CommentsService],
   exports: [CommentsService],

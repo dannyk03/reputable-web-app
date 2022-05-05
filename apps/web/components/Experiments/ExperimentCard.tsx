@@ -15,6 +15,7 @@ import Tag from "../Tag";
 import Card from "../Card";
 import { PopulatedExperiment } from "types";
 import { truncate } from "lodash";
+import { ICommunity } from "@reputable/types";
 
 export interface ExperimentCardProps extends ChakraProps {
   experiment: PopulatedExperiment;
@@ -77,8 +78,8 @@ export default function ExperimentCard({
         }}
       />
       <HStack mt={3}>
-        {experiment.communities.map((tag, idx) => (
-          <Tag key={`${experiment._id}_tag_${idx}`}>{tag}</Tag>
+        {experiment.communities.map((tag: ICommunity, idx: number) => (
+          <Tag key={`${experiment._id}_tag_${idx}`}>{tag.name}</Tag>
         ))}
       </HStack>
     </Card>

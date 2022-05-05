@@ -4,6 +4,12 @@ export interface BaseMongoEntity {
   updatedAt?: Date;
 }
 
+export interface IUserMetadata {
+  tokens?: number;
+  transactions?: ITransaction[];
+  communities?: string[];
+}
+
 export interface ITip {
   userId: string;
   amount: number;
@@ -20,11 +26,6 @@ export interface ICommunity extends BaseMongoEntity {
   icon: string;
   memberCount: number;
   slug: string;
-}
-
-export interface UserMetaData {
-  transactions?: ITransaction[];
-  tokens: number;
 }
 
 export enum ExperimentStatus {
@@ -46,6 +47,8 @@ export interface IUser {
   picture: string;
   name: string;
   tips?: ITip[];
+  user_id: string;
+  user_metadata?: IUserMetadata;
 }
 
 export interface IComment extends BaseMongoEntity {
@@ -103,10 +106,18 @@ export interface IExperiment extends BaseMongoEntity {
   prettifyResult?: (result: IExperimentResult) => IExperimentResult;
 }
 
-export interface PopulatedExperiment extends Omit<IExperiment, "createdBy"> {
+export interface PopulatedExperiment
+  extends Omit<IExperiment, "createdBy" | "communities"> {
   createdBy?: IUser;
+  communities?: ICommunity[];
 }
 export interface PopulatedComment extends Omit<IComment, "author" | "replies"> {
   author: IUser;
-  replies?: {author?: IUser} & Omit<IComment,"author">[];
+  replies?: { author?: IUser } & Omit<IComment, "author">[];
 }
+
+export interface IMessageResponse {
+  message: string;
+}
+
+export type ITipDTO = Pick<ITip, "amount">;

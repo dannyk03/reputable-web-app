@@ -11,7 +11,7 @@ import { ExperimentsService } from './experiments.service';
 import { Experiment } from './entities/experiment.entity';
 import { CreateExperimentInput } from './dto/create-experiment.input';
 import { UpdateExperimentInput } from './dto/update-experiment.input';
-import { Public } from 'src/decorators';
+import { CurrentUser, Public } from 'src/decorators';
 import { CommentsService } from '../comments/comments.service';
 import { Comment } from '../comments/entities/comment.entity';
 import * as DataLoader from 'dataloader';
@@ -22,6 +22,7 @@ import { instanceToPlain } from 'class-transformer';
 import { PopulatedComment } from '@reputable/types';
 import { CommunitiesService } from '../communities/communities.service';
 import { Community } from '../communities/entities/community.entity';
+import { MessageResponse } from 'src/common/entities/response';
 
 @Resolver(() => Experiment)
 export class ExperimentsResolver {
@@ -79,8 +80,11 @@ export class ExperimentsResolver {
 
   @Public()
   @Query(() => [Experiment], { name: 'experiments' })
-  findAll() {
-    return this.experimentsService.findAll();
+  findAll(
+    @Args('community', { type: () => String, nullable: true })
+    community?: string,
+  ) {
+    return this.experimentsService.query({ community });
   }
 
   @Public()
@@ -119,5 +123,14 @@ export class ExperimentsResolver {
   @Mutation(() => Experiment)
   removeExperiment(@Args('id', { type: () => Int }) id: number) {
     return this.experimentsService.remove(id);
+  }
+
+  @Mutation(() => MessageResponse)
+  tipExperiment(
+    @Args('tip', { type: () => Int }) tip: number,
+    @Args('id') id: string,
+    @CurrentUser() user: User,
+  ) {
+    return this.experimentsService.tipExperiment(id, user, tip);
   }
 }

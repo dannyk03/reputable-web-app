@@ -1,4 +1,4 @@
-import { applyDecorators, SetMetadata } from '@nestjs/common';
+import { applyDecorators, SetMetadata, ExecutionContext } from '@nestjs/common';
 import { pre, DocumentType, plugin, modelOptions } from '@typegoose/typegoose';
 import { Query, Document } from 'mongoose';
 import {
@@ -9,8 +9,14 @@ import {
 } from 'class-transformer';
 import { mongooseLeanGetters, mongooseLeanVirtuals } from '../plugins';
 import { createParamDecorator } from '@nestjs/common';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
-export const CurrentUser = createParamDecorator((data, req) => req.user);
+export const CurrentUser = createParamDecorator(
+  (data: unknown, context: ExecutionContext) => {
+    const ctx = GqlExecutionContext.create(context);
+    return ctx.getContext().req.user;
+  },
+);
 
 export const IS_PUBLIC_KEY = 'isPublic';
 export const Public = () => SetMetadata(IS_PUBLIC_KEY, true);
@@ -41,7 +47,7 @@ export const TransformQueries = <T>(
       ['findOne', 'find'],
       function (this: Query<any, DocumentType<T>>, next) {
         this.transform((docs: DocumentType<T> | DocumentType<T>[]) => {
-          let docsAsArray = Array.isArray(docs) ? docs : [docs];
+          const docsAsArray = Array.isArray(docs) ? docs : [docs];
           let transformedInstances: T[] = docsAsArray.map((d) =>
             plainToClass(cls, d),
           );

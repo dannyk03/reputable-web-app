@@ -1,7 +1,7 @@
 import ExperimentSingleView from "../../containers/Experiments/Single";
 import React from "react";
 import { useRouter } from "next/router";
-import { useExperiment } from "../../_api/Experiments/single";
+import { useExperiment } from "../../_api/Experiments/queries/single";
 
 export default function ExperimentSingle() {
   const router = useRouter();

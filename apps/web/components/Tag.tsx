@@ -1,6 +1,12 @@
-import { Text } from "@chakra-ui/react";
+import { ChakraProps, Text, TextProps } from "@chakra-ui/react";
+import React from "react";
 
-export default function Tag({ children, ...restProps }) {
+export interface TagProps extends TextProps {}
+
+export default function Tag({
+  children,
+  ...restProps
+}: React.PropsWithChildren<TagProps>) {
   return (
     <Text
       fontSize={14}

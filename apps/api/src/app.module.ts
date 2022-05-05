@@ -10,6 +10,7 @@ import { ConfigModule } from '@nestjs/config';
 import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { UsersModule } from './modules/users/users.module';
 import { CommunitiesModule } from './modules/communities/communities.module';
+import { JwtStrategy } from './common/strategies/jwt.strategy';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { CommunitiesModule } from './modules/communities/communities.module';
     CommunitiesModule,
   ],
   providers: [
+    JwtStrategy,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,

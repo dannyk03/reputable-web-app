@@ -41,6 +41,7 @@ type Comment {
   text: String
   experiment: ID
   replies: [Comment!]
+  isEdited: Boolean!
 }
 
 type Tip {
@@ -92,11 +93,12 @@ type MessageResponse {
 }
 
 type Query {
-  experiments: [Experiment!]!
+  experiments(community: String): [Experiment!]!
   experiment(_id: String!): Experiment!
   comments: [Comment!]!
   comment(_id: String!): Comment!
   users: [User!]!
+  me: User!
   communities: [Community!]!
   community(slug: String!): Community!
 }
@@ -105,10 +107,12 @@ type Mutation {
   createExperiment(experiment: CreateExperimentInput!): Experiment!
   updateExperiment(_id: String!, experiment: UpdateExperimentInput!): Experiment!
   removeExperiment(id: Int!): Experiment!
+  tipExperiment(tip: Int!, id: String!): MessageResponse!
   createComment(createCommentInput: CreateCommentInput!): Comment!
   updateComment(_id: String!, comment: UpdateCommentInput!): Comment!
   removeComment(_id: String!): Comment!
   makeTransaction(from: String!, to: String!, amount: Float!): MessageResponse!
+  joinCommunity(community: String!): MessageResponse!
 }
 
 input CreateExperimentInput {
@@ -128,12 +132,11 @@ input UpdateExperimentInput {
 }
 
 input CreateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int!
+  replyTo: String!
+  text: String!
+  experiment: String!
 }
 
 input UpdateCommentInput {
-  """Example field (placeholder)"""
-  exampleField: Int
-  id: Int!
+  text: String!
 }

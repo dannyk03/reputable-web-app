@@ -1,9 +1,10 @@
 import { ObjectType, Field, GraphQLISODateTime, Int } from '@nestjs/graphql';
 import { IUser } from '@reputable/types';
 import { Transaction } from 'src/common/entities/transaction';
+import { IUserMetadata } from '@reputable/types';
 
 @ObjectType()
-export class UserMetaData {
+export class UserMetaData implements IUserMetadata {
   @Field(() => Int)
   tokens?: number;
   @Field(() => Transaction, { nullable: true, defaultValue: [] })

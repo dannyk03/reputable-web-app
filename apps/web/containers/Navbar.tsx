@@ -8,12 +8,14 @@ import {
   useTheme,
   Text,
   Avatar,
+  Link,
 } from "@chakra-ui/react";
 import Logo from "../components/Icons/Logo";
 import { useAuth0 } from "@auth0/auth0-react";
 import makeAvatar from "../helpers/makeAvatar";
 import { BiBell } from "react-icons/bi";
 import Image from "next/image";
+import NextLink from "next/link";
 
 export default function Navbar() {
   const theme = useTheme();
@@ -21,7 +23,16 @@ export default function Navbar() {
   return (
     <Flex flexDirection="column">
       <HStack py={10}>
-        <Icon as={Logo} w="180px" h="44px" fill={theme.colors.primary[800]} />
+        <NextLink href={"/"} passHref>
+          <Link>
+            <Icon
+              as={Logo}
+              w="180px"
+              h="44px"
+              fill={theme.colors.primary[800]}
+            />
+          </Link>
+        </NextLink>
         <Spacer />
         {!user ? (
           <>
@@ -42,7 +53,9 @@ export default function Navbar() {
               borderColor="gray.200"
               borderRadius="24px"
               _hover={{ cursor: "pointer" }}
-              onClick={() => loginWithPopup()}
+              onClick={() =>
+                loginWithPopup({ audience: "https://api.reputable.health" })
+              }
             >
               <Text>Sign in</Text>
             </Box>

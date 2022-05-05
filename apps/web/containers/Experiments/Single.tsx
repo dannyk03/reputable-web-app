@@ -25,8 +25,8 @@ import ExperimentMarkerInfo from "../../components/Experiments/ExperimentMarkerI
 import { PrimaryButton } from "../../components/Button";
 import ReputableLogo from "../../components/Icons/ReputableLogo";
 import { ITip } from "@reputable/types";
-import ContributionsTooltip from "../../components/Experiments/ContributionsTooltip";
-import { experiment } from "../../mockData";
+import ContributionsModal from "../../components/Experiments/ContributionsModal";
+import TipModal from "../../components/TipModal";
 
 interface ExperimentsSingleViewProps {
   experiment: PopulatedExperiment;
@@ -108,18 +108,20 @@ export default function ExperimentsSingleView({
 
       <Flex minW="400px" direction="column" gap={6}>
         <VStack gap={4}>
-          <PrimaryButton
-            w="100%"
-            text="Tip REPT"
-            leftIcon={
-              <Icon
-                as={ReputableLogo}
-                color="white"
-                width="16px"
-                height="16px"
-              />
-            }
-          />
+          <TipModal experimentId={data._id}>
+            <PrimaryButton
+              w="100%"
+              text="Tip REPT"
+              leftIcon={
+                <Icon
+                  as={ReputableLogo}
+                  color="white"
+                  width="16px"
+                  height="16px"
+                />
+              }
+            />
+          </TipModal>
           <HStack align="center">
             <Icon as={ReputableLogo} width="18px" height="18px" />
             <Text size="18px" fontWeight={600} lineHeight="28px">
@@ -129,7 +131,7 @@ export default function ExperimentsSingleView({
               )}{" "}
               REPT received
             </Text>
-            <ContributionsTooltip tips={experiment.tips || []}>
+            <ContributionsModal tips={data.tips || []}>
               <Text
                 color="primary.700"
                 lineHeight="28px"
@@ -139,7 +141,7 @@ export default function ExperimentsSingleView({
               >
                 See contributions
               </Text>
-            </ContributionsTooltip>
+            </ContributionsModal>
           </HStack>
         </VStack>
         <Box>

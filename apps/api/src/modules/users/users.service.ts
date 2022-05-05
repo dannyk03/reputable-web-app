@@ -56,6 +56,10 @@ export class UsersService {
     });
   }
 
+  async findById(id: string) {
+    return this.client.get<User>(`/users/${id}`).then((r) => r.data);
+  }
+
   async findOne(email: string) {
     return this.client
       .get<User>('/users-by-email', {

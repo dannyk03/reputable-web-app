@@ -1,6 +1,6 @@
 import { gql, request } from "graphql-request";
 import { useQuery, QueryClient } from "react-query";
-import { useGraphqlClient } from "../../providers/GraphqlClient";
+import { useApiContext } from "../../../providers/ApiContext";
 import { PopulatedExperiment } from "@reputable/types";
 
 export interface ExperimentsParams {
@@ -10,10 +10,15 @@ export interface ExperimentsParams {
 }
 
 const query = gql`
-  query {
-    experiments {
+  query ($community: String) {
+    experiments(community: $community) {
       title
-      communities
+      communities {
+        icon
+        name
+        slug
+        memberCount
+      }
       createdBy {
         name
         email
@@ -27,12 +32,11 @@ const query = gql`
   }
 `;
 
-export const useExperiments = (params: ExperimentsParams["GET"]) => {
-  const client = useGraphqlClient();
-  const { community } = params;
+export const useExperiments = (community?: string) => {
+  const { client } = useApiContext();
 
   return useQuery<PopulatedExperiment[]>(["experiments", { community }], () =>
-    client.request(query).then((r) => {
+    client.request(query, { community }).then((r) => {
       return r.experiments;
     })
   );

@@ -3,6 +3,11 @@ export interface BaseMongoEntity {
     _id: string;
     updatedAt?: Date;
 }
+export interface IUserMetadata {
+    tokens?: number;
+    transactions?: ITransaction[];
+    communities?: string[];
+}
 export interface ITip {
     userId: string;
     amount: number;
@@ -17,10 +22,6 @@ export interface ICommunity extends BaseMongoEntity {
     icon: string;
     memberCount: number;
     slug: string;
-}
-export interface UserMetaData {
-    transactions?: ITransaction[];
-    tokens: number;
 }
 export declare enum ExperimentStatus {
     ACTIVE = "ACTIVE",
@@ -39,6 +40,8 @@ export interface IUser {
     picture: string;
     name: string;
     tips?: ITip[];
+    user_id: string;
+    user_metadata?: IUserMetadata;
 }
 export interface IComment extends BaseMongoEntity {
     author: string;
@@ -80,8 +83,9 @@ export interface IExperiment extends BaseMongoEntity {
     tips?: ITip[];
     prettifyResult?: (result: IExperimentResult) => IExperimentResult;
 }
-export interface PopulatedExperiment extends Omit<IExperiment, "createdBy"> {
+export interface PopulatedExperiment extends Omit<IExperiment, "createdBy" | "communities"> {
     createdBy?: IUser;
+    communities?: ICommunity[];
 }
 export interface PopulatedComment extends Omit<IComment, "author" | "replies"> {
     author: IUser;
@@ -89,4 +93,8 @@ export interface PopulatedComment extends Omit<IComment, "author" | "replies"> {
         author?: IUser;
     } & Omit<IComment, "author">[];
 }
+export interface IMessageResponse {
+    message: string;
+}
+export declare type ITipDTO = Pick<ITip, "amount">;
 //# sourceMappingURL=index.d.ts.map

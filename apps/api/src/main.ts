@@ -5,6 +5,7 @@ import { mongoose } from '@typegoose/typegoose';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.enableCors();
   await app.listen(4000);
   mongoose.set('debug', true);
 }

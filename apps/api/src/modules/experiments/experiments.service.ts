@@ -1,11 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { CreateExperimentInput } from './dto/create-experiment.input';
 import { UpdateExperimentInput } from './dto/update-experiment.input';
 import { Experiment, ExperimentDocument } from './entities/experiment.entity';
 import { Model, FilterQuery } from 'mongoose';
 import { plainToClass } from 'class-transformer';
-import { ITip, IUser } from '@reputable/types';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class ExperimentsService {
@@ -20,16 +20,18 @@ export class ExperimentsService {
       .then((experiment) => plainToClass(Experiment, experiment.toJSON()));
   }
 
-  async tipExperiment(experimentId: string, user: IUser, tip: ITip) {
+  async tipExperiment(experimentId: string, user: User, amount: number) {
+    if (user.user_metadata.tokens - amount < 0)
+      return new BadRequestException('Insufficient funds');
     return this.experimentModel
       .findByIdAndUpdate(experimentId, {
-        $push: { tips: tip },
+        $push: { tips: { userId: user.user_id, amount } },
       })
       .orFail()
       .exec()
-      .then((experiment: ExperimentDocument) =>
-        plainToClass(Experiment, experiment.toJSON()),
-      );
+      .then(() => ({
+        message: 'Tipped experiment!',
+      }));
   }
 
   async findAll() {
@@ -42,8 +44,9 @@ export class ExperimentsService {
   }
 
   async query(selector: FilterQuery<ExperimentDocument>) {
+    console.log('selector', selector);
     return this.experimentModel
-      .find(selector)
+      .find({ communities: selector?.community })
       .sort({ _id: -1 })
       .lean({ virtuals: true, getters: true })
       .limit(25)

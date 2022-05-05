@@ -1,13 +1,18 @@
 import { gql, request } from "graphql-request";
 import { useQuery, QueryClient } from "react-query";
-import { useGraphqlClient } from "../../providers/GraphqlClient";
+import { useApiContext } from "../../../providers/ApiContext";
 import { PopulatedExperiment } from "@reputable/types";
 
 const query = gql`
   query ($_id: String!) {
     experiment(_id: $_id) {
       title
-      communities
+      communities {
+        name
+        slug
+        icon
+        memberCount
+      }
       tips {
         amount
       }
@@ -54,7 +59,7 @@ const query = gql`
 `;
 
 export const useExperiment = (_id: string) => {
-  const client = useGraphqlClient();
+  const { client } = useApiContext();
 
   return useQuery<PopulatedExperiment>(["experiment", { _id }], () =>
     client.request(query, { _id }).then((r) => {
