@@ -8,6 +8,8 @@ export class UserMetaData {
   tokens?: number;
   @Field(() => Transaction, { nullable: true, defaultValue: [] })
   transactions?: Transaction[];
+  @Field(() => [String], { nullable: true, defaultValue: [] })
+  communities?: string[];
 }
 
 @ObjectType()

@@ -7,24 +7,12 @@ import {
   Comment,
   CommentDocument,
 } from '../modules/comments/entities/comment.entity';
-import { experimentResultMarkers } from '../common/data';
+import { communities, experimentResultMarkers } from '../common/data';
 import {
   IExperiment,
   ExperimentStatus,
   IResultHistory,
 } from '@reputable/types';
-
-export const communities = [
-  'Sleep',
-  'Longevity',
-  'Anxiety',
-  'Weight Loss',
-  'Meditation',
-  'Anxiety',
-  'Chronic Pain',
-  'Cardiovascular',
-  'Blood Sugar',
-];
 
 const pickRandomFromArray = (arr: any[]) => {
   return arr[
@@ -160,6 +148,9 @@ async function main() {
   await db.collection('comments').insertMany(replies);
   console.log('Added replies!');
   console.log('Script is done. Exiting...');
+
+  console.log('Adding communities');
+  await db.collection('communities').insertMany(communities);
   process.exit(1);
 }
 
@@ -182,7 +173,7 @@ export const generateExperiment = async (users) => {
         faker.datatype.number({ min: 1, max: 3 }),
       ),
       communities: getRandomSubarray(
-        communities,
+        communities.map((c) => c.slug),
         faker.datatype.number({ min: 1, max: 3 }),
       ),
       description: faker.lorem.paragraphs(5, '<br/>'),

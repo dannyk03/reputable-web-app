@@ -1,19 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { CreateCommunityInput } from './dto/create-community.input';
-import { UpdateCommunityInput } from './dto/update-community.input';
 import { communities } from '../../common/data';
+import { InjectModel } from '@nestjs/mongoose';
+import { Community, CommunityDocument } from './entities/community.entity';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class CommunitiesService {
-  create(createCommunityInput: CreateCommunityInput) {
-    return 'This action adds a new community';
-  }
+  constructor(
+    @InjectModel(Community.name)
+    private communitiesModel: Model<CommunityDocument>,
+  ) {}
 
   findAll() {
-    return communities;
+    return this.communitiesModel.find({}).orFail().exec();
   }
 
   findOne(slug: string) {
-    return communities.filter((c) => c.slug === slug);
+    return this.communitiesModel.findOne({ slug }).orFail().exec();
+  }
+
+  incrementMemberCount(slug: string) {
+    return this.communitiesModel.updateOne(
+      { slug },
+      { $inc: { memberCount: 1 } },
+    );
   }
 }

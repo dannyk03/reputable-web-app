@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateExperimentInput } from './dto/create-experiment.input';
 import { UpdateExperimentInput } from './dto/update-experiment.input';
 import { Experiment, ExperimentDocument } from './entities/experiment.entity';
-import { Model } from 'mongoose';
+import { Model, FilterQuery } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { ITip, IUser } from '@reputable/types';
 
@@ -35,6 +35,16 @@ export class ExperimentsService {
   async findAll() {
     return this.experimentModel
       .find({})
+      .lean({ virtuals: true, getters: true })
+      .limit(25)
+      .orFail()
+      .exec();
+  }
+
+  async query(selector: FilterQuery<ExperimentDocument>) {
+    return this.experimentModel
+      .find(selector)
+      .sort({ _id: -1 })
       .lean({ virtuals: true, getters: true })
       .limit(25)
       .orFail()

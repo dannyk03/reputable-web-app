@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Experiment, ExperimentSchema } from './entities/experiment.entity';
 import { CommentsModule } from '../comments/comments.module';
 import { UsersModule } from '../users/users.module';
+import { CommunitiesModule } from '../communities/communities.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { UsersModule } from '../users/users.module';
     ]),
     CommentsModule,
     UsersModule,
+    CommunitiesModule,
   ],
   providers: [ExperimentsResolver, ExperimentsService],
 })

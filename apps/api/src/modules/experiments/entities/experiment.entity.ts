@@ -1,9 +1,4 @@
-import {
-  ObjectType,
-  Field,
-  registerEnumType,
-  Int,
-} from '@nestjs/graphql';
+import { ObjectType, Field, registerEnumType, Int } from '@nestjs/graphql';
 import { BaseMongoEntity } from '../../../common/entities/mongo';
 import { buildSchema, DocumentType, index, prop } from '@typegoose/typegoose';
 import {
@@ -16,6 +11,7 @@ import { Comment } from '../../comments/entities/comment.entity';
 import { TransformQueries } from '../../../decorators';
 import { User } from '../../../modules/users/entities/user.entity';
 import { Tip } from '../../../common/entities/tip';
+import { Community } from '../../../modules/communities/entities/community.entity';
 
 interface MarkerPrettifiers {
   [k: string]: (value: number) => string;
@@ -129,7 +125,7 @@ export class Experiment extends BaseMongoEntity implements IExperiment {
     required: true,
   })
   public createdBy: string;
-  @Field(() => [String])
+  @Field(() => [Community])
   @prop({ type: () => [String], required: true })
   public communities: string[];
   @Field()
@@ -138,9 +134,9 @@ export class Experiment extends BaseMongoEntity implements IExperiment {
   @Field(() => [ExperimentResultMarker])
   @prop({ required: true })
   public markers: ExperimentResultMarker[];
-  @Field(()=>Int)
-  @prop({required:true})
-  public experimentPeriod: number
+  @Field(() => Int)
+  @prop({ required: true })
+  public experimentPeriod: number;
   /*
     Results wont be used for MVP
     @Field(() => [ExperimentResult])

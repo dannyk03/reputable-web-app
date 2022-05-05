@@ -2,6 +2,7 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { ITip } from '@reputable/types';
 import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 import { plainToClass } from 'class-transformer';
+import { CommunitiesService } from '../communities/communities.service';
 import { User } from './entities/user.entity';
 
 const getAuth0ManagementAccessToken = () => {
@@ -31,7 +32,7 @@ const getAuth0ManagementAccessToken = () => {
 @Injectable()
 export class UsersService {
   private client: AxiosInstance;
-  constructor() {
+  constructor(private readonly communitiesService: CommunitiesService) {
     this.client = axios.create({
       baseURL: `${process.env.AUTH0_ISSUER_URL}api/v2`,
       timeout: 5000,
@@ -90,6 +91,27 @@ export class UsersService {
       return {
         message: 'Transaction successful!',
       };
+    });
+  }
+
+  async joinCommunity(email: string, community: string) {
+    return this.findOne(email).then((user) => {
+      if (user.user_metadata.communities.includes(community))
+        return new BadRequestException(
+          'You are already a member of this community',
+        );
+      return Promise.all([
+        this.client.patch<User>(`/users/${user.user_id}`, {
+          user_metadata: {
+            communities: [...user.user_metadata.communities, community],
+          },
+        }),
+        this.communitiesService.incrementMemberCount(community),
+      ]).then((response) => {
+        return {
+          message: 'Joined community!',
+        };
+      });
     });
   }
 }

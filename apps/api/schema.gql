@@ -13,6 +13,7 @@ type Transaction {
 type UserMetaData {
   tokens: Int!
   transactions: Transaction
+  communities: [String!]
 }
 
 type User {
@@ -47,6 +48,16 @@ type Tip {
   amount: Int!
 }
 
+type Community {
+  createdAt: DateTime
+  updatedAt: DateTime
+  _id: ID
+  name: String!
+  icon: String!
+  memberCount: Int!
+  slug: String!
+}
+
 type ExperimentResultMarker {
   name: String!
   slug: String!
@@ -61,7 +72,7 @@ type Experiment {
   title: String!
   status: ExperimentStatus!
   createdBy: User!
-  communities: [String!]!
+  communities: [Community!]!
   description: String!
   markers: [ExperimentResultMarker!]!
   experimentPeriod: Int!
@@ -78,16 +89,6 @@ enum ExperimentStatus {
 
 type MessageResponse {
   message: String!
-}
-
-type Community {
-  createdAt: DateTime
-  updatedAt: DateTime
-  _id: ID
-  name: String!
-  icon: String!
-  memberCount: Int!
-  slug: String!
 }
 
 type Query {
