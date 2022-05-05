@@ -26,6 +26,7 @@ export default function Navbar() {
         <NextLink href={"/"} passHref>
           <Link>
             <Icon
+              _focus={{ textDecoration: "none" }}
               as={Logo}
               w="180px"
               h="44px"
