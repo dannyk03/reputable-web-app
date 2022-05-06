@@ -44,6 +44,8 @@ const steps = [
 
 export default function CreateExperimentView() {
   const [currentStep, setCurrentStep] = React.useState<number>(0);
+  const next = () => setCurrentStep((prevStep) => Math.min(prevStep + 1, 2));
+  const prev = () => setCurrentStep((prevStep) => Math.max(prevStep - 1, 0));
   const methods = useForm<TCreateExperiment>();
 
   console.log(methods.getValues());
@@ -69,8 +71,7 @@ export default function CreateExperimentView() {
       canFinish:
         methods.formState.errors.hasOwnProperty("description") ||
         methods.formState.errors.hasOwnProperty("title"),
-      onFinish: () =>
-        setCurrentStep((prevStep) => Math.min(steps.length, prevStep + 1)),
+      onFinish: () => next(),
     },
     {
       resultMarkers: experimentResultMarkers,

@@ -3,7 +3,19 @@ import { ContentState, EditorState, RawDraftContentState } from "draft-js";
 import dynamic from "next/dynamic";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorProps } from "react-draft-wysiwyg";
-import { Box, WithCSSVar } from "@chakra-ui/react";
+import {
+  Box,
+  Collapse,
+  Flex,
+  HStack,
+  VStack,
+  Text,
+  useDisclosure,
+  WithCSSVar,
+} from "@chakra-ui/react";
+import { ChevronDownIcon } from "@chakra-ui/icons";
+import styles from "./styles.module.css";
+import ToolbarDropdown from "./components/ToolbarDropdown";
 
 const Editor = dynamic<EditorProps>(
   () => import("react-draft-wysiwyg").then((mod) => mod.Editor),
@@ -39,6 +51,20 @@ export default class RichTextEditor extends Component<RTEProps, RTEState> {
   };
 
   render() {
+    const blockTypeOptions = [
+      "Normal",
+      "H1",
+      "H2",
+      "H3",
+      "H4",
+      "H5",
+      "H6",
+      "Blockquote",
+      "Code",
+    ];
+    const fontSizes = [
+      8, 9, 10, 11, 12, 14, 16, 18, 24, 30, 36, 48, 60, 72, 96,
+    ];
     const { editorState } = this.state;
     const { theme } = this.props;
     return (
@@ -52,8 +78,8 @@ export default class RichTextEditor extends Component<RTEProps, RTEState> {
             borderRadius: "12px",
             minHeight: "200px",
             padding: "5px 20px",
-            fontSize: "",
           }}
+          editorClassName={styles.editorClass}
           toolbar={{
             options: [
               "inline",
@@ -65,10 +91,26 @@ export default class RichTextEditor extends Component<RTEProps, RTEState> {
               "link",
               "history",
             ],
-            inline: { inDropdown: true },
-            list: { inDropdown: true },
-            textAlign: { inDropdown: true },
-            link: { inDropdown: true },
+            blockType: {
+              component: (params) =>
+                ToolbarDropdown({
+                  ...params,
+                  placeholder: "Normal",
+                  options: blockTypeOptions,
+                  w: "140px",
+                  h: "25px",
+                }),
+            },
+            fontSize: {
+              component: (params) =>
+                ToolbarDropdown({
+                  ...params,
+                  palceholder: 16,
+                  options: fontSizes,
+                  w: "50px",
+                  h: "25px",
+                }),
+            },
           }}
         />
       </Box>

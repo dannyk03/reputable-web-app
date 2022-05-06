@@ -6,6 +6,7 @@ import axios from "axios";
 import React from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { APIContextProvider } from "../providers/ApiContext";
+import { ReactQueryDevtools } from "react-query/devtools";
 
 axios.defaults.baseURL = process.env.API_URL;
 
@@ -23,6 +24,7 @@ function Reputable({ Component, pageProps }) {
             <MainLayout>
               <Hydrate state={pageProps.dehydratedState}>
                 <Component {...pageProps} />
+                <ReactQueryDevtools initialIsOpen={false} />
               </Hydrate>
             </MainLayout>
           </ChakraProvider>

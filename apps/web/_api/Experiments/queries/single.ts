@@ -29,6 +29,7 @@ const query = gql`
         picture
       }
       comments {
+        _id
         replyTo
         createdAt
         updatedAt
@@ -61,9 +62,8 @@ const query = gql`
 export const useExperiment = (_id: string) => {
   const { client } = useApiContext();
 
-  return useQuery<PopulatedExperiment>(["experiment", { _id }], () =>
+  return useQuery<PopulatedExperiment>(["experiments", { _id }], () =>
     client.request(query, { _id }).then((r) => {
-      console.log("response", r);
       return r.experiment;
     })
   );

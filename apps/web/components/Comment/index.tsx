@@ -4,6 +4,11 @@ import makeAvatar from "../../helpers/makeAvatar";
 import Image from "next/image";
 import React from "react";
 import { PopulatedComment } from "@reputable/types";
+import { DeleteIcon } from "@chakra-ui/icons";
+import { remove } from "lodash";
+import { useComment } from "../../_api/Comments/mutations";
+import { useRouter } from "next/router";
+import { useApiContext } from "../../providers/ApiContext";
 
 interface CommentProps {
   data: Partial<PopulatedComment>;
@@ -25,9 +30,12 @@ export default function Comment({
     replies = [],
   } = data;
   const timeAgo = moment(new Date(updatedAt)).fromNow();
+  const router = useRouter();
+  const { user } = useApiContext();
+  const { remove } = useComment(router.query.id as string);
   return (
     <>
-      <Box {...restProps} pl={replyTo && 12} pt={5}>
+      <Box {...restProps} pl={replyTo !== null ? 12 : 0} pt={5}>
         <Flex justify="start"></Flex>
         <Flex justify={"start"} align="center">
           <Avatar
@@ -58,20 +66,38 @@ export default function Comment({
             upvoted
           />
           */}
-          <Button colorScheme="gray" variant="ghost" height={6} ml={1}>
-            <Image
-              src="/icons/Comment.svg"
-              width={14}
-              height={14}
-              alt="Reply"
-            />
-            <Text pl="6px">Reply</Text>
-          </Button>
+          {replyTo === null && (
+            <Button colorScheme="gray" variant="ghost" height={6} ml={1}>
+              <Image
+                src="/icons/Comment.svg"
+                width={14}
+                height={14}
+                alt="Reply"
+              />
+              <Text pl="6px">Reply</Text>
+            </Button>
+          )}
+          {user && user.email === author.email && (
+            <Button
+              colorScheme="red"
+              variant="ghost"
+              height={6}
+              ml={1}
+              onClick={() => {
+                if (window.confirm("Are you sure to delete this comment?"))
+                  remove.mutate({ _id });
+              }}
+            >
+              <DeleteIcon width="14px" />
+              <Text pl="6px">Delete</Text>
+            </Button>
+          )}
         </Flex>
       </Box>
-      {replies.map((comment, idx) => (
-        <Comment key={`${_id}_reply_${idx}`} data={comment} />
-      ))}
+      {!replyTo &&
+        replies.map((comment, idx) => (
+          <Comment key={`${_id}_reply_${idx}`} data={comment} />
+        ))}
     </>
   );
 }

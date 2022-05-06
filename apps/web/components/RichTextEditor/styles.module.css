@@ -1,0 +1,21 @@
+.editorClass * h1{
+  font-size: revert !important;
+}
+.editorClass * h2 {
+  font-size: revert !important;
+}
+.editorClass * h3 {
+  font-size: revert !important;
+}
+.editorClass * h4 {
+  font-size: revert !important;
+}
+.editorClass * h5 {
+  font-size: revert !important;
+}
+.editorClass * h6 {
+  font-size: revert !important;
+}
+.editorClass * {
+  margin: 0.3em 0 !important;
+}

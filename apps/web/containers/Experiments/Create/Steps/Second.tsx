@@ -47,6 +47,7 @@ export default function SecondStep({
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </Text>
         <Divider my={4} />
+        {/* 
         <FormControl>
           <FormLabel htmlFor="healthMarker">
             Add Health Marker Results
@@ -81,6 +82,7 @@ export default function SecondStep({
             ></Input>
           </FormControl>
         ))}
+                    */}
       </Card>
       <Card>
         <Text

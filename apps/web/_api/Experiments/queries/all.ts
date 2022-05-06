@@ -13,6 +13,10 @@ const query = gql`
   query ($community: String) {
     experiments(community: $community) {
       title
+      tips {
+        amount
+        userId
+      }
       communities {
         icon
         name

@@ -17,16 +17,16 @@ import { BsThreeDots } from "react-icons/bs";
 import { FcDonate, FcShare } from "react-icons/fc";
 import Comments from "../../containers/Comments";
 import React from "react";
-import { PopulatedExperiment } from "types";
-import { StatusTag } from "../../components/Experiments";
 import AboutExperiment from "../../components/Experiments/About";
 import TextLink from "../../components/TextLink";
 import ExperimentMarkerInfo from "../../components/Experiments/ExperimentMarkerInfo";
 import { PrimaryButton } from "../../components/Button";
 import ReputableLogo from "../../components/Icons/ReputableLogo";
-import { ITip } from "@reputable/types";
+import { ITip, PopulatedExperiment } from "@reputable/types";
 import ContributionsModal from "../../components/Experiments/ContributionsModal";
 import TipModal from "../../components/TipModal";
+import Image from "next/image";
+import { useAuth0 } from "@auth0/auth0-react";
 
 interface ExperimentsSingleViewProps {
   experiment: PopulatedExperiment;
@@ -36,6 +36,21 @@ export default function ExperimentsSingleView({
   children,
   experiment: data,
 }: React.PropsWithChildren<ExperimentsSingleViewProps>) {
+  const { isAuthenticated } = useAuth0();
+  const contributions: {
+    tokensMatched: number;
+    tokensTipped: number;
+  } = data.tips.reduce(
+    (prev, curr) => ({
+      tokensMatched: (prev.tokensMatched += curr.amount * curr.amount),
+      tokensTipped: (prev.tokensTipped += curr.amount),
+    }),
+    {
+      tokensMatched: 0,
+      tokensTipped: 0,
+    }
+  );
+  const totalTokens = contributions.tokensMatched + contributions.tokensTipped;
   return (
     <Flex direction={"row"} gap="90px">
       <Box flexGrow={1}>
@@ -43,7 +58,10 @@ export default function ExperimentsSingleView({
           _focus={{ outline: "none" }}
           label="Back to experiments"
           icon={<ArrowBackIcon />}
-          href="/experiments"
+          href={{
+            pathname: "/experiments",
+            query: { community: data.communities[0].slug },
+          }}
         />
 
         <Heading color="gray.800" fontSize="36px" pt={4} lineHeight="40px">
@@ -51,24 +69,22 @@ export default function ExperimentsSingleView({
         </Heading>
         <Flex pt={5}>
           <Flex gap={2} align="center" height={7}>
-            <StatusTag status={data.status} />
-            {/* 
             {(data.communities || []).map((comm, idx) => (
-              <Box key={`communityTag_${idx}`}>
+              <HStack key={`communityTag_${idx}`}>
                 <Image
-                  alt="Sleep Community"
+                  alt={`${comm.name} Community`}
                   src={comm.icon}
-                  width="28px"
-                  height="28px"
+                  width="24px"
+                  height="24px"
                 />
                 <Text color="gray.700" fontSize="18px" fontWeight={400}>
-                  {`${comm.name} by`}
+                  {`${comm.name}`}
                 </Text>
-              </Box>
+              </HStack>
             ))}
-            */}
+            <Text fontSize="18px">by</Text>
             <Text color="gray.700" fontSize="18px" fontWeight={600}>
-              {data.createdBy.firstName}
+              {data.createdBy.name}
             </Text>
           </Flex>
           <Spacer />
@@ -78,14 +94,6 @@ export default function ExperimentsSingleView({
             Duplicate
           </Button>
           */}
-            <Button
-              leftIcon={<FcDonate />}
-              height={7}
-              variant="ghost"
-              size="sm"
-            >
-              Tip
-            </Button>
             <Button leftIcon={<FcShare />} height={7} variant="ghost" size="sm">
               Share
             </Button>
@@ -98,7 +106,7 @@ export default function ExperimentsSingleView({
           </Flex>
         </Flex>
         <Box
-          mt={10}
+          mt={6}
           dangerouslySetInnerHTML={{ __html: data.description }}
         ></Box>
         <Box mt="50px">
@@ -111,7 +119,10 @@ export default function ExperimentsSingleView({
           <TipModal experimentId={data._id}>
             <PrimaryButton
               w="100%"
-              text="Tip REPT"
+              disabled={!isAuthenticated}
+              text={
+                isAuthenticated ? "Tip REPT" : "Sign in to tip this experiment"
+              }
               leftIcon={
                 <Icon
                   as={ReputableLogo}
@@ -125,11 +136,7 @@ export default function ExperimentsSingleView({
           <HStack align="center">
             <Icon as={ReputableLogo} width="18px" height="18px" />
             <Text size="18px" fontWeight={600} lineHeight="28px">
-              {data.tips.reduce(
-                (prev: number, curr: ITip) => (prev += curr.amount),
-                0
-              )}{" "}
-              REPT received
+              {totalTokens} REPT received
             </Text>
             <ContributionsModal tips={data.tips || []}>
               <Text

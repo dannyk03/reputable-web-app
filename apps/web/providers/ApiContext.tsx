@@ -11,6 +11,7 @@ const meQuery = gql`
       name
       email
       email_verified
+      picture
       user_metadata {
         tokens
         communities

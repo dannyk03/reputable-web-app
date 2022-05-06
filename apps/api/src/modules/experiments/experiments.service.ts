@@ -6,12 +6,15 @@ import { Experiment, ExperimentDocument } from './entities/experiment.entity';
 import { Model, FilterQuery } from 'mongoose';
 import { plainToClass } from 'class-transformer';
 import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
+import { pickBy } from 'lodash';
 
 @Injectable()
 export class ExperimentsService {
   constructor(
     @InjectModel(Experiment.name)
     private experimentModel: Model<ExperimentDocument>,
+    private usersService: UsersService,
   ) {}
 
   async create(createExperimentInput: CreateExperimentInput) {
@@ -23,15 +26,22 @@ export class ExperimentsService {
   async tipExperiment(experimentId: string, user: User, amount: number) {
     if (user.user_metadata.tokens - amount < 0)
       return new BadRequestException('Insufficient funds');
-    return this.experimentModel
-      .findByIdAndUpdate(experimentId, {
-        $push: { tips: { userId: user.user_id, amount } },
-      })
-      .orFail()
-      .exec()
-      .then(() => ({
-        message: 'Tipped experiment!',
-      }));
+    return await Promise.all([
+      this.experimentModel
+        .findByIdAndUpdate(experimentId, {
+          $push: { tips: { userId: user.user_id, amount } },
+        })
+        .orFail()
+        .exec(),
+      this.usersService.updateOne(user.user_id, {
+        user_metadata: {
+          ...user.user_metadata,
+          tokens: user.user_metadata.tokens - amount,
+        },
+      }),
+    ]).then(() => ({
+      message: 'Tipped experiment!',
+    }));
   }
 
   async findAll() {
@@ -44,9 +54,9 @@ export class ExperimentsService {
   }
 
   async query(selector: FilterQuery<ExperimentDocument>) {
-    console.log('selector', selector);
+    const selectorValidated = pickBy(selector, (val) => val);
     return this.experimentModel
-      .find({ communities: selector?.community })
+      .find(selectorValidated)
       .sort({ _id: -1 })
       .lean({ virtuals: true, getters: true })
       .limit(25)

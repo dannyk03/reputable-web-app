@@ -1,6 +1,6 @@
 import { IMessageResponse } from "@reputable/types";
-import { gql, request } from "graphql-request";
-import { useMutation } from "react-query";
+import { gql } from "graphql-request";
+import { useMutation, useQueryClient } from "react-query";
 import { useApiContext } from "../../../providers/ApiContext";
 
 const tipExperiment = gql`
@@ -11,14 +11,25 @@ const tipExperiment = gql`
   }
 `;
 
-export const useTipExperiment = () => {
-  const { client } = useApiContext();
+export const useTipExperiment = (experimentId?: string) => {
+  const { client, refreshUser } = useApiContext();
+  const queryClient = useQueryClient();
 
   return useMutation<
     IMessageResponse,
     Error,
     { experimentId: string; tip: number }
-  >("tipExperiment", (params) => {
-    return client.request<IMessageResponse>(tipExperiment, params);
-  });
+  >(
+    "tipExperiment",
+    (params) => {
+      return client.request<IMessageResponse>(tipExperiment, params);
+    },
+    {
+      onSuccess: () => {
+        console.log("invalidating", experimentId);
+        queryClient.invalidateQueries(["experiments", { _id: experimentId }]);
+        refreshUser();
+      },
+    }
+  );
 };

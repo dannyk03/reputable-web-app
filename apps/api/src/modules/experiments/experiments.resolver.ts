@@ -26,50 +26,12 @@ import { MessageResponse } from 'src/common/entities/response';
 
 @Resolver(() => Experiment)
 export class ExperimentsResolver {
-  private commentsLoader: DataLoader<string, PopulatedComment[]>;
-  private usersLoader: DataLoader<string, User>;
-  private communitiesLoader: DataLoader<string, Community>;
   constructor(
     private readonly experimentsService: ExperimentsService,
     private readonly commentsService: CommentsService,
     private readonly usersService: UsersService,
     private readonly communitiesService: CommunitiesService,
-  ) {
-    this.commentsLoader = new DataLoader<string, PopulatedComment[]>(
-      async (_ids) => {
-        const comments = await commentsService.query({
-          // Since we convert everything with class-transformer, we need to
-          // convert _ids back to ObjectId type.
-          // Mongoose will not automatically inherit type for $in operator.
-          experiment: { $in: _ids },
-        });
-        const commentsMap = mapFromArray<PopulatedComment>(
-          comments,
-          (c) => c.experiment as string,
-        );
-        return _ids.map((_id) => makeArray(commentsMap.get(_id)));
-      },
-    );
-    this.usersLoader = new DataLoader<string, User>(async (emails) => {
-      const users = await Promise.all(
-        emails.map((email) => usersService.findOne(email)),
-      );
-      const usersMap = mapFromArray<User>(users, (u) => u.email);
-      return emails.map((email) => usersMap.get(email) as User);
-    });
-    this.communitiesLoader = new DataLoader<string, Community>(
-      async (slugs) => {
-        const communities = await Promise.all(
-          slugs.map((slug) => communitiesService.findOne(slug)),
-        );
-        const communitiesMap = mapFromArray<Community>(
-          communities,
-          (c) => c.slug,
-        );
-        return slugs.map((slug) => communitiesMap.get(slug) as Community);
-      },
-    );
-  }
+  ) {}
 
   @Mutation(() => Experiment)
   createExperiment(
@@ -95,7 +57,8 @@ export class ExperimentsResolver {
 
   @ResolveField('comments', (returns) => [Comment])
   async getComments(@Parent() experiment: Experiment) {
-    return this.commentsLoader.load(experiment._id).then((r) => {
+    const commentsLoader = this.commentsService.getLoaderForExperiments();
+    return commentsLoader.load(experiment._id).then((r) => {
       const returned = instanceToPlain(r, { exposeUnsetFields: false });
       return returned;
     });
@@ -103,13 +66,17 @@ export class ExperimentsResolver {
 
   @ResolveField('createdBy', (returns) => User)
   getUser(@Parent() experiment: Experiment) {
-    return this.usersLoader.load(experiment.createdBy);
+    return this.usersService
+      .getLoaderForExperiments()
+      .load(experiment.createdBy);
   }
 
   @Public()
   @ResolveField('communities', (returns) => [Community])
   getCommunities(@Parent() experiment: Experiment) {
-    return this.communitiesLoader.loadMany(experiment.communities);
+    return this.communitiesService
+      .getLoaderForExperiments()
+      .loadMany(experiment.communities);
   }
 
   @Mutation(() => Experiment)

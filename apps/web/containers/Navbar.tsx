@@ -11,15 +11,19 @@ import {
   Link,
 } from "@chakra-ui/react";
 import Logo from "../components/Icons/Logo";
-import { useAuth0 } from "@auth0/auth0-react";
 import makeAvatar from "../helpers/makeAvatar";
 import { BiBell } from "react-icons/bi";
 import Image from "next/image";
 import NextLink from "next/link";
+import { useApiContext } from "../providers/ApiContext";
+import { useAuth0 } from "@auth0/auth0-react";
+import UserBadge from "../components/UserBadge";
+import NoSSR from "../components/NoSSR";
 
 export default function Navbar() {
   const theme = useTheme();
-  const { loginWithRedirect, user, loginWithPopup } = useAuth0();
+  const { loginWithPopup } = useAuth0();
+  const { user } = useApiContext();
   return (
     <Flex flexDirection="column">
       <HStack py={10}>
@@ -83,31 +87,12 @@ export default function Navbar() {
                   fontSize="16px"
                   fontWeight={600}
                 >
-                  2838 REPT
+                  {user.user_metadata.tokens} REPT
                 </Text>
               </HStack>
-              <HStack
-                py={2}
-                px={4}
-                border="1px solid"
-                borderColor="gray.200"
-                borderRadius="24px"
-              >
-                <Avatar
-                  width={"24px"}
-                  height={"24px"}
-                  name="Profile Photo"
-                  src={user.profileImage ?? makeAvatar(user.sub)}
-                />
-                <Text
-                  color="gray.700"
-                  lineHeight="24px"
-                  fontSize="16px"
-                  fontWeight={600}
-                >
-                  {user.given_name}
-                </Text>
-              </HStack>
+              <NoSSR>
+                <UserBadge w="fit-content" />
+              </NoSSR>
               <Flex
                 borderRadius="50%"
                 border="1px solid"

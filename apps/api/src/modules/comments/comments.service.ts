@@ -9,6 +9,8 @@ import { FilterQuery } from 'mongoose';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
 import { PopulatedComment } from '@reputable/types';
+import * as DataLoader from 'dataloader';
+import { makeArray, mapFromArray } from '../../common/helpers';
 
 @Injectable()
 export class CommentsService {
@@ -87,6 +89,23 @@ export class CommentsService {
   }
 
   remove(_id: string) {
-    return this.commentsModel.findOneAndRemove().orFail().exec();
+    return this.commentsModel.findByIdAndRemove(_id).orFail().exec();
+  }
+
+  getLoaderForExperiments() {
+    return new DataLoader<string, PopulatedComment[]>(async (_ids) => {
+      const comments = await this.query({
+        // Since we convert everything with class-transformer, we need to
+        // convert _ids back to ObjectId type.
+        // Mongoose will not automatically inherit type for $in operator.
+        experiment: { $in: _ids },
+        replyTo: { $eq: null },
+      });
+      const commentsMap = mapFromArray<PopulatedComment>(
+        comments,
+        (c) => c.experiment as string,
+      );
+      return _ids.map((_id) => makeArray(commentsMap.get(_id)));
+    });
   }
 }

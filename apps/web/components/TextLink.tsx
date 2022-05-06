@@ -3,7 +3,7 @@ import NextLink from "next/link";
 import React from "react";
 
 export interface TextLinkProps extends ChakraProps {
-  href: string;
+  href: string | Record<string, any>;
   icon?: JSX.Element;
   label?: string;
 }
@@ -16,8 +16,8 @@ export default function TextLink({
 }: React.PropsWithChildren<TextLinkProps>) {
   return (
     <NextLink href={href} passHref>
-      <Link {...restProps}>
-        <Flex align="center">
+      <Link w="fit-content" {...restProps}>
+        <Flex w="fit-content" align="center">
           {icon}
           <Text fontWeight={600} color="gray.700" pl={2}>
             {label}

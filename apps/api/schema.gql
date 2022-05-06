@@ -108,9 +108,9 @@ type Mutation {
   updateExperiment(_id: String!, experiment: UpdateExperimentInput!): Experiment!
   removeExperiment(id: Int!): Experiment!
   tipExperiment(tip: Int!, id: String!): MessageResponse!
-  createComment(createCommentInput: CreateCommentInput!): Comment!
-  updateComment(_id: String!, comment: UpdateCommentInput!): Comment!
-  removeComment(_id: String!): Comment!
+  createComment(createCommentInput: CreateCommentInput!): MessageResponse!
+  updateComment(_id: String!, comment: UpdateCommentInput!): MessageResponse!
+  removeComment(_id: String!): MessageResponse!
   makeTransaction(from: String!, to: String!, amount: Float!): MessageResponse!
   joinCommunity(community: String!): MessageResponse!
 }
@@ -132,7 +132,7 @@ input UpdateExperimentInput {
 }
 
 input CreateCommentInput {
-  replyTo: String!
+  replyTo: String
   text: String!
   experiment: String!
 }

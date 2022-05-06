@@ -1,9 +1,11 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { ITip } from '@reputable/types';
+import { BadRequestException, Injectable, Scope } from '@nestjs/common';
+import * as DataLoader from 'dataloader';
 import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 import { plainToClass } from 'class-transformer';
 import { CommunitiesService } from '../communities/communities.service';
 import { User } from './entities/user.entity';
+import { mapFromArray } from 'src/common/helpers';
+import { REQUEST } from '@nestjs/core';
 
 const getAuth0ManagementAccessToken = () => {
   const options: AxiosRequestConfig = {
@@ -29,7 +31,7 @@ const getAuth0ManagementAccessToken = () => {
     });
 };
 
-@Injectable()
+@Injectable({ scope: Scope.REQUEST })
 export class UsersService {
   private client: AxiosInstance;
   constructor(private readonly communitiesService: CommunitiesService) {
@@ -58,6 +60,10 @@ export class UsersService {
 
   async findById(id: string) {
     return this.client.get<User>(`/users/${id}`).then((r) => r.data);
+  }
+
+  async updateOne(id: string, userData: Partial<User>) {
+    return this.client.patch<User>(`/users/${id}`, userData);
   }
 
   async findOne(email: string) {
@@ -116,6 +122,16 @@ export class UsersService {
           message: 'Joined community!',
         };
       });
+    });
+  }
+
+  getLoaderForExperiments() {
+    return new DataLoader<string, User>(async (emails) => {
+      const users = await Promise.all(
+        emails.map((email) => this.findOne(email)),
+      );
+      const usersMap = mapFromArray<User>(users, (u) => u.email);
+      return emails.map((email) => usersMap.get(email) as User);
     });
   }
 }

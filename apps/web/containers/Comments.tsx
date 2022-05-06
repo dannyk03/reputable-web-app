@@ -5,6 +5,7 @@ import {
   Divider,
   Flex,
   Heading,
+  HStack,
   Text,
   Textarea,
   useTheme,
@@ -14,9 +15,13 @@ import Comment from "../components/Comment";
 import Xarrow, { Xwrapper } from "react-xarrows";
 import makeAvatar from "../helpers/makeAvatar";
 import { ArrowDownIcon } from "@chakra-ui/icons";
-import { IComment } from "types";
+import { IComment } from "@reputable/types";
 import Card from "../components/Card";
 import { useAuth0 } from "@auth0/auth0-react";
+import { PrimaryButton } from "../components/Button";
+import { useForm } from "react-hook-form";
+import { useComment } from "../_api/Comments/mutations";
+import { useRouter } from "next/router";
 
 // React-XArrows will throw a warning if this is removed.
 React.useLayoutEffect = React.useEffect;
@@ -30,7 +35,10 @@ export default function Comments({
 }: React.PropsWithChildren<CommentsProps>) {
   const theme = useTheme();
   const { user = {} } = useAuth0();
-  const [value, setValue] = React.useState("");
+  const { register, handleSubmit } =
+    useForm<Pick<IComment, "text" | "experiment" | "replyTo">>();
+  const router = useRouter();
+  const { create, remove } = useComment(router.query.id as string);
 
   return (
     <Card>
@@ -51,17 +59,41 @@ export default function Comments({
       {/*
         Sort will go here.
        */}
-      <Flex>
+      <Flex w="100%">
         <Avatar
           width={"40px"}
           height={"40px"}
           name="Profile Photo"
           src={user.picture ?? makeAvatar(user.given_name ?? "User")}
         />
-        <Textarea ml={3} placeholder="Add a comment" />
+        <form
+          style={{ width: "100%" }}
+          onSubmit={handleSubmit((values) => {
+            create.mutate({
+              ...values,
+              experiment: router.query.id as string,
+            });
+          })}
+        >
+          <HStack align="end">
+            <Textarea
+              ml={3}
+              h="100px"
+              placeholder="Add a comment"
+              required
+              {...register("text", {
+                minLength: {
+                  value: 10,
+                  message: "Your comment should be at least 20 chars long.",
+                },
+              })}
+            />
+            <PrimaryButton fontSize="14px" h={8} type="submit" text="Submit" />
+          </HStack>
+        </form>
       </Flex>
       <Xwrapper>
-        {comments.map((comment = {}, index) => {
+        {comments.map((comment, index) => {
           return (
             <Box key={`parent_comment_${index}`}>
               <Comment id={`comment_${index}`} data={comment} />

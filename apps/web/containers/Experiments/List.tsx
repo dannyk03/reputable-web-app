@@ -6,6 +6,7 @@ import { ExperimentCard } from "../../components/Experiments";
 import SearchBar from "../../components/SearchBar";
 import { ICommunity, PopulatedExperiment } from "@reputable/types";
 import CommunityCard from "../../components/Communities/CommunityCard";
+import { useRouter } from "next/router";
 
 export interface ExperimentsListViewProps {
   experiments: PopulatedExperiment[];
@@ -16,11 +17,13 @@ export default function ExperimentsListView({
   experiments,
   community,
 }: React.PropsWithChildren<ExperimentsListViewProps>) {
+  const router = useRouter();
   return (
     <Flex direction="row">
       <VStack w="260px" gap={5}>
         <CommunityCard community={community} />
         <PrimaryButton
+          onClick={() => router.push("/experiments/create")}
           text="Create new experiment"
           leftIcon={<AddIcon width="12px" height="12px" />}
         />

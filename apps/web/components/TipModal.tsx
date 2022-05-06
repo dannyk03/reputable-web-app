@@ -28,11 +28,9 @@ export default function TipModal({
   children,
   experimentId,
 }: React.PropsWithChildren<{ experimentId: string }>) {
-  const format = (val: string) => val + ` REPT`;
-  const parse = (val: string) => val.replace(/^\$/, "");
   const [value, setValue] = React.useState("1");
 
-  const { mutate, isLoading } = useTipExperiment();
+  const { mutate, isLoading } = useTipExperiment(experimentId);
 
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef();
@@ -51,8 +49,8 @@ export default function TipModal({
             <HStack justify={"center"} align="start">
               <NumberInput
                 maxW={32}
-                onChange={(valueString) => setValue(parse(valueString))}
-                value={format(value)}
+                onChange={(val) => setValue(val)}
+                value={value}
                 max={10}
               >
                 <NumberInputField />
