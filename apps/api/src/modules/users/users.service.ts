@@ -5,7 +5,9 @@ import { plainToClass } from 'class-transformer';
 import { CommunitiesService } from '../communities/communities.service';
 import { User } from './entities/user.entity';
 import { mapFromArray } from 'src/common/helpers';
-import { REQUEST } from '@nestjs/core';
+import { Cron } from '@nestjs/schedule';
+import * as fs from 'fs';
+import * as moment from 'moment';
 
 const getAuth0ManagementAccessToken = () => {
   const options: AxiosRequestConfig = {
@@ -23,6 +25,7 @@ const getAuth0ManagementAccessToken = () => {
   return axios
     .request(options)
     .then(function (response) {
+      console.log('response', response.data);
       return response.data.access_token;
     })
     .catch(function (error) {
@@ -31,7 +34,7 @@ const getAuth0ManagementAccessToken = () => {
     });
 };
 
-@Injectable({ scope: Scope.REQUEST })
+@Injectable()
 export class UsersService {
   private client: AxiosInstance;
   constructor(private readonly communitiesService: CommunitiesService) {
@@ -45,11 +48,32 @@ export class UsersService {
     this.refreshToken();
   }
 
+  @Cron('* 15 * * * *')
   async refreshToken() {
-    return getAuth0ManagementAccessToken().then(
-      (token) =>
-        (this.client.defaults.headers['Authorization'] = `Bearer ${token}`),
+    const persistedToken = (
+      await fs.promises.readFile('./auth0Token.txt')
+    ).toString();
+    const lastTokenDate = persistedToken.split(' ')[1];
+    const duration = moment(Date.now()).diff(
+      moment(new Date(parseInt(lastTokenDate))),
+      'h',
     );
+    if (duration < 22) {
+      this.client.defaults.headers['Authorization'] = `Bearer ${
+        persistedToken.split(' ')[0]
+      }`;
+      return;
+    }
+    return getAuth0ManagementAccessToken().then((token) => {
+      this.client.defaults.headers['Authorization'] = `Bearer ${token}`;
+      fs.writeFile(
+        './auth0Token.txt',
+        `${token} ${Date.now().toString()}`,
+        (err) => {
+          if (err) console.error(err);
+        },
+      );
+    });
   }
 
   async findAll() {

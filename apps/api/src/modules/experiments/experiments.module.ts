@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ExperimentsService } from './experiments.service';
 import { ExperimentsResolver } from './experiments.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -16,9 +16,10 @@ import { CommunitiesModule } from '../communities/communities.module';
       },
     ]),
     CommentsModule,
-    UsersModule,
+    forwardRef(() => UsersModule),
     CommunitiesModule,
   ],
   providers: [ExperimentsResolver, ExperimentsService],
+  exports: [ExperimentsService],
 })
 export class ExperimentsModule {}

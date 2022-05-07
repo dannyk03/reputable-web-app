@@ -24,6 +24,8 @@ type User {
   name: String!
   user_id: String!
   user_metadata: UserMetaData
+  experiments: [Experiment!]!
+  last_login: String!
 }
 
 """
@@ -98,6 +100,7 @@ type Query {
   comments: [Comment!]!
   comment(_id: String!): Comment!
   users: [User!]!
+  userByEmail(email: String!): User!
   me: User!
   communities: [Community!]!
   community(slug: String!): Community!

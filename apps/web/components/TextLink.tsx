@@ -16,10 +16,10 @@ export default function TextLink({
 }: React.PropsWithChildren<TextLinkProps>) {
   return (
     <NextLink href={href} passHref>
-      <Link w="fit-content" {...restProps}>
+      <Link w="fit-content">
         <Flex w="fit-content" align="center">
           {icon}
-          <Text fontWeight={600} color="gray.700" pl={2}>
+          <Text fontWeight={600} color="gray.700" pl={2} {...restProps}>
             {label}
           </Text>
         </Flex>

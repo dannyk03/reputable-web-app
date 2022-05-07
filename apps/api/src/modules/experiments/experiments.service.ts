@@ -8,6 +8,8 @@ import { plainToClass } from 'class-transformer';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { pickBy } from 'lodash';
+import * as DataLoader from 'dataloader';
+import { mapFromArray } from 'src/common/helpers';
 
 @Injectable()
 export class ExperimentsService {
@@ -78,5 +80,17 @@ export class ExperimentsService {
 
   remove(id: number) {
     return `This action removes a #${id} experiment`;
+  }
+
+  getLoaderForUsers() {
+    return new DataLoader<string, Experiment>(async (emails) => {
+      const experiments = await this.query({ author: { $in: emails } });
+
+      const experimentsMap = mapFromArray<Experiment>(
+        experiments,
+        (exp) => exp.createdBy,
+      );
+      return emails.map((e) => experimentsMap.get(e) as Experiment);
+    });
   }
 }

@@ -49,6 +49,8 @@ export interface IUser {
   tips?: ITip[];
   user_id: string;
   user_metadata?: IUserMetadata;
+  experiments?: Pick<IExperiment, "createdBy">[];
+  last_login: string;
 }
 
 export interface IComment extends BaseMongoEntity {

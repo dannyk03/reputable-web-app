@@ -31,7 +31,7 @@ const APIContext = React.createContext<IAPIContext>({});
 
 export function APIContextProvider({ children }: React.PropsWithChildren<{}>) {
   const { isAuthenticated, getAccessTokenSilently, logout } = useAuth0();
-  const [user, setUser] = React.useState(null);
+  const [user, setUser] = React.useState();
   const [r, setR] = React.useState(false);
   const refreshUser = () => setR((prevR) => !prevR);
   React.useEffect(() => {

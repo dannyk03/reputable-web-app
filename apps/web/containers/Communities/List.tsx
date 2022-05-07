@@ -29,6 +29,7 @@ export default function CommunitiesListView({
       <Grid mt={10} gap={6} templateColumns="repeat(4, 1fr)">
         {data.map((community, index) => (
           <NextLink
+            key={`community_${index}`}
             href={{
               pathname: "/experiments",
               query: { community: community.slug },
@@ -36,7 +37,7 @@ export default function CommunitiesListView({
             passHref
           >
             <Link _hover={{ textDecoration: "none" }}>
-              <GridItem key={`community_${index}`} w="100%">
+              <GridItem w="100%">
                 <Box
                   border="1px solid"
                   borderRadius="16px"
