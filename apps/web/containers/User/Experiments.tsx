@@ -19,7 +19,6 @@ import ReputableLogo from "../../components/Icons/ReputableLogo";
 import makeAvatar from "../../helpers/makeAvatar";
 import moment from "moment";
 import { useApiContext } from "../../providers/ApiContext";
-import ExperimentsListView from "../Experiments/List";
 import { ExperimentCard } from "../../components/Experiments";
 
 interface UserExperimentsProps {
@@ -31,6 +30,7 @@ export default function UserExperiments({
 }: React.PropsWithChildren<UserExperimentsProps>) {
   const router = useRouter();
   const { user } = useApiContext();
+
   const lastLogin = moment(user?.last_login ?? Date.now()).fromNow();
   return (
     <VStack textAlign="left" w="100%" justify="start" gap={10}>
@@ -48,7 +48,7 @@ export default function UserExperiments({
           src={data?.picture ?? makeAvatar(data?.user_id)}
         />
         <VStack gap={2} pl={5} justify="flex-start">
-          <Box>
+          <Box w="100%">
             <Text
               color="gray.800"
               fontWeight={600}
@@ -83,9 +83,9 @@ export default function UserExperiments({
             <Tab>Experiments ({data?.experiments.length})</Tab>
           </TabList>
           <TabPanels>
-            <TabPanel>
+            <TabPanel px={10}>
               {(data?.experiments || []).map((exp) => (
-                <ExperimentCard experiment={exp} />
+                <ExperimentCard experiment={exp} mt={5} />
               ))}
             </TabPanel>
           </TabPanels>

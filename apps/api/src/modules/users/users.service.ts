@@ -25,7 +25,6 @@ const getAuth0ManagementAccessToken = () => {
   return axios
     .request(options)
     .then(function (response) {
-      console.log('response', response.data);
       return response.data.access_token;
     })
     .catch(function (error) {

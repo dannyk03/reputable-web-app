@@ -7,11 +7,9 @@ import {
   Icon,
   useTheme,
   Text,
-  Avatar,
   Link,
 } from "@chakra-ui/react";
 import Logo from "../components/Icons/Logo";
-import makeAvatar from "../helpers/makeAvatar";
 import { BiBell } from "react-icons/bi";
 import Image from "next/image";
 import NextLink from "next/link";
@@ -22,8 +20,9 @@ import NoSSR from "../components/NoSSR";
 
 export default function Navbar() {
   const theme = useTheme();
-  const { loginWithPopup } = useAuth0();
-  const { user } = useApiContext();
+  const { loginWithPopup, loginWithRedirect, isAuthenticated, user } =
+    useAuth0();
+  const { user: APIUser } = useApiContext();
   return (
     <Flex flexDirection="column">
       <HStack py={10}>
@@ -59,7 +58,9 @@ export default function Navbar() {
               borderRadius="24px"
               _hover={{ cursor: "pointer" }}
               onClick={() =>
-                loginWithPopup({ audience: "https://api.reputable.health" })
+                loginWithRedirect({
+                  audience: "https://api.reputable.health",
+                })
               }
             >
               <Text>Sign in</Text>
@@ -87,7 +88,7 @@ export default function Navbar() {
                   fontSize="16px"
                   fontWeight={600}
                 >
-                  {user.user_metadata.tokens} REPT
+                  {APIUser?.user_metadata?.tokens} REPT
                 </Text>
               </HStack>
               <NoSSR>

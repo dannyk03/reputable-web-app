@@ -14,6 +14,9 @@ module.exports = withTM({
     };
     return config;
   },
+  images: {
+    domains: ["drive.google.com"],
+  },
   env: {
     API_URL: process.env.API_URL || "http://localhost:4000",
     AUTH0_DOMAIN: process.env.AUTH0_DOMAIN || "dev-mpvuqq8o.us.auth0.com",
@@ -21,5 +24,6 @@ module.exports = withTM({
       process.env.AUTH0_CLIENT_ID || "4JpjfVVmuJzQOzxBjqQ4fzmmygy5VS6Z",
     AUTH0_REDIRECT_URL:
       process.env.AUTH0_REDIRECT_URL || "http://localhost:3000",
+    AUTH0_AUDIENCE: "https://api.reputable.health",
   },
 });

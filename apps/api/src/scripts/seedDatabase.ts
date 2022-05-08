@@ -110,6 +110,7 @@ async function main() {
   console.log('Dropping collections...');
   await db.dropCollection('experiments');
   await db.dropCollection('comments');
+  await db.dropCollection('communities');
   console.log('Starting experiment seeding');
   const accessToken = await getAuth0ManagementAccessToken();
   console.log('Retrieved access token for auth0');

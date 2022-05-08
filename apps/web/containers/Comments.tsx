@@ -10,7 +10,7 @@ import {
   Textarea,
   useTheme,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useState } from "react";
 import Comment from "../components/Comment";
 import Xarrow, { Xwrapper } from "react-xarrows";
 import makeAvatar from "../helpers/makeAvatar";
@@ -33,12 +33,28 @@ export interface CommentsProps {
 export default function Comments({
   comments = [],
 }: React.PropsWithChildren<CommentsProps>) {
+  const batchSize = 2;
+  const startingBatchNumber = React.useRef(1);
+
   const theme = useTheme();
   const { user = {} } = useAuth0();
   const { register, handleSubmit } =
     useForm<Pick<IComment, "text" | "experiment" | "replyTo">>();
   const router = useRouter();
   const { create, remove } = useComment(router.query.id as string);
+  const [renderedComments, setRenderedComments] = useState(
+    comments.slice(0, batchSize)
+  );
+
+  const onLoadMore = () => {
+    setRenderedComments((prevComments) => [
+      ...prevComments,
+      ...comments.slice(
+        startingBatchNumber.current * batchSize,
+        (startingBatchNumber.current + 1) * batchSize
+      ),
+    ]);
+  };
 
   return (
     <Card>
@@ -93,7 +109,7 @@ export default function Comments({
         </form>
       </Flex>
       <Xwrapper>
-        {comments.map((comment, index) => {
+        {renderedComments.map((comment, index) => {
           return (
             <Box key={`parent_comment_${index}`}>
               <Comment id={`comment_${index}`} data={comment} />
@@ -113,6 +129,8 @@ export default function Comments({
       <Flex justify="center" align="center">
         <Button
           leftIcon={<ArrowDownIcon />}
+          onClick={() => onLoadMore()}
+          disabled={renderedComments.length === comments.length}
           height={7}
           variant="ghost"
           size="sm"

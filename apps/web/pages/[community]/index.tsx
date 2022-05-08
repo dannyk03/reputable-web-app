@@ -8,9 +8,7 @@ export default function Experiments() {
   const { data, isLoading, error, isFetching } = useExperiments(
     router.query.community as string
   );
-  if (!router.query.community || isLoading) {
-    return <></>;
-  }
+  if (!router.query?.community || isLoading) return <></>;
   const communityData = data[0].communities.filter(
     (c) => c.slug === router.query.community
   )[0];

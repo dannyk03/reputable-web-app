@@ -48,8 +48,6 @@ export default function CreateExperimentView() {
   const prev = () => setCurrentStep((prevStep) => Math.max(prevStep - 1, 0));
   const methods = useForm<TCreateExperiment>();
 
-  console.log(methods.getValues());
-
   /**
    * For initial validation
    */

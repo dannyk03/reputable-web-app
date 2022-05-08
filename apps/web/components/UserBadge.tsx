@@ -11,6 +11,7 @@ import {
   LinkBox,
   LinkOverlay,
   ChakraProps,
+  Link,
 } from "@chakra-ui/react";
 import makeAvatar from "../helpers/makeAvatar";
 import { useApiContext } from "../providers/ApiContext";
@@ -21,8 +22,7 @@ export default function UserBadge({
   children,
   ...restProps
 }: React.PropsWithChildren<ChakraProps>) {
-  const { user } = useApiContext();
-  const { logout } = useAuth0();
+  const { logout, user } = useAuth0();
   const { onToggle, isOpen } = useDisclosure();
   return (
     <Box {...restProps}>
@@ -51,7 +51,7 @@ export default function UserBadge({
         </Text>
         {!isOpen ? <ChevronDownIcon /> : <ChevronUpIcon />}
       </HStack>
-      <Box id="otlga" position="relative" />
+      <Box position="relative" />
       <Collapse in={isOpen} animateOpacity>
         <VStack
           mt="2px"
@@ -63,8 +63,8 @@ export default function UserBadge({
           zIndex={2}
           p={3}
         >
-          <LinkBox>
-            <NextLink href="/my-experiments" passHref>
+          <NextLink href={`user/${encodeURIComponent(user.email)}`} passHref>
+            <Link>
               <Text
                 py={2}
                 px={6}
@@ -72,12 +72,16 @@ export default function UserBadge({
                 fontWeight={500}
                 size="16px"
                 lineHeight="24px"
-                _hover={{ backgroundColor: "primary.100", cursor: "pointer" }}
+                _hover={{
+                  backgroundColor: "primary.100",
+                  cursor: "pointer",
+                  textDecor: "none",
+                }}
               >
-                <LinkOverlay>My Experiments</LinkOverlay>
+                My Experiments
               </Text>
-            </NextLink>
-          </LinkBox>
+            </Link>
+          </NextLink>
           <Text
             py={2}
             px={6}
@@ -85,7 +89,9 @@ export default function UserBadge({
             fontWeight={500}
             size="16px"
             lineHeight="24px"
-            onClick={() => logout({ returnTo: window.location.origin })}
+            onClick={() => {
+              logout({ returnTo: window.location.origin });
+            }}
             borderRadius="6px"
             _hover={{ backgroundColor: "primary.100", cursor: "pointer" }}
           >

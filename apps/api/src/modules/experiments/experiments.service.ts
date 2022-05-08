@@ -57,8 +57,9 @@ export class ExperimentsService {
 
   async query(selector: FilterQuery<ExperimentDocument>) {
     const selectorValidated = pickBy(selector, (val) => val);
+    console.log('selectorValid', selectorValidated);
     return this.experimentModel
-      .find(selectorValidated)
+      .find({ communities: selectorValidated.community, ...selectorValidated })
       .sort({ _id: -1 })
       .lean({ virtuals: true, getters: true })
       .limit(25)

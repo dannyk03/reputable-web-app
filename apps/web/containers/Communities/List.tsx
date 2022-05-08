@@ -9,7 +9,6 @@ import {
 } from "@chakra-ui/react";
 import Image from "next/image";
 import React from "react";
-import Autocomplete from "../../components/Autocomplete/Async";
 import SearchBar from "../../components/SearchBar";
 import { ICommunity } from "../../types";
 import NextLink from "next/link";
@@ -25,15 +24,11 @@ export default function CommunitiesListView({
   const formatter = Intl.NumberFormat("en", { notation: "compact" });
   return (
     <Box maxW="960px">
-      <SearchBar />
       <Grid mt={10} gap={6} templateColumns="repeat(4, 1fr)">
         {data.map((community, index) => (
           <NextLink
             key={`community_${index}`}
-            href={{
-              pathname: "/experiments",
-              query: { community: community.slug },
-            }}
+            href={`/${community.slug}`}
             passHref
           >
             <Link _hover={{ textDecoration: "none" }}>

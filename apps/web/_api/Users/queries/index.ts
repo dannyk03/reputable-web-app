@@ -17,9 +17,18 @@ const userByEmailQuery = gql`
         _id
         title
         description
+        communities {
+          name
+          icon
+          slug
+        }
         tips {
           userId
           amount
+        }
+        createdBy {
+          picture
+          name
         }
       }
       last_login
@@ -28,7 +37,6 @@ const userByEmailQuery = gql`
 `;
 
 export const useUserByEmail = (email: string) => {
-  if (!email) return { data: {}, isLoading: false };
   const { client } = useApiContext();
 
   return useQuery<IUser>(["userByEmail", { email }], () =>

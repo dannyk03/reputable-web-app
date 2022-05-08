@@ -30,10 +30,17 @@ interface IAPIContext {
 const APIContext = React.createContext<IAPIContext>({});
 
 export function APIContextProvider({ children }: React.PropsWithChildren<{}>) {
-  const { isAuthenticated, getAccessTokenSilently, logout } = useAuth0();
+  const {
+    isAuthenticated,
+    getAccessTokenSilently,
+    logout,
+    user: user1,
+  } = useAuth0();
   const [user, setUser] = React.useState();
   const [r, setR] = React.useState(false);
   const refreshUser = () => setR((prevR) => !prevR);
+  console.log("User is authenticated", isAuthenticated);
+  console.log("user1", user1);
   React.useEffect(() => {
     if (isAuthenticated)
       getAccessTokenSilently({ audience: "https://api.reputable.health" }).then(

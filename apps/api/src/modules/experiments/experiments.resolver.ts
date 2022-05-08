@@ -43,6 +43,7 @@ export class ExperimentsResolver {
     @Args('community', { type: () => String, nullable: true })
     community?: string,
   ) {
+    console.log('community', community);
     return this.experimentsService.query({ community });
   }
 

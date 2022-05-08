@@ -20,7 +20,10 @@ import ReputableLogo from "../Icons/ReputableLogo";
 import Image from "next/image";
 
 export interface ExperimentCardProps extends ChakraProps {
-  experiment: PopulatedExperiment;
+  experiment: Pick<
+    PopulatedExperiment,
+    "tips" | "createdBy" | "title" | "_id" | "description" | "communities"
+  >;
 }
 
 export default function ExperimentCard({

@@ -1,4 +1,14 @@
-import { Avatar, Box, Button, Flex, Text, Textarea } from "@chakra-ui/react";
+import {
+  Avatar,
+  Box,
+  Button,
+  Flex,
+  HStack,
+  Icon,
+  Text,
+  Textarea,
+  VStack,
+} from "@chakra-ui/react";
 import moment from "moment";
 import makeAvatar from "../../helpers/makeAvatar";
 import Image from "next/image";
@@ -9,6 +19,11 @@ import { remove } from "lodash";
 import { useComment } from "../../_api/Comments/mutations";
 import { useRouter } from "next/router";
 import { useApiContext } from "../../providers/ApiContext";
+import Card from "../Card";
+import useClickOutside, { ClickOutside } from "../../hooks/useClickOutside";
+import ReputableLogo from "../Icons/ReputableLogo";
+import ExperimentsLogo from "../Icons/ExperimentsLogo";
+import { PrimaryButton } from "../Button";
 
 interface CommentProps {
   data: Partial<PopulatedComment>;
@@ -29,6 +44,7 @@ export default function Comment({
     text,
     replies = [],
   } = data;
+  const [isUserCardOpen, setUserCardOpen] = React.useState(false);
   const timeAgo = moment(new Date(updatedAt)).fromNow();
   const router = useRouter();
   const { user } = useApiContext();
@@ -37,20 +53,81 @@ export default function Comment({
     <>
       <Box {...restProps} pl={replyTo !== null ? 12 : 0} pt={5}>
         <Flex justify="start"></Flex>
-        <Flex justify={"start"} align="center">
+        <Flex justify={"start"} align="center" position="relative">
           <Avatar
             id={id}
             width={"40px"}
             height={"40px"}
             name="Profile Photo"
             src={author.picture ?? makeAvatar("User")}
+            onClick={() => setUserCardOpen(true)}
           />
-          <Text pl="2" fontWeight={600} color="gray.700">
+          <Text
+            pl="2"
+            fontWeight={600}
+            color="gray.700"
+            onClick={() => setUserCardOpen(true)}
+          >
             Tolga Oguz
           </Text>
           <Text pl="2" fontWeight={400} color="gray.600">
             {timeAgo}
           </Text>
+          <ClickOutside
+            onClickOutside={() => {
+              setUserCardOpen(false);
+            }}
+          >
+            {isUserCardOpen && (
+              <Card
+                py={6}
+                px="60px"
+                position="absolute"
+                top="30px"
+                left="50px"
+                zIndex={9}
+                backgroundColor="white"
+                borderRadius="16px"
+              >
+                <VStack>
+                  <Avatar
+                    id={id}
+                    width={"64px"}
+                    height={"64px"}
+                    name="User Card Profile Photo"
+                    src={author.picture ?? makeAvatar("User")}
+                  />
+                  <Text
+                    pl="2"
+                    fontWeight={600}
+                    color="gray.700"
+                    onClick={() => setUserCardOpen(true)}
+                  >
+                    Tolga Oguz
+                  </Text>
+                  <HStack>
+                    <HStack alignItems="center">
+                      <Icon
+                        as={ReputableLogo}
+                        width="14px"
+                        height="14px"
+                        color="gray.600"
+                      />
+                      <Text size="12px" lineHeight="26px" color="gray.600">
+                        {author?.user_metadata?.tokens}
+                      </Text>
+                    </HStack>
+                  </HStack>
+                  <PrimaryButton
+                    text="See full profile"
+                    size="sm"
+                    fontSize="14px"
+                    height="32px"
+                  />
+                </VStack>
+              </Card>
+            )}
+          </ClickOutside>
         </Flex>
         <Flex pl={12}>
           <Text>{text}</Text>

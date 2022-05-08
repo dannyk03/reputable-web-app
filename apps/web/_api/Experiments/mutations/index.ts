@@ -26,7 +26,6 @@ export const useTipExperiment = (experimentId?: string) => {
     },
     {
       onSuccess: () => {
-        console.log("invalidating", experimentId);
         queryClient.invalidateQueries(["experiments", { _id: experimentId }]);
         refreshUser();
       },

@@ -38,6 +38,9 @@ const query = gql`
           name
           user_id
           email
+          user_metadata {
+            tokens
+          }
           picture
         }
         replies {
@@ -45,6 +48,9 @@ const query = gql`
           updatedAt
           author {
             name
+            user_metadata {
+              tokens
+            }
             user_id
             email
             picture

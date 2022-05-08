@@ -5,7 +5,7 @@ export const experimentResultMarkers: ExperimentResultMarker[] = [
   {
     name: 'Resting Heart Rate',
     slug: 'resting-heart-rate',
-    devices: ['Ourora Ring']
+    devices: ['Ourora Ring'],
   },
   {
     name: 'Deep Sleep',
@@ -28,50 +28,50 @@ export const experimentResultMarkers: ExperimentResultMarker[] = [
 export const communities: Omit<ICommunity, '_id'>[] = [
   {
     name: 'Sleep',
-    memberCount: 45321,
-    icon: '/icons/communities/sleep.png',
+    icon: 'https://drive.google.com/uc?id=1kHhGvQNewsLJmVptDD_EjAQzXLgB4sig',
     slug: 'sleep',
+    memberCount: 0,
   },
   {
     name: 'Longevity',
-    memberCount: 12394,
-    icon: '/icons/communities/longevity.png',
+    icon: 'https://drive.google.com/uc?id=1AQwkYEVabHlXM5BbgAm4pnrLdlfEgdXp',
     slug: 'longevity',
+    memberCount: 0,
   },
   {
     name: 'Weight Loss',
-    memberCount: 32962,
-    icon: '/icons/communities/weight-loss.png',
+    icon: 'https://drive.google.com/uc?id=1sLYxSlC8g40NGBNHGZLzttf7fnlrGIhJ',
     slug: 'weight-loss',
+    memberCount: 0,
   },
   {
     name: 'Meditation',
-    memberCount: 158979,
-    icon: '/icons/communities/meditation.png',
+    icon: 'https://drive.google.com/uc?id=1Z1Q_2Nod79IZ9qWs8d07qH582v05VQtB',
     slug: 'meditation',
+    memberCount: 0,
   },
   {
     name: 'Anxiety',
-    memberCount: 102743,
-    icon: '/icons/communities/anxiety.png',
+    icon: 'https://drive.google.com/uc?id=1Q8oQhwioKN_WQ7jogqENOdYnJKIeH4OS',
     slug: 'anxiety',
+    memberCount: 0,
   },
   {
     name: 'Chronic Pain',
-    memberCount: 9322,
-    icon: '/icons/communities/chronic-pain.png',
+    icon: 'https://drive.google.com/uc?id=1dV7c891-rex0axNNcpRjEVy5HmWe0o1x',
     slug: 'chronic-pain',
+    memberCount: 0,
   },
   {
     name: 'Cardiovascular',
-    memberCount: 19556,
-    icon: '/icons/communities/cardiovascular.png',
+    icon: 'https://drive.google.com/uc?id=16CUC0HUQIq5NRP3gF0DFWOyUcNEdH2QY',
     slug: 'cardiovascular',
+    memberCount: 0,
   },
   {
     name: 'Blood Sugar',
-    memberCount: 83967,
-    icon: '/icons/communities/blood-sugar.png',
+    icon: 'https://drive.google.com/uc?id=1TgLWQfpU7AddazWNZk_mK6auvZnUVCTE',
     slug: 'blood-sugar',
+    memberCount: 0,
   },
 ];

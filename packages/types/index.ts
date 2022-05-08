@@ -24,7 +24,7 @@ export interface ITransaction {
 export interface ICommunity extends BaseMongoEntity {
   name: string;
   icon: string;
-  memberCount: number;
+  memberCount?: number;
   slug: string;
 }
 

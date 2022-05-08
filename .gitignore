@@ -1,1 +1,5 @@
 node_modules
+packages/types/dist/index.d.ts
+packages/types/dist/index.d.ts
+packages/types/dist/index.d.ts.map
+packages/types/dist/tsconfig.tsbuildinfo
