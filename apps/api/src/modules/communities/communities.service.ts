@@ -7,6 +7,18 @@ import { mapFromArray } from '../../common/helpers';
 
 @Injectable()
 export class CommunitiesService {
+  public loaderForExperiments = new DataLoader<string, Community>(
+    async (slugs) => {
+      const communities = await Promise.all(
+        slugs.map((slug) => this.findOne(slug)),
+      );
+      const communitiesMap = mapFromArray<Community>(
+        communities,
+        (c) => c.slug,
+      );
+      return slugs.map((slug) => communitiesMap.get(slug) as Community);
+    },
+  );
   constructor(
     @InjectModel(Community.name)
     private communitiesModel: Model<CommunityDocument>,
@@ -21,22 +33,8 @@ export class CommunitiesService {
   }
 
   incrementMemberCount(slug: string) {
-    return this.communitiesModel.updateOne(
-      { slug },
-      { $inc: { memberCount: 1 } },
-    );
-  }
-
-  getLoaderForExperiments() {
-    return new DataLoader<string, Community>(async (slugs) => {
-      const communities = await Promise.all(
-        slugs.map((slug) => this.findOne(slug)),
-      );
-      const communitiesMap = mapFromArray<Community>(
-        communities,
-        (c) => c.slug,
-      );
-      return slugs.map((slug) => communitiesMap.get(slug) as Community);
-    });
+    return this.communitiesModel
+      .updateOne({ slug }, { $inc: { memberCount: 1 } })
+      .then(() => this.loaderForExperiments.clear(slug));
   }
 }

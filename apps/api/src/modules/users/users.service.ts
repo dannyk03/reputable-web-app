@@ -37,6 +37,11 @@ const getAuth0ManagementAccessToken = () => {
 @Injectable()
 export class UsersService {
   private client: AxiosInstance;
+  public loaderForExperiments = new DataLoader<string, User>(async (emails) => {
+    const users = await this.findAll();
+    const usersMap = mapFromArray<User>(users, (u) => u.email);
+    return emails.map((email) => usersMap.get(email) as User);
+  });
   constructor(private readonly communitiesService: CommunitiesService) {
     this.client = axios.create({
       baseURL: `${process.env.AUTH0_ISSUER_URL}api/v2`,
@@ -87,7 +92,9 @@ export class UsersService {
   }
 
   async updateOne(id: string, userData: Partial<User>) {
-    return this.client.patch<User>(`/users/${id}`, userData);
+    return this.client.patch<User>(`/users/${id}`, userData).then(() => {
+      this.loaderForExperiments.clearAll();
+    });
   }
 
   async findOne(email: string) {
@@ -122,6 +129,7 @@ export class UsersService {
           tokens: fromUser.user_metadata.tokens + amount,
         },
       });
+      this.loaderForExperiments.clearAll();
       return {
         message: 'Transaction successful!',
       };
@@ -142,20 +150,11 @@ export class UsersService {
         }),
         this.communitiesService.incrementMemberCount(community),
       ]).then((response) => {
+        this.loaderForExperiments.clear(email);
         return {
           message: 'Joined community!',
         };
       });
-    });
-  }
-
-  getLoaderForExperiments() {
-    return new DataLoader<string, User>(async (emails) => {
-      const users = await Promise.all(
-        emails.map((email) => this.findOne(email)),
-      );
-      const usersMap = mapFromArray<User>(users, (u) => u.email);
-      return emails.map((email) => usersMap.get(email) as User);
     });
   }
 }

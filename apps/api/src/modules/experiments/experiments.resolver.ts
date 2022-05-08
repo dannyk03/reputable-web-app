@@ -14,12 +14,9 @@ import { UpdateExperimentInput } from './dto/update-experiment.input';
 import { CurrentUser, Public } from 'src/decorators';
 import { CommentsService } from '../comments/comments.service';
 import { Comment } from '../comments/entities/comment.entity';
-import * as DataLoader from 'dataloader';
-import { makeArray, mapFromArray } from '../../common/helpers';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { instanceToPlain } from 'class-transformer';
-import { PopulatedComment } from '@reputable/types';
 import { CommunitiesService } from '../communities/communities.service';
 import { Community } from '../communities/entities/community.entity';
 import { MessageResponse } from 'src/common/entities/response';
@@ -66,17 +63,15 @@ export class ExperimentsResolver {
 
   @ResolveField('createdBy', (returns) => User)
   getUser(@Parent() experiment: Experiment) {
-    return this.usersService
-      .getLoaderForExperiments()
-      .load(experiment.createdBy);
+    return this.usersService.loaderForExperiments.load(experiment.createdBy);
   }
 
   @Public()
   @ResolveField('communities', (returns) => [Community])
   getCommunities(@Parent() experiment: Experiment) {
-    return this.communitiesService
-      .getLoaderForExperiments()
-      .loadMany(experiment.communities);
+    return this.communitiesService.loaderForExperiments.loadMany(
+      experiment.communities,
+    );
   }
 
   @Mutation(() => Experiment)
