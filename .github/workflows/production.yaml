@@ -16,15 +16,18 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v2
 
+      - name: Prepare Dockerfile and docker-compose.yaml
+        run: zip application_api.zip .
+
       - name: Deploy to EB
         uses: einaregilsson/beanstalk-deploy@v20
         with:
           aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          application_name: cc-production
-          environment_name: api-production-multi
+          application_name: reputable
+          environment_name: production
           version_label: ${{ env.VERSION }}
           region: us-east-1
           deployment_package: application_api.zip
-          existing_bucket_name: consumerchoice-bitbucket
+          existing_bucket_name: reputable-api
           wait_for_environment_recovery: 600
