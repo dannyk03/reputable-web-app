@@ -20,7 +20,7 @@ export interface ITransaction {
 export interface ICommunity extends BaseMongoEntity {
     name: string;
     icon: string;
-    memberCount: number;
+    memberCount?: number;
     slug: string;
 }
 export declare enum ExperimentStatus {
@@ -42,6 +42,8 @@ export interface IUser {
     tips?: ITip[];
     user_id: string;
     user_metadata?: IUserMetadata;
+    experiments?: Pick<IExperiment, "createdBy">[];
+    last_login: string;
 }
 export interface IComment extends BaseMongoEntity {
     author: string;

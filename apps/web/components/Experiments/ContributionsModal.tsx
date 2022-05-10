@@ -33,7 +33,7 @@ export default function ContributionsModal({
     tokensTipped: number;
   } = tips.reduce(
     (prev, curr) => ({
-      tokensMatched: (prev.tokensMatched += curr.amount * curr.amount),
+      tokensMatched: (prev.tokensMatched += Math.sqrt(curr.amount)),
       tokensTipped: (prev.tokensTipped += curr.amount),
     }),
     {
@@ -41,7 +41,10 @@ export default function ContributionsModal({
       tokensTipped: 0,
     }
   );
-  const totalTokens = contributions.tokensMatched + contributions.tokensTipped;
+  const matchedAmount = Math.round(
+    contributions.tokensMatched * contributions.tokensMatched
+  );
+  const totalTokens = matchedAmount + contributions.tokensTipped;
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef();
   return (
@@ -67,7 +70,9 @@ export default function ContributionsModal({
               <HStack align="center">
                 <Icon as={ReputableLogo} width="18px" height="18px" />
                 <Text size="18px" fontWeight={600} lineHeight="28px">
-                  {contributions.tokensMatched}
+                  {Math.round(
+                    contributions.tokensMatched * contributions.tokensMatched
+                  )}
                 </Text>
                 <Text>REPT matched by Reputable</Text>
               </HStack>

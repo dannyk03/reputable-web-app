@@ -42,7 +42,7 @@ export default function ExperimentsSingleView({
     tokensTipped: number;
   } = data.tips.reduce(
     (prev, curr) => ({
-      tokensMatched: (prev.tokensMatched += curr.amount * curr.amount),
+      tokensMatched: (prev.tokensMatched += Math.sqrt(curr.amount)),
       tokensTipped: (prev.tokensTipped += curr.amount),
     }),
     {
@@ -50,7 +50,10 @@ export default function ExperimentsSingleView({
       tokensTipped: 0,
     }
   );
-  const totalTokens = contributions.tokensMatched + contributions.tokensTipped;
+  const matchedAmount = Math.round(
+    contributions.tokensMatched * contributions.tokensMatched
+  );
+  const totalTokens = matchedAmount + contributions.tokensTipped;
   return (
     <Flex direction={"row"} gap="90px">
       <Box flexGrow={1}>

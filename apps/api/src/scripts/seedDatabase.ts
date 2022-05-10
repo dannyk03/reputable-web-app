@@ -175,7 +175,7 @@ export const generateExperiment = async (users) => {
       ),
       communities: getRandomSubarray(
         communities.map((c) => c.slug),
-        faker.datatype.number({ min: 1, max: 3 }),
+        faker.datatype.number({ min: 1, max: 1 }),
       ),
       description: faker.lorem.paragraphs(5, '<br/>'),
       createdBy:
