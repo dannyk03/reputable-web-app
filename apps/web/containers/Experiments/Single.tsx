@@ -14,7 +14,7 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import { BsThreeDots } from "react-icons/bs";
-import { FcDonate, FcShare } from "react-icons/fc";
+import { FcShare } from "react-icons/fc";
 import Comments from "../../containers/Comments";
 import React from "react";
 import AboutExperiment from "../../components/Experiments/About";
@@ -27,6 +27,7 @@ import ContributionsModal from "../../components/Experiments/ContributionsModal"
 import TipModal from "../../components/TipModal";
 import Image from "next/image";
 import { useAuth0 } from "@auth0/auth0-react";
+import calculateContributions from "../../helpers/calculateContributions";
 
 interface ExperimentsSingleViewProps {
   experiment: PopulatedExperiment;
@@ -37,23 +38,7 @@ export default function ExperimentsSingleView({
   experiment: data,
 }: React.PropsWithChildren<ExperimentsSingleViewProps>) {
   const { isAuthenticated } = useAuth0();
-  const contributions: {
-    tokensMatched: number;
-    tokensTipped: number;
-  } = data.tips.reduce(
-    (prev, curr) => ({
-      tokensMatched: (prev.tokensMatched += Math.sqrt(curr.amount)),
-      tokensTipped: (prev.tokensTipped += curr.amount),
-    }),
-    {
-      tokensMatched: 0,
-      tokensTipped: 0,
-    }
-  );
-  const matchedAmount = Math.round(
-    contributions.tokensMatched * contributions.tokensMatched
-  );
-  const totalTokens = matchedAmount + contributions.tokensTipped;
+  const {totalTokens, matchedAmount, tokensTipped} = calculateContributions(data.tips)
   return (
     <Flex direction={"row"} gap="90px">
       <Box flexGrow={1}>
@@ -62,8 +47,7 @@ export default function ExperimentsSingleView({
           label="Back to experiments"
           icon={<ArrowBackIcon />}
           href={{
-            pathname: "/experiments",
-            query: { community: data.communities[0].slug },
+            pathname: `/${data.communities[0].slug}`,
           }}
         />
 

@@ -83,7 +83,7 @@ export default function CreateExperimentView() {
           <VStack align="start" flexGrow={1} gap={6}>
             <TextLink
               label="Back"
-              href="/experiments"
+              href="/"
               icon={<ArrowBackIcon />}
             />
             {React.cloneElement(

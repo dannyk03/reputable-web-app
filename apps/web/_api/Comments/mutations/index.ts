@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import { IComment } from "@reputable/types";
 import { IMessageResponse } from "@reputable/types";
 import { gql } from "graphql-request";
@@ -23,10 +24,11 @@ const removeCommentQuery = gql`
 export const useComment = (experimentId: string) => {
   const { client } = useApiContext();
   const queryClient = useQueryClient();
-
+  const toast = useToast()
   const config = {
-    onSuccess: () => {
-      queryClient.invalidateQueries(["experiments", { _id: experimentId }]);
+    onSuccess: (data: IMessageResponse) => {
+      queryClient.invalidateQueries(["experiments", { _id: experimentId }]);  
+      toast({title: 'Success!',description:data.message,status: 'success',isClosable:true, variant: 'top-accent'})
     },
   };
 
@@ -39,13 +41,15 @@ export const useComment = (experimentId: string) => {
     (params) =>
       client.request(createCommentQuery, {
         createCommentInput: params,
-      }),
+      }).then(r=>r.createComment),
     config
   );
 
   const removeComment = useMutation<IMessageResponse, Error, { _id: string }>(
     "removeComment",
-    (params) => client.request(removeCommentQuery, params),
+    (params) => {
+      return client.request(removeCommentQuery, params).then(r=>r.removeComment)
+    },
     config
   );
 

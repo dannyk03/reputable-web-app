@@ -54,19 +54,23 @@ export class UsersService {
 
   @Cron('* 15 * * * *')
   async refreshToken() {
-    const persistedToken = (
-      await fs.promises.readFile('./auth0Token.txt')
-    ).toString();
-    const lastTokenDate = persistedToken.split(' ')[1];
-    const duration = moment(Date.now()).diff(
-      moment(new Date(parseInt(lastTokenDate))),
-      'h',
-    );
-    if (duration < 22) {
-      this.client.defaults.headers['Authorization'] = `Bearer ${
-        persistedToken.split(' ')[0]
-      }`;
-      return;
+    try{
+      const persistedToken = (
+        await fs.promises.readFile('./auth0Token.txt')
+      ).toString();
+      const lastTokenDate = persistedToken.split(' ')[1];
+      const duration = moment(Date.now()).diff(
+        moment(new Date(parseInt(lastTokenDate))),
+        'h',
+      );
+      if (duration < 22) {
+        this.client.defaults.headers['Authorization'] = `Bearer ${
+          persistedToken.split(' ')[0]
+        }`;
+        return;
+      }
+    }catch(err){
+      console.log('Couldnt find accessToken, creating one..')
     }
     return getAuth0ManagementAccessToken().then((token) => {
       this.client.defaults.headers['Authorization'] = `Bearer ${token}`;

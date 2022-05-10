@@ -18,6 +18,7 @@ import { truncate } from "lodash";
 import { ICommunity } from "@reputable/types";
 import ReputableLogo from "../Icons/ReputableLogo";
 import Image from "next/image";
+import calculateContributions from "../../helpers/calculateContributions";
 
 export interface ExperimentCardProps extends ChakraProps {
   experiment: Pick<
@@ -30,20 +31,7 @@ export default function ExperimentCard({
   experiment,
   ...restProps
 }: React.PropsWithChildren<ExperimentCardProps>) {
-  const contributions: {
-    tokensMatched: number;
-    tokensTipped: number;
-  } = (experiment?.tips || []).reduce(
-    (prev, curr) => ({
-      tokensMatched: (prev.tokensMatched += curr.amount * curr.amount),
-      tokensTipped: (prev.tokensTipped += curr.amount),
-    }),
-    {
-      tokensMatched: 0,
-      tokensTipped: 0,
-    }
-  );
-  const totalTokens = contributions.tokensMatched + contributions.tokensTipped;
+  const {totalTokens, matchedAmount, tokensTipped} = calculateContributions(experiment.tips)
   return (
     <Card {...restProps} noShadow>
       <HStack>

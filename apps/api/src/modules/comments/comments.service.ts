@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { CreateCommentInput } from './dto/create-comment.input';
 import { UpdateCommentInput } from './dto/update-comment.input';
-import { Comment } from './entities/comment.entity';
+import { Comment, CommentDocument } from './entities/comment.entity';
 import { plainToClass } from 'class-transformer';
 import { FilterQuery } from 'mongoose';
 import { UsersService } from '../users/users.service';
@@ -14,6 +14,20 @@ import { makeArray, mapFromArray } from '../../common/helpers';
 
 @Injectable()
 export class CommentsService {
+  public loaderForExperiments = new DataLoader<string, PopulatedComment[]>(async (_ids) => {
+    const comments = await this.query({
+      // Since we convert everything with class-transformer, we need to
+      // convert _ids back to ObjectId type.
+      // Mongoose will not automatically inherit type for $in operator.
+      experiment: { $in: _ids },
+      replyTo: { $eq: null },
+    });
+    const commentsMap = mapFromArray<PopulatedComment>(
+      comments,
+      (c) => c.experiment as string,
+    );
+    return _ids.map((_id) => makeArray(commentsMap.get(_id)));
+  });
   constructor(
     @InjectModel(Comment.name)
     private commentsModel: ReturnModelType<typeof Comment>,
@@ -23,7 +37,10 @@ export class CommentsService {
   async create(commentData: CreateCommentInput) {
     return this.commentsModel
       .create(commentData)
-      .then((comment) => plainToClass(Comment, comment.toJSON()));
+      .then((comment) => {
+        this.loaderForExperiments.clearAll();
+        plainToClass(Comment, comment.toJSON())
+      });
   }
 
   query(selector: FilterQuery<Comment>) {
@@ -85,27 +102,14 @@ export class CommentsService {
       .updateOne({ _id }, commentData)
       .orFail()
       .lean()
-      .exec();
+      .exec().then((comment: any)=>{
+        this.loaderForExperiments.clear(comment.experiment)
+      });
   }
 
   remove(_id: string) {
-    return this.commentsModel.findByIdAndRemove(_id).orFail().exec();
-  }
-
-  getLoaderForExperiments() {
-    return new DataLoader<string, PopulatedComment[]>(async (_ids) => {
-      const comments = await this.query({
-        // Since we convert everything with class-transformer, we need to
-        // convert _ids back to ObjectId type.
-        // Mongoose will not automatically inherit type for $in operator.
-        experiment: { $in: _ids },
-        replyTo: { $eq: null },
-      });
-      const commentsMap = mapFromArray<PopulatedComment>(
-        comments,
-        (c) => c.experiment as string,
-      );
-      return _ids.map((_id) => makeArray(commentsMap.get(_id)));
-    });
+    return this.commentsModel.findByIdAndRemove(_id).orFail().exec().then(()=>{
+      this.loaderForExperiments.clearAll()
+    })
   }
 }

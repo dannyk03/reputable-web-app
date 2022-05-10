@@ -63,7 +63,7 @@ export default function UserBadge({
           zIndex={2}
           p={3}
         >
-          <NextLink href={`user/${encodeURIComponent(user.email)}`} passHref>
+          <NextLink href={`/user/${encodeURIComponent(user.email)}`} passHref>
             <Link>
               <Text
                 py={2}

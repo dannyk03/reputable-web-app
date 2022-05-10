@@ -2,6 +2,7 @@ import {
   Avatar,
   Box,
   Button,
+  Collapse,
   Flex,
   HStack,
   Icon,
@@ -15,14 +16,12 @@ import Image from "next/image";
 import React from "react";
 import { PopulatedComment } from "@reputable/types";
 import { DeleteIcon } from "@chakra-ui/icons";
-import { remove } from "lodash";
 import { useComment } from "../../_api/Comments/mutations";
 import { useRouter } from "next/router";
 import { useApiContext } from "../../providers/ApiContext";
 import Card from "../Card";
-import useClickOutside, { ClickOutside } from "../../hooks/useClickOutside";
+import { ClickOutside } from "../../hooks/useClickOutside";
 import ReputableLogo from "../Icons/ReputableLogo";
-import ExperimentsLogo from "../Icons/ExperimentsLogo";
 import { PrimaryButton } from "../Button";
 
 interface CommentProps {
@@ -48,6 +47,7 @@ export default function Comment({
   const timeAgo = moment(new Date(updatedAt)).fromNow();
   const router = useRouter();
   const { user } = useApiContext();
+  const [showReplies, setShowReplies] = React.useState(false);
   const { remove } = useComment(router.query.id as string);
   return (
     <>
@@ -169,12 +169,28 @@ export default function Comment({
               <Text pl="6px">Delete</Text>
             </Button>
           )}
+          {replies.length > 0 && (
+            <>
+              <Text
+                color="primary.600"
+                _hover={{ textDecor: "underline", cursor: "pointer" }}
+                onClick={() =>
+                  setShowReplies((prevShowReplies) => !prevShowReplies)
+                }
+              >
+                {!showReplies
+                  ? `Show replies (${replies.length})`
+                  : "Hide replies"}
+              </Text>
+            </>
+          )}
         </Flex>
       </Box>
-      {!replyTo &&
-        replies.map((comment, idx) => (
-          <Comment key={`${_id}_reply_${idx}`} data={comment} />
+      <Collapse in={showReplies}>
+        {replies.map((comment, idx) => (
+          <Comment key={`reply_${comment._id}`} data={comment} />
         ))}
+      </Collapse>
     </>
   );
 }

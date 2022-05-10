@@ -33,27 +33,17 @@ export interface CommentsProps {
 export default function Comments({
   comments = [],
 }: React.PropsWithChildren<CommentsProps>) {
-  const batchSize = 2;
-  const startingBatchNumber = React.useRef(1);
-
   const theme = useTheme();
   const { user = {} } = useAuth0();
   const { register, handleSubmit } =
     useForm<Pick<IComment, "text" | "experiment" | "replyTo">>();
   const router = useRouter();
   const { create, remove } = useComment(router.query.id as string);
-  const [renderedComments, setRenderedComments] = useState(
-    comments.slice(0, batchSize)
-  );
+  const [batchSize, setBatchSize] = React.useState(5);
+  const [refresh, setRefresh] = React.useState(false);
 
   const onLoadMore = () => {
-    setRenderedComments((prevComments) => [
-      ...prevComments,
-      ...comments.slice(
-        startingBatchNumber.current * batchSize,
-        (startingBatchNumber.current + 1) * batchSize
-      ),
-    ]);
+    setBatchSize((prevBatch) => prevBatch + 5);
   };
 
   return (
@@ -109,7 +99,7 @@ export default function Comments({
         </form>
       </Flex>
       <Xwrapper>
-        {renderedComments.map((comment, index) => {
+        {comments.slice(0, batchSize).map((comment, index) => {
           return (
             <Box key={`parent_comment_${index}`}>
               <Comment id={`comment_${index}`} data={comment} />
@@ -126,11 +116,11 @@ export default function Comments({
           );
         })}
       </Xwrapper>
-      <Flex justify="center" align="center">
+      <Flex justify="center" align="center" mt={5}>
         <Button
           leftIcon={<ArrowDownIcon />}
           onClick={() => onLoadMore()}
-          disabled={renderedComments.length === comments.length}
+          disabled={comments.slice(0, batchSize).length === comments.length}
           height={7}
           variant="ghost"
           size="sm"

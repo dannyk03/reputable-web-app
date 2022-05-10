@@ -44,6 +44,7 @@ const query = gql`
           picture
         }
         replies {
+          _id
           createdAt
           updatedAt
           author {

@@ -1,6 +1,6 @@
 import { IMessageResponse } from "@reputable/types";
 import { gql } from "graphql-request";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useApiContext } from "../../../providers/ApiContext";
 
 const joinCommunityMutation = gql`
@@ -11,14 +11,15 @@ const joinCommunityMutation = gql`
   }
 `;
 
-export const useJoinCommunity = () => {
-  const { client, refreshUser } = useApiContext();
+export const useJoinCommunity = (community: string) => {
+  const { client: APIClient, refreshUser } = useApiContext();
+  const client = useQueryClient()
 
   return useMutation<IMessageResponse, Error, { community: string }>(
     "joinCommunity",
-    (params) => client.request(joinCommunityMutation, params),
+    () => APIClient.request(joinCommunityMutation, {community}),
     {
-      onSuccess: () => refreshUser(),
+      onSuccess: () => {refreshUser();client.invalidateQueries(['experiments',{community}])},
     }
   );
 };

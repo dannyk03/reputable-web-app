@@ -14,6 +14,7 @@ import {
 } from "@chakra-ui/react";
 import { ITip } from "@reputable/types";
 import React from "react";
+import calculateContributions from "../../helpers/calculateContributions";
 import ReputableLogo from "../Icons/ReputableLogo";
 
 interface ContributionsModalProps {
@@ -28,23 +29,7 @@ export default function ContributionsModal({
   children,
   tips,
 }: React.PropsWithChildren<ContributionsModalProps>) {
-  const contributions: {
-    tokensMatched: number;
-    tokensTipped: number;
-  } = tips.reduce(
-    (prev, curr) => ({
-      tokensMatched: (prev.tokensMatched += Math.sqrt(curr.amount)),
-      tokensTipped: (prev.tokensTipped += curr.amount),
-    }),
-    {
-      tokensMatched: 0,
-      tokensTipped: 0,
-    }
-  );
-  const matchedAmount = Math.round(
-    contributions.tokensMatched * contributions.tokensMatched
-  );
-  const totalTokens = matchedAmount + contributions.tokensTipped;
+  const {totalTokens, matchedAmount, tokensTipped} = calculateContributions(tips)
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef();
   return (
@@ -63,16 +48,14 @@ export default function ContributionsModal({
               <HStack align="center">
                 <Icon as={ReputableLogo} width="18px" height="18px" />
                 <Text size="18px" fontWeight={600} lineHeight="28px">
-                  {contributions.tokensTipped}
+                  {tokensTipped}
                 </Text>
                 <Text>REPT received from the community</Text>
               </HStack>
               <HStack align="center">
                 <Icon as={ReputableLogo} width="18px" height="18px" />
                 <Text size="18px" fontWeight={600} lineHeight="28px">
-                  {Math.round(
-                    contributions.tokensMatched * contributions.tokensMatched
-                  )}
+                  {matchedAmount}
                 </Text>
                 <Text>REPT matched by Reputable</Text>
               </HStack>

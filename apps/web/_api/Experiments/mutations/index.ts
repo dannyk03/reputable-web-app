@@ -1,3 +1,4 @@
+import { useToast } from "@chakra-ui/react";
 import { IMessageResponse } from "@reputable/types";
 import { gql } from "graphql-request";
 import { useMutation, useQueryClient } from "react-query";
@@ -14,6 +15,7 @@ const tipExperiment = gql`
 export const useTipExperiment = (experimentId?: string) => {
   const { client, refreshUser } = useApiContext();
   const queryClient = useQueryClient();
+  const toast = useToast()
 
   return useMutation<
     IMessageResponse,
@@ -22,12 +24,13 @@ export const useTipExperiment = (experimentId?: string) => {
   >(
     "tipExperiment",
     (params) => {
-      return client.request<IMessageResponse>(tipExperiment, params);
+      return client.request<IMessageResponse>(tipExperiment, params).then(r=>r.tipExperiment);
     },
     {
-      onSuccess: () => {
+      onSuccess: (data: IMessageResponse) => {
         queryClient.invalidateQueries(["experiments", { _id: experimentId }]);
         refreshUser();
+        toast({title: 'Success!',description:data.message,status: 'success',isClosable:true, variant: 'top-accent'})
       },
     }
   );

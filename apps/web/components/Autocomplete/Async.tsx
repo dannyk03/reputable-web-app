@@ -15,6 +15,7 @@ import { debounce } from "lodash";
 
 import React, { useEffect, useMemo, useState } from "react";
 import NoSSR from "../NoSSR";
+import SearchInput from "../SearchInput";
 
 interface AsyncAutocompleteProps<T> {
   fetchData: (inputValue: string) => Promise<T[]>;
@@ -71,30 +72,7 @@ export default function AutocompleteAsync<T>({
   return (
     <NoSSR>
       <Box {...restProps}>
-        <InputGroup {...getComboboxProps()} variant="filled">
-          <InputLeftElement pointerEvents="none">
-            <SearchIcon color="gray.400" />
-          </InputLeftElement>
-          {loading && (
-            <InputRightElement pointerEvents="none">
-              <CircularProgress
-                size="24px"
-                isIndeterminate
-                color="primary.400"
-              />
-            </InputRightElement>
-          )}
-          <Input
-            bgColor="gray.50"
-            borderColor="gray.200"
-            border="1px solid"
-            borderRadius={24}
-            _hover={{}}
-            type="tel"
-            placeholder="Search an experiment"
-            {...getInputProps()}
-          />
-        </InputGroup>
+        <SearchInput placeholder="Search" inputGroupProps={getComboboxProps()} inputProps={getInputProps()} />
         <UnorderedList {...getMenuProps()} listStyleType="none" mx={0}>
           <Collapse in={isOpen} animateOpacity>
             <Box

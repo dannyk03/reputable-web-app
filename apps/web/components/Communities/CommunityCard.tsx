@@ -15,7 +15,7 @@ export default function CommunityCard({
   community,
 }: React.PropsWithChildren<CommunityCardProps>) {
   const { user } = useApiContext();
-  const { mutate, isLoading } = useJoinCommunity();
+  const { mutate, isLoading } = useJoinCommunity(community.slug);
 
   if (!community) return <></>;
 
@@ -53,7 +53,7 @@ export default function CommunityCard({
             <Button
               disabled={alreadyJoined || isLoading}
               variant="outline"
-              onClick={() => mutate({ community: community.slug })}
+              onClick={() => mutate()}
               leftIcon={alreadyJoined && <CheckIcon />}
             >
               {alreadyJoined ? "Joined" : "Join"}

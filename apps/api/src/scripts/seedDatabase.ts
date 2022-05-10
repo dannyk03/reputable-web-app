@@ -1,4 +1,4 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectId } from 'mongodb';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: '../../.env' });
 import { faker } from '@faker-js/faker';
@@ -184,6 +184,7 @@ export const generateExperiment = async (users) => {
   return randomExperiment;
 };
 
+type MongoComment = Omit<Comment,'_id'> & {_id: ObjectId}
 /**
  * Generates a random comment and relates them to random experiments and users.
  * @param experiments A list of available experiments that will be linked to generated comments
@@ -193,11 +194,12 @@ export const generateComment = (
   experiments: IExperiment[],
   users: Record<string, any>[],
   replyToComments: CommentDocument[] = [],
-): Omit<Comment, '_id'> => {
+): MongoComment  => {
   const randomReplyComment = pickRandomFromArray(replyToComments);
   const randomAuthor = pickRandomFromArray(users);
   const randomExperiment = pickRandomFromArray(experiments);
   return {
+    _id: new ObjectId(),
     text: faker.lorem.paragraph(3),
     author: randomAuthor.email,
     replyTo: replyToComments.length > 0 ? randomReplyComment._id : undefined,

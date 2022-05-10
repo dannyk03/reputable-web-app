@@ -39,8 +39,6 @@ export function APIContextProvider({ children }: React.PropsWithChildren<{}>) {
   const [user, setUser] = React.useState();
   const [r, setR] = React.useState(false);
   const refreshUser = () => setR((prevR) => !prevR);
-  console.log("User is authenticated", isAuthenticated);
-  console.log("user1", user1);
   React.useEffect(() => {
     if (isAuthenticated)
       getAccessTokenSilently({ audience: "https://api.reputable.health" }).then(
