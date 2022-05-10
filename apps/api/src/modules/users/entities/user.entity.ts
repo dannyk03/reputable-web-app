@@ -1,5 +1,5 @@
 import { ObjectType, Field, GraphQLISODateTime, Int } from '@nestjs/graphql';
-import { IUser } from '@reputable/types';
+import { IUser, PopulatedExperiment } from '@reputable/types';
 import { Transaction } from 'src/common/entities/transaction';
 import { IUserMetadata } from '@reputable/types';
 import { Experiment } from 'src/modules/experiments/entities/experiment.entity';
@@ -31,7 +31,10 @@ export class User implements IUser {
   @Field(() => UserMetaData, { nullable: true })
   user_metadata?: UserMetaData;
   @Field(() => [Experiment], { nullable: true })
-  experiments?: Experiment[];
+  experiments?: Pick<
+    PopulatedExperiment,
+    'tips' | 'createdBy' | 'title' | '_id' | 'description' | 'communities'
+  >[];
   @Field()
   last_login: string;
 }

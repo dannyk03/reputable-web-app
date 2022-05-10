@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  reputable-api:
+    image: "092678734647.dkr.ecr.us-east-1.amazonaws.com/reputable-api-production:latest"
+    ports:
+      - "80:4000"
+    env_file: .env
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"

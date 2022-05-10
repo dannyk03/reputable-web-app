@@ -1,0 +1,30 @@
+name: Deploy monorepo to production
+
+env:
+  VERSION: ${{ github.run_id }}-${{ github.run_number }}
+  API_DOCKER_REGISTRY: 092678734647.dkr.ecr.us-east-1.amazonaws.com
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-api:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Deploy to EB
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: cc-production
+          environment_name: api-production-multi
+          version_label: ${{ env.VERSION }}
+          region: us-east-1
+          deployment_package: application_api.zip
+          existing_bucket_name: consumerchoice-bitbucket
+          wait_for_environment_recovery: 600

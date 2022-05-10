@@ -14,20 +14,22 @@ import { makeArray, mapFromArray } from '../../common/helpers';
 
 @Injectable()
 export class CommentsService {
-  public loaderForExperiments = new DataLoader<string, PopulatedComment[]>(async (_ids) => {
-    const comments = await this.query({
-      // Since we convert everything with class-transformer, we need to
-      // convert _ids back to ObjectId type.
-      // Mongoose will not automatically inherit type for $in operator.
-      experiment: { $in: _ids },
-      replyTo: { $eq: null },
-    });
-    const commentsMap = mapFromArray<PopulatedComment>(
-      comments,
-      (c) => c.experiment as string,
-    );
-    return _ids.map((_id) => makeArray(commentsMap.get(_id)));
-  });
+  public loaderForExperiments = new DataLoader<string, PopulatedComment[]>(
+    async (_ids) => {
+      const comments = await this.query({
+        // Since we convert everything with class-transformer, we need to
+        // convert _ids back to ObjectId type.
+        // Mongoose will not automatically inherit type for $in operator.
+        experiment: { $in: _ids },
+        replyTo: { $eq: null },
+      });
+      const commentsMap = mapFromArray<PopulatedComment>(
+        comments,
+        (c) => c.experiment as string,
+      );
+      return _ids.map((_id) => makeArray(commentsMap.get(_id)));
+    },
+  );
   constructor(
     @InjectModel(Comment.name)
     private commentsModel: ReturnModelType<typeof Comment>,
@@ -35,12 +37,10 @@ export class CommentsService {
   ) {}
 
   async create(commentData: CreateCommentInput) {
-    return this.commentsModel
-      .create(commentData)
-      .then((comment) => {
-        this.loaderForExperiments.clearAll();
-        plainToClass(Comment, comment.toJSON())
-      });
+    return this.commentsModel.create(commentData).then((comment) => {
+      this.loaderForExperiments.clearAll();
+      plainToClass(Comment, comment.toJSON());
+    });
   }
 
   query(selector: FilterQuery<Comment>) {
@@ -66,7 +66,7 @@ export class CommentsService {
         );
         return comments.map((comment) => {
           return {
-            ...comment,
+            ...(comment as unknown as PopulatedComment),
             author: emailToUser[comment.author],
             replies: comment.replies.map((r) => ({
               ...r,
@@ -102,14 +102,19 @@ export class CommentsService {
       .updateOne({ _id }, commentData)
       .orFail()
       .lean()
-      .exec().then((comment: any)=>{
-        this.loaderForExperiments.clear(comment.experiment)
+      .exec()
+      .then((comment: any) => {
+        this.loaderForExperiments.clear(comment.experiment);
       });
   }
 
   remove(_id: string) {
-    return this.commentsModel.findByIdAndRemove(_id).orFail().exec().then(()=>{
-      this.loaderForExperiments.clearAll()
-    })
+    return this.commentsModel
+      .findByIdAndRemove(_id)
+      .orFail()
+      .exec()
+      .then(() => {
+        this.loaderForExperiments.clearAll();
+      });
   }
 }
