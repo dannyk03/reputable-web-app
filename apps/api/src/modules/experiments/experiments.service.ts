@@ -13,6 +13,15 @@ import { mapFromArray } from 'src/common/helpers';
 
 @Injectable()
 export class ExperimentsService {
+  public loaderForUsers = new DataLoader<string, Experiment>(async (emails) => {
+    const experiments = await this.query({ author: { $in: emails } });
+
+    const experimentsMap = mapFromArray<Experiment>(
+      experiments,
+      (exp) => exp.createdBy,
+    );
+    return emails.map((e) => experimentsMap.get(e) as Experiment);
+  });
   constructor(
     @InjectModel(Experiment.name)
     private experimentModel: Model<ExperimentDocument>,
@@ -58,7 +67,7 @@ export class ExperimentsService {
   async query(selector: FilterQuery<ExperimentDocument>) {
     const selectorValidated = pickBy(selector, (val) => val);
     return this.experimentModel
-      .find({ communities: selectorValidated.community, ...selectorValidated })
+      .find(selectorValidated)
       .sort({ _id: -1 })
       .lean({ virtuals: true, getters: true })
       .limit(25)
@@ -80,17 +89,5 @@ export class ExperimentsService {
 
   remove(id: number) {
     return `This action removes a #${id} experiment`;
-  }
-
-  getLoaderForUsers() {
-    return new DataLoader<string, Experiment>(async (emails) => {
-      const experiments = await this.query({ author: { $in: emails } });
-
-      const experimentsMap = mapFromArray<Experiment>(
-        experiments,
-        (exp) => exp.createdBy,
-      );
-      return emails.map((e) => experimentsMap.get(e) as Experiment);
-    });
   }
 }

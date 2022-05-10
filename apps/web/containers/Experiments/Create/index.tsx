@@ -8,7 +8,6 @@ import { IExperiment } from "../../../types";
 import FirstStep from "./Steps/First";
 import { PrimaryButton } from "../../../components/Button";
 import SecondStep from "./Steps/Second";
-import { experimentResultMarkers } from "../../../mockData";
 
 export interface IStep {
   title: string;
@@ -71,9 +70,7 @@ export default function CreateExperimentView() {
         methods.formState.errors.hasOwnProperty("title"),
       onFinish: () => next(),
     },
-    {
-      resultMarkers: experimentResultMarkers,
-    },
+    {},
   ];
 
   return (
@@ -81,11 +78,7 @@ export default function CreateExperimentView() {
       <form>
         <HStack align="start" gap={24}>
           <VStack align="start" flexGrow={1} gap={6}>
-            <TextLink
-              label="Back"
-              href="/"
-              icon={<ArrowBackIcon />}
-            />
+            <TextLink label="Back" href="/" icon={<ArrowBackIcon />} />
             {React.cloneElement(
               steps[currentStep].container,
               stepPropsArray[currentStep]

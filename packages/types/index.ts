@@ -49,7 +49,10 @@ export interface IUser {
   tips?: ITip[];
   user_id: string;
   user_metadata?: IUserMetadata;
-  experiments?: Pick<IExperiment, "createdBy">[];
+  experiments?: Pick<
+    PopulatedExperiment,
+    "tips" | "createdBy" | "title" | "_id" | "description" | "communities"
+  >[];
   last_login: string;
 }
 
@@ -109,9 +112,10 @@ export interface IExperiment extends BaseMongoEntity {
 }
 
 export interface PopulatedExperiment
-  extends Omit<IExperiment, "createdBy" | "communities"> {
+  extends Omit<IExperiment, "createdBy" | "communities" | "comments"> {
   createdBy?: IUser;
   communities?: ICommunity[];
+  comments?: PopulatedComment[];
 }
 export interface PopulatedComment extends Omit<IComment, "author" | "replies"> {
   author: IUser;

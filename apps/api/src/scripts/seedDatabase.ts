@@ -184,7 +184,7 @@ export const generateExperiment = async (users) => {
   return randomExperiment;
 };
 
-type MongoComment = Omit<Comment,'_id'> & {_id: ObjectId}
+type MongoComment = Omit<Comment, '_id'> & { _id: ObjectId };
 /**
  * Generates a random comment and relates them to random experiments and users.
  * @param experiments A list of available experiments that will be linked to generated comments
@@ -194,7 +194,7 @@ export const generateComment = (
   experiments: IExperiment[],
   users: Record<string, any>[],
   replyToComments: CommentDocument[] = [],
-): MongoComment  => {
+): MongoComment => {
   const randomReplyComment = pickRandomFromArray(replyToComments);
   const randomAuthor = pickRandomFromArray(users);
   const randomExperiment = pickRandomFromArray(experiments);

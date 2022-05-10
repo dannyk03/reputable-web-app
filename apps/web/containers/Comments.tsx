@@ -15,7 +15,7 @@ import Comment from "../components/Comment";
 import Xarrow, { Xwrapper } from "react-xarrows";
 import makeAvatar from "../helpers/makeAvatar";
 import { ArrowDownIcon } from "@chakra-ui/icons";
-import { IComment } from "@reputable/types";
+import { PopulatedComment } from "@reputable/types";
 import Card from "../components/Card";
 import { useAuth0 } from "@auth0/auth0-react";
 import { PrimaryButton } from "../components/Button";
@@ -27,7 +27,7 @@ import { useRouter } from "next/router";
 React.useLayoutEffect = React.useEffect;
 
 export interface CommentsProps {
-  comments: IComment[];
+  comments: PopulatedComment[];
 }
 
 export default function Comments({
@@ -36,7 +36,7 @@ export default function Comments({
   const theme = useTheme();
   const { user = {} } = useAuth0();
   const { register, handleSubmit } =
-    useForm<Pick<IComment, "text" | "experiment" | "replyTo">>();
+    useForm<Pick<PopulatedComment, "text" | "experiment" | "replyTo">>();
   const router = useRouter();
   const { create, remove } = useComment(router.query.id as string);
   const [batchSize, setBatchSize] = React.useState(5);

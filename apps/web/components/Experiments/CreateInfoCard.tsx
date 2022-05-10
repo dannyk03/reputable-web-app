@@ -22,7 +22,7 @@ export interface CreateInfoCardProps {
   };
 }
 
-export default function CreateInfoCard({ currentStep, totalSteps, step = {} }) {
+export default function CreateInfoCard({ currentStep, totalSteps, step }) {
   /**
    * Current step value state will hold a value between 0-100
    * and it will be used to determine which step the is user at currently.

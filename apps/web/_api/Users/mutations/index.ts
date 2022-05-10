@@ -13,13 +13,16 @@ const joinCommunityMutation = gql`
 
 export const useJoinCommunity = (community: string) => {
   const { client: APIClient, refreshUser } = useApiContext();
-  const client = useQueryClient()
+  const client = useQueryClient();
 
-  return useMutation<IMessageResponse, Error, { community: string }>(
+  return useMutation<IMessageResponse, Error>(
     "joinCommunity",
-    () => APIClient.request(joinCommunityMutation, {community}),
+    () => APIClient.request(joinCommunityMutation, { community }),
     {
-      onSuccess: () => {refreshUser();client.invalidateQueries(['experiments',{community}])},
+      onSuccess: () => {
+        refreshUser();
+        client.invalidateQueries(["experiments", { community }]);
+      },
     }
   );
 };

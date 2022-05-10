@@ -1,11 +1,12 @@
 import { Divider, Heading } from "@chakra-ui/react";
+import { IExperimentResultMarker } from "@reputable/types";
 import React from "react";
 import { ExperimentResultMarker } from "../../../types";
 import Card from "../../Card";
 import CollapsableMarkerTag from "./components/CollapsableMarkerTag";
 
 export interface ExperimentMarkerInfoProps {
-  markers: ExperimentResultMarker[];
+  markers: IExperimentResultMarker[];
 }
 
 export default function ExperimentMarkerInfo({

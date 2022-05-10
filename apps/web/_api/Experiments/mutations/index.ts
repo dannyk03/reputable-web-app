@@ -15,7 +15,7 @@ const tipExperiment = gql`
 export const useTipExperiment = (experimentId?: string) => {
   const { client, refreshUser } = useApiContext();
   const queryClient = useQueryClient();
-  const toast = useToast()
+  const toast = useToast();
 
   return useMutation<
     IMessageResponse,
@@ -24,13 +24,21 @@ export const useTipExperiment = (experimentId?: string) => {
   >(
     "tipExperiment",
     (params) => {
-      return client.request<IMessageResponse>(tipExperiment, params).then(r=>r.tipExperiment);
+      return client
+        .request<{ tipExperiment: IMessageResponse }>(tipExperiment, params)
+        .then((r) => r.tipExperiment);
     },
     {
       onSuccess: (data: IMessageResponse) => {
         queryClient.invalidateQueries(["experiments", { _id: experimentId }]);
         refreshUser();
-        toast({title: 'Success!',description:data.message,status: 'success',isClosable:true, variant: 'top-accent'})
+        toast({
+          title: "Success!",
+          description: data.message,
+          status: "success",
+          isClosable: true,
+          variant: "top-accent",
+        });
       },
     }
   );

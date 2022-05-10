@@ -2,7 +2,6 @@ import { HStack, Text } from "@chakra-ui/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import mockApiCall from "../helpers/fakeApiCall";
-import { searchExperimentItems } from "../mockData";
 import { ExperimentSearchResult } from "../types";
 import AutocompleteAsync from "./Autocomplete/Async";
 
@@ -50,7 +49,7 @@ export const SearchBarItem = (item: ExperimentSearchResult) => (
 export default function SearchBar({ ...restProps }) {
   const fetchResults = (inputValue: string) =>
     mockApiCall(
-      searchExperimentItems.filter((s) =>
+      [].filter((s) =>
         s.title.toLocaleLowerCase().startsWith(inputValue.toLocaleLowerCase())
       ),
       600

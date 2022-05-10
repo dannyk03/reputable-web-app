@@ -43,7 +43,7 @@ export class ExperimentsResolver {
     @Args('community', { type: () => String, nullable: true })
     community?: string,
   ) {
-    return this.experimentsService.query({ community });
+    return this.experimentsService.query({ communities: community });
   }
 
   @Public()
@@ -54,10 +54,12 @@ export class ExperimentsResolver {
 
   @ResolveField('comments', (returns) => [Comment])
   async getComments(@Parent() experiment: Experiment) {
-    return this.commentsService.loaderForExperiments.load(experiment._id).then((r) => {
-      const returned = instanceToPlain(r, { exposeUnsetFields: false });
-      return returned;
-    });
+    return this.commentsService.loaderForExperiments
+      .load(experiment._id)
+      .then((r) => {
+        const returned = instanceToPlain(r, { exposeUnsetFields: false });
+        return returned;
+      });
   }
 
   @ResolveField('createdBy', (returns) => User)

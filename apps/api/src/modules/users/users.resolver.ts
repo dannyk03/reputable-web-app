@@ -56,7 +56,7 @@ export class UsersResolver {
 
   @ResolveField('experiments', (returns) => [Experiment])
   async getExperiments(@Parent() user: User) {
-    const usersLoader = this.experimentsService.getLoaderForUsers();
+    const usersLoader = this.experimentsService.loaderForUsers;
     return usersLoader.load(user.email);
   }
 }

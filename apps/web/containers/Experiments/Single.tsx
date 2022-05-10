@@ -38,7 +38,9 @@ export default function ExperimentsSingleView({
   experiment: data,
 }: React.PropsWithChildren<ExperimentsSingleViewProps>) {
   const { isAuthenticated } = useAuth0();
-  const {totalTokens, matchedAmount, tokensTipped} = calculateContributions(data.tips)
+  const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
+    data.tips
+  );
   return (
     <Flex direction={"row"} gap="90px">
       <Box flexGrow={1}>

@@ -103,6 +103,7 @@ export class ExperimentResult implements IExperimentResult {
 @ObjectType({ description: 'experiment' })
 @TransformQueries(Experiment)
 @index({ communites: 1 })
+@index({ createdBy: -1 })
 export class Experiment extends BaseMongoEntity implements IExperiment {
   /** Define possible markers here for now. */
   static markerPrettifiers: MarkerPrettifiers = {
