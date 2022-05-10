@@ -2,3 +2,4 @@ dist
 *.txt
 .turbo
 schema.gql
+auth0Token.txt

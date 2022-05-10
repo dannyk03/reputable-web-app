@@ -3,3 +3,4 @@ node_modules
 lint-staged.config.js
 README.md
 schema.gql
+auth0Token.txt
