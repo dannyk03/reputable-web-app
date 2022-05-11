@@ -3,7 +3,7 @@ import { gql, GraphQLClient } from "graphql-request";
 import { useAuth0 } from "@auth0/auth0-react";
 import type { IUser } from "@reputable/types";
 
-const client = new GraphQLClient(`${process.env.API_URL}/graphql`);
+const client = new GraphQLClient(`${process.env.API_URL}graphql`);
 
 const meQuery = gql`
   query {
