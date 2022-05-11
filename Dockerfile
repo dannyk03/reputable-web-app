@@ -1,4 +1,4 @@
-FROM node:14-alpine AS builder
+FROM node:14-alpine
 RUN apk update
 # Set working directory
 WORKDIR /app
@@ -7,24 +7,24 @@ COPY . .
 RUN turbo prune --scope=@reputable/api --docker
 
 # Add lockfile and package.json's of isolated subworkspace
-FROM node:14-alpine AS installer
+FROM node:14-alpine
 RUN apk update
 WORKDIR /app
-COPY --from=builder /app/out/json/ .
-COPY --from=builder /app/out/yarn.lock ./yarn.lock
+COPY --from=0 /app/out/json/ .
+COPY --from=0 /app/out/yarn.lock ./yarn.lock
 RUN yarn install
 
 FROM node:14-alpine AS sourcer
 RUN apk update
 WORKDIR /app
-COPY --from=installer /app/ .
-COPY --from=builder /app/out/full/ .
+COPY --from=1 /app/ .
+COPY --from=0 /app/out/full/ .
 COPY .gitignore .gitignore
 CMD yarn turbo run build --scope=@reputable/api
 
-FROM sourcer as deployer
+FROM sourcer
 RUN apk update
 WORKDIR /app
-COPY --from=sourcer /app/apps/api/dist/ .
+COPY --from=2 /app/apps/api/dist/ .
 EXPOSE 4000
 CMD ["node","main.js"]
