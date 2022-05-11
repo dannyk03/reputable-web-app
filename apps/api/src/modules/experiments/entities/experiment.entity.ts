@@ -1,11 +1,8 @@
 import { ObjectType, Field, registerEnumType, Int } from '@nestjs/graphql';
 import { BaseMongoEntity } from '../../../common/entities/mongo';
 import { buildSchema, DocumentType, index, prop } from '@typegoose/typegoose';
-import type {
-  ExperimentStatus,
-  IExperiment,
-  IExperimentResultMarker,
-} from '@reputable/types';
+import type { IExperiment, IExperimentResultMarker } from '@reputable/types';
+import { ExperimentStatus } from '@reputable/types';
 import { convertMinsToHrsMins, XOR } from '../../../common/helpers';
 import { Comment } from '../../comments/entities/comment.entity';
 import { TransformQueries } from '../../../decorators';

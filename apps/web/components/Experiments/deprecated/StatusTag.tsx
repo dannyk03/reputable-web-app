@@ -1,6 +1,6 @@
 import React from "react";
 import { Text } from "@chakra-ui/react";
-import type { ExperimentStatus } from "@reputable/types";
+import { ExperimentStatus } from "@reputable/types";
 
 interface StatusTagProps {
   status: ExperimentStatus;

@@ -5,6 +5,7 @@
   "main": "dist/index",
   "types": "dist/index",
   "scripts": {
+    "start:prod": "rm -rf dist && tsc",
     "build": "rm -rf dist && tsc",
     "dev": "rm -rf dist && tsc --watch"
   },

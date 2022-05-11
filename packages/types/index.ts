@@ -35,10 +35,12 @@ export enum ExperimentStatus {
   CLOSED = "CLOSED",
 }
 
+/*
 export enum MarkerValueChangeType {
   POSITIVE = "POSITIVE",
   NEGATIVE = "NEGATIVE",
 }
+*/
 
 export interface IUser {
   created_at: Date;

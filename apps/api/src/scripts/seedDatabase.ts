@@ -8,11 +8,8 @@ import {
   CommentDocument,
 } from '../modules/comments/entities/comment.entity';
 import { communities, experimentResultMarkers } from '../common/data';
-import type {
-  IExperiment,
-  ExperimentStatus,
-  IResultHistory,
-} from '@reputable/types';
+import type { IExperiment, IResultHistory } from '@reputable/types';
+import { ExperimentStatus } from '@reputable/types';
 
 const pickRandomFromArray = (arr: any[]) => {
   return arr[
