@@ -76,6 +76,7 @@ export interface IExperimentResultMarker {
   */
 }
 
+/*
 export interface IResultHistory {
   date: Date;
   markerValue: number;
@@ -94,6 +95,7 @@ export interface IExperimentResult {
   history: IResultHistory[];
   lastChange?: IMarkerValueChange;
 }
+*/
 
 export interface IExperiment extends BaseMongoEntity {
   title: string;
@@ -110,7 +112,7 @@ export interface IExperiment extends BaseMongoEntity {
   experimentPeriod: number;
   comments?: IComment[];
   tips?: ITip[];
-  prettifyResult?: (result: IExperimentResult) => IExperimentResult;
+  // prettifyResult?: (result: IExperimentResult) => IExperimentResult;
 }
 
 export interface PopulatedExperiment
