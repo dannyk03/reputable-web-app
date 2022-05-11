@@ -20,4 +20,4 @@ WORKDIR /app
 COPY --from=1 /app/ .
 COPY --from=0 /app/out/full/ .
 EXPOSE 4000
-RUN yarn turbo run start:prod
+CMD yarn turbo run start:prod
