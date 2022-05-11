@@ -19,11 +19,5 @@ RUN apk update
 WORKDIR /app
 COPY --from=1 /app/ .
 COPY --from=0 /app/out/full/ .
-CMD yarn turbo run build --scope=@reputable/api
-
-FROM node:14-alpine
-RUN apk update
-WORKDIR /app
-COPY --from=2 /app/apps/api/dist/ .
 EXPOSE 4000
-CMD ["node","main.js"]
+RUN yarn turbo run start:prod --scope=@reputable/api
