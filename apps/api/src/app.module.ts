@@ -11,6 +11,7 @@ import { JwtAuthGuard } from './common/guards/jwt-auth.guard';
 import { UsersModule } from './modules/users/users.module';
 import { CommunitiesModule } from './modules/communities/communities.module';
 import { JwtStrategy } from './common/strategies/jwt.strategy';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -46,5 +47,6 @@ import { JwtStrategy } from './common/strategies/jwt.strategy';
       useClass: JwtAuthGuard,
     },
   ],
+  controllers: [AppController],
 })
 export class AppModule {}
