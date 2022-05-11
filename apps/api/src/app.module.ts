@@ -20,8 +20,8 @@ import { JwtStrategy } from './common/strategies/jwt.strategy';
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
-      debug: true,
-      playground: true,
+      debug: process.env.PRODUCTION ? false : true,
+      playground: process.env.PRODUCTION ? false : true,
       autoSchemaFile: 'schema.gql',
       transformSchema: (schema) => upperDirectiveTransformer(schema, 'upper'),
       installSubscriptionHandlers: true,
