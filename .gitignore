@@ -4,3 +4,7 @@ packages/types/dist/index.d.ts
 packages/types/dist/index.d.ts.map
 packages/types/dist/tsconfig.tsbuildinfo
 out
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
