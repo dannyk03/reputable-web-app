@@ -8,7 +8,7 @@ import {
   CommentDocument,
 } from '../modules/comments/entities/comment.entity';
 import { communities, experimentResultMarkers } from '../common/data';
-import type { IExperiment, IResultHistory } from '@reputable/types';
+import type { IExperiment } from '@reputable/types';
 import { ExperimentStatus } from '@reputable/types';
 
 const pickRandomFromArray = (arr: any[]) => {
@@ -70,6 +70,7 @@ const generateResultHistory = (startDate: Date, endDate: Date) => {
   };
 };
 
+/*
 export const generateExperimentResultHistory = (
   length: number,
   startDate: Date,
@@ -79,6 +80,7 @@ export const generateExperimentResultHistory = (
     generateResultHistory(startDate, endDate),
   ) as IResultHistory[];
 };
+*/
 
 function getRandomSubarray(arr: any[], size: number) {
   // eslint-disable-next-line prefer-const
@@ -153,9 +155,6 @@ async function main() {
 }
 
 export const generateExperiment = async (users) => {
-  const startDate = faker.date.recent(30);
-  const endDate = faker.date.soon(30);
-
   const randomExperiment: Omit<IExperiment, 'createdAt' | 'updatedAt' | '_id'> =
     {
       title: faker.lorem.sentence(6),
