@@ -30,4 +30,5 @@ jobs:
           region: us-east-1
           deployment_package: api.zip
           existing_bucket_name: reputable-api
+          use_existing_version_if_available: true
           wait_for_environment_recovery: 600
