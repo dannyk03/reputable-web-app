@@ -8,7 +8,7 @@ import { plainToClass } from 'class-transformer';
 import { FilterQuery } from 'mongoose';
 import { UsersService } from '../users/users.service';
 import { User } from '../users/entities/user.entity';
-import { PopulatedComment } from '@reputable/types';
+import type { PopulatedComment } from '@reputable/types';
 import * as DataLoader from 'dataloader';
 import { makeArray, mapFromArray } from '../../common/helpers';
 

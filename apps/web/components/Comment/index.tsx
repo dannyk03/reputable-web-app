@@ -14,7 +14,7 @@ import moment from "moment";
 import makeAvatar from "../../helpers/makeAvatar";
 import Image from "next/image";
 import React from "react";
-import { PopulatedComment } from "@reputable/types";
+import type { PopulatedComment } from "@reputable/types";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useComment } from "../../_api/Comments/mutations";
 import { useRouter } from "next/router";

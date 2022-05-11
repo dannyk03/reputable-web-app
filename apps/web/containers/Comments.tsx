@@ -10,12 +10,12 @@ import {
   Textarea,
   useTheme,
 } from "@chakra-ui/react";
-import React, { useState } from "react";
+import React from "react";
 import Comment from "../components/Comment";
 import Xarrow, { Xwrapper } from "react-xarrows";
 import makeAvatar from "../helpers/makeAvatar";
 import { ArrowDownIcon } from "@chakra-ui/icons";
-import { PopulatedComment } from "@reputable/types";
+import type { PopulatedComment } from "@reputable/types";
 import Card from "../components/Card";
 import { useAuth0 } from "@auth0/auth0-react";
 import { PrimaryButton } from "../components/Button";

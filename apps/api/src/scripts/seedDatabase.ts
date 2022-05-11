@@ -8,7 +8,7 @@ import {
   CommentDocument,
 } from '../modules/comments/entities/comment.entity';
 import { communities, experimentResultMarkers } from '../common/data';
-import {
+import type {
   IExperiment,
   ExperimentStatus,
   IResultHistory,

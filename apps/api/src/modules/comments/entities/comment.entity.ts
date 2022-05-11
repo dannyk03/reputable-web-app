@@ -8,7 +8,7 @@ import {
 } from '@typegoose/typegoose';
 import { BaseMongoEntity } from '../../../common/entities/mongo';
 import { DeserializedMongoId, TransformQueries } from '../../../decorators';
-import { IComment } from '@reputable/types';
+import type { IComment } from '@reputable/types';
 import { User } from 'src/modules/users/entities/user.entity';
 
 @ObjectType({ description: 'Comment' })

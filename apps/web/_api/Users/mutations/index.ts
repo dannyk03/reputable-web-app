@@ -1,7 +1,7 @@
 import { IMessageResponse } from "@reputable/types";
 import { gql } from "graphql-request";
 import { useMutation, useQueryClient } from "react-query";
-import { useApiContext } from "../../../providers/ApiContext";
+import type { useApiContext } from "../../../providers/ApiContext";
 
 const joinCommunityMutation = gql`
   mutation ($community: String!) {

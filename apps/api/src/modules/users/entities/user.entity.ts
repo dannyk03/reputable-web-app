@@ -1,7 +1,7 @@
 import { ObjectType, Field, GraphQLISODateTime, Int } from '@nestjs/graphql';
 import { IUser, PopulatedExperiment } from '@reputable/types';
 import { Transaction } from 'src/common/entities/transaction';
-import { IUserMetadata } from '@reputable/types';
+import type { IUserMetadata } from '@reputable/types';
 import { Experiment } from 'src/modules/experiments/entities/experiment.entity';
 
 @ObjectType()

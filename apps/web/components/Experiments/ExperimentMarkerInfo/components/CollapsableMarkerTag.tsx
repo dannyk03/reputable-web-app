@@ -1,6 +1,6 @@
 import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
 import { Box, Collapse, HStack, useDisclosure, Text } from "@chakra-ui/react";
-import { IExperimentResultMarker } from "@reputable/types";
+import type { IExperimentResultMarker } from "@reputable/types";
 import React from "react";
 import Tag, { TagProps } from "../../../Tag";
 

@@ -12,7 +12,7 @@ import {
   Divider,
   useDisclosure,
 } from "@chakra-ui/react";
-import { ITip } from "@reputable/types";
+import type { ITip } from "@reputable/types";
 import React from "react";
 import calculateContributions from "../../helpers/calculateContributions";
 import ReputableLogo from "../Icons/ReputableLogo";
@@ -29,7 +29,8 @@ export default function ContributionsModal({
   children,
   tips,
 }: React.PropsWithChildren<ContributionsModalProps>) {
-  const {totalTokens, matchedAmount, tokensTipped} = calculateContributions(tips)
+  const { totalTokens, matchedAmount, tokensTipped } =
+    calculateContributions(tips);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const finalRef = React.useRef();
   return (

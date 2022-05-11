@@ -1,5 +1,5 @@
 import { ExperimentResultMarker } from '../../modules/experiments/entities/experiment.entity';
-import { ICommunity } from '@reputable/types';
+import type { ICommunity } from '@reputable/types';
 
 export const experimentResultMarkers: ExperimentResultMarker[] = [
   {

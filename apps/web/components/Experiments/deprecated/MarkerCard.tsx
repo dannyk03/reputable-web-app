@@ -1,7 +1,10 @@
 import { Box, Flex, Text, Icon } from "@chakra-ui/react";
 import React from "react";
 import { BiHeart } from "react-icons/bi";
-import { IExperimentResult, MarkerValueChangeType } from "@reputable/types";
+import type {
+  IExperimentResult,
+  MarkerValueChangeType,
+} from "@reputable/types";
 import { TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
 
 export default function MarkerCard({

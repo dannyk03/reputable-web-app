@@ -1,6 +1,6 @@
 import { Box, Flex, VStack, Text, Button } from "@chakra-ui/react";
 import React from "react";
-import { ICommunity } from "@reputable/types";
+import type { ICommunity } from "@reputable/types";
 import Image from "next/image";
 import Card from "../Card";
 import { useJoinCommunity } from "../../_api/Users/mutations";

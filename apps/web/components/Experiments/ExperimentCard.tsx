@@ -13,9 +13,8 @@ import makeAvatar from "../../helpers/makeAvatar";
 import NextLink from "next/link";
 import Tag from "../Tag";
 import Card from "../Card";
-import { PopulatedExperiment } from "@reputable/types";
+import type { PopulatedExperiment, ICommunity } from "@reputable/types";
 import { truncate } from "lodash";
-import { ICommunity } from "@reputable/types";
 import ReputableLogo from "../Icons/ReputableLogo";
 import Image from "next/image";
 import calculateContributions from "../../helpers/calculateContributions";
@@ -31,7 +30,9 @@ export default function ExperimentCard({
   experiment,
   ...restProps
 }: React.PropsWithChildren<ExperimentCardProps>) {
-  const {totalTokens, matchedAmount, tokensTipped} = calculateContributions(experiment.tips)
+  const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
+    experiment.tips
+  );
   return (
     <Card {...restProps} noShadow>
       <HStack>

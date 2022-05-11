@@ -1,5 +1,5 @@
 import { useToast } from "@chakra-ui/react";
-import { IMessageResponse } from "@reputable/types";
+import type { IMessageResponse } from "@reputable/types";
 import { gql } from "graphql-request";
 import { useMutation, useQueryClient } from "react-query";
 import { useApiContext } from "../../../providers/ApiContext";

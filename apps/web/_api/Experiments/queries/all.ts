@@ -1,7 +1,7 @@
 import { gql, request } from "graphql-request";
 import { useQuery, QueryClient } from "react-query";
 import { useApiContext } from "../../../providers/ApiContext";
-import { PopulatedExperiment } from "@reputable/types";
+import type { PopulatedExperiment } from "@reputable/types";
 
 export interface ExperimentsParams {
   GET: {

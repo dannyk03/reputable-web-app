@@ -1,7 +1,6 @@
 import { Divider, Heading } from "@chakra-ui/react";
-import { IExperimentResultMarker } from "@reputable/types";
+import type { IExperimentResultMarker } from "@reputable/types";
 import React from "react";
-import { ExperimentResultMarker } from "../../../types";
 import Card from "../../Card";
 import CollapsableMarkerTag from "./components/CollapsableMarkerTag";
 

@@ -1,7 +1,7 @@
 import { ObjectType, Field, registerEnumType, Int } from '@nestjs/graphql';
 import { BaseMongoEntity } from '../../../common/entities/mongo';
 import { buildSchema, DocumentType, index, prop } from '@typegoose/typegoose';
-import {
+import type {
   ExperimentStatus,
   IExperiment,
   IExperimentResultMarker,

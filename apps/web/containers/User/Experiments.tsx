@@ -11,7 +11,7 @@ import {
   TabPanels,
   TabPanel,
 } from "@chakra-ui/react";
-import { IUser } from "@reputable/types";
+import type { IUser } from "@reputable/types";
 import { useRouter } from "next/router";
 import React from "react";
 import ExperimentsLogo from "../../components/Icons/ExperimentsLogo";

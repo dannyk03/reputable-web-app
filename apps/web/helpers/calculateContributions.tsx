@@ -1,6 +1,6 @@
-import {ITip} from '@reputable/types'
+import type { ITip } from "@reputable/types";
 
-export default function calculateContributions (tips: ITip[] = []){
+export default function calculateContributions(tips: ITip[] = []) {
   const contributions: {
     tokensMatched: number;
     tokensTipped: number;
@@ -14,7 +14,15 @@ export default function calculateContributions (tips: ITip[] = []){
       tokensTipped: 0,
     }
   );
-  const matchedAmount = (contributions.tokensMatched * contributions.tokensMatched).toFixed(2)
-  const totalTokens = (parseFloat(matchedAmount) + contributions.tokensTipped).toFixed(2);
-  return {totalTokens,matchedAmount,tokensTipped: contributions.tokensTipped}
+  const matchedAmount = (
+    contributions.tokensMatched * contributions.tokensMatched
+  ).toFixed(2);
+  const totalTokens = (
+    parseFloat(matchedAmount) + contributions.tokensTipped
+  ).toFixed(2);
+  return {
+    totalTokens,
+    matchedAmount,
+    tokensTipped: contributions.tokensTipped,
+  };
 }

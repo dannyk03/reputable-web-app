@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { ITransaction } from '@reputable/types';
+import type { ITransaction } from '@reputable/types';
 
 @ObjectType()
 export class Transaction implements ITransaction {

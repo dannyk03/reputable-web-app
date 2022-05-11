@@ -22,7 +22,7 @@ import TextLink from "../../components/TextLink";
 import ExperimentMarkerInfo from "../../components/Experiments/ExperimentMarkerInfo";
 import { PrimaryButton } from "../../components/Button";
 import ReputableLogo from "../../components/Icons/ReputableLogo";
-import { ITip, PopulatedExperiment } from "@reputable/types";
+import type { PopulatedExperiment } from "@reputable/types";
 import ContributionsModal from "../../components/Experiments/ContributionsModal";
 import TipModal from "../../components/TipModal";
 import Image from "next/image";

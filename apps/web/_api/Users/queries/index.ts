@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 import { useQuery } from "react-query";
 import { useApiContext } from "../../../providers/ApiContext";
-import { IUser } from "@reputable/types";
+import type { IUser } from "@reputable/types";
 
 const userByEmailQuery = gql`
   query ($email: String!) {

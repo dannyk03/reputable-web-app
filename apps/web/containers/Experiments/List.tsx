@@ -3,7 +3,7 @@ import { Flex, Box, VStack, HStack } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { PrimaryButton } from "../../components/Button";
 import { ExperimentCard } from "../../components/Experiments";
-import { ICommunity, PopulatedExperiment } from "@reputable/types";
+import type { ICommunity, PopulatedExperiment } from "@reputable/types";
 import CommunityCard from "../../components/Communities/CommunityCard";
 import { useRouter } from "next/router";
 import SearchInput from "../../components/SearchInput";

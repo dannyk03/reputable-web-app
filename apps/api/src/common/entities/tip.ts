@@ -1,5 +1,5 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { ITip } from '@reputable/types';
+import type { ITip } from '@reputable/types';
 import { prop } from '@typegoose/typegoose';
 
 @ObjectType()

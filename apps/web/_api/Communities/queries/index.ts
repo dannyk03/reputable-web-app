@@ -1,7 +1,7 @@
 import { gql } from "graphql-request";
 import { useQuery } from "react-query";
 import { useApiContext } from "../../../providers/ApiContext";
-import { ICommunity } from "@reputable/types";
+import type { ICommunity } from "@reputable/types";
 
 const communitiesQuery = gql`
   query {
