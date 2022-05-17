@@ -9,19 +9,23 @@ import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { pickBy } from 'lodash';
 import * as DataLoader from 'dataloader';
-import { mapFromArray } from 'src/common/helpers';
+import { makeArray, mapFromArray } from 'src/common/helpers';
 
 @Injectable()
 export class ExperimentsService {
-  public loaderForUsers = new DataLoader<string, Experiment>(async (emails) => {
-    const experiments = await this.query({ author: { $in: emails } });
-
-    const experimentsMap = mapFromArray<Experiment>(
-      experiments,
-      (exp) => exp.createdBy,
-    );
-    return emails.map((e) => experimentsMap.get(e) as Experiment);
-  });
+  public loaderForUsers = new DataLoader<string, Experiment[]>(
+    async (emails) => {
+      const experiments = await this.query(
+        { createdBy: { $in: emails } },
+        { _id: 1, createdBy: 1 },
+      );
+      const experimentsMap = mapFromArray<Experiment>(
+        experiments,
+        (exp) => exp.createdBy,
+      );
+      return emails.map((e) => experimentsMap.get(e) as Experiment[]);
+    },
+  );
   constructor(
     @InjectModel(Experiment.name)
     private experimentModel: Model<ExperimentDocument>,
@@ -59,20 +63,18 @@ export class ExperimentsService {
     return this.experimentModel
       .find({})
       .lean({ virtuals: true, getters: true })
-      .limit(25)
       .orFail()
       .exec();
   }
 
-  async query(selector: FilterQuery<ExperimentDocument>) {
+  async query(
+    selector: FilterQuery<ExperimentDocument>,
+    projection?: Record<string, 1 | 0>,
+  ) {
     const selectorValidated = pickBy(selector, (val) => val);
-    return this.experimentModel
-      .find(selectorValidated)
-      .sort({ _id: -1 })
-      .lean({ virtuals: true, getters: true })
-      .limit(25)
-      .orFail()
-      .exec();
+    const q = this.experimentModel.find(selectorValidated).sort({ _id: -1 });
+    if (projection) q.select(projection);
+    return q.lean({ virtuals: true, getters: true }).orFail().exec();
   }
 
   findOne(_id: string) {

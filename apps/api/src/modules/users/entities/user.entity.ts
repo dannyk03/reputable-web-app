@@ -1,15 +1,15 @@
 import { ObjectType, Field, GraphQLISODateTime, Int } from '@nestjs/graphql';
-import { IUser, PopulatedExperiment } from '@reputable/types';
-import { Transaction } from 'src/common/entities/transaction';
+import { ITip, IUser, PopulatedExperiment } from '@reputable/types';
 import type { IUserMetadata } from '@reputable/types';
-import { Experiment } from 'src/modules/experiments/entities/experiment.entity';
+import { Experiment } from '../../../modules/experiments/entities/experiment.entity';
+import { Tip } from '../../../common/entities/tip';
 
 @ObjectType()
 export class UserMetaData implements IUserMetadata {
   @Field(() => Int)
   tokens?: number;
-  @Field(() => Transaction, { nullable: true, defaultValue: [] })
-  transactions?: Transaction[];
+  @Field(() => [Tip], { nullable: true, defaultValue: [] })
+  tips?: ITip[];
   @Field(() => [String], { nullable: true, defaultValue: [] })
   communities?: string[];
 }
@@ -30,11 +30,8 @@ export class User implements IUser {
   user_id: string;
   @Field(() => UserMetaData, { nullable: true })
   user_metadata?: UserMetaData;
-  @Field(() => [Experiment], { nullable: true })
-  experiments?: Pick<
-    PopulatedExperiment,
-    'tips' | 'createdBy' | 'title' | '_id' | 'description' | 'communities'
-  >[];
+  @Field(() => Int)
+  experiments_count?: number;
   @Field()
   last_login: string;
 }

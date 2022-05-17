@@ -8,6 +8,7 @@ export interface IUserMetadata {
   tokens?: number;
   transactions?: ITransaction[];
   communities?: string[];
+  tips?: ITip[];
 }
 
 export interface ITip {
@@ -51,10 +52,7 @@ export interface IUser {
   tips?: ITip[];
   user_id: string;
   user_metadata?: IUserMetadata;
-  experiments?: Pick<
-    PopulatedExperiment,
-    "tips" | "createdBy" | "title" | "_id" | "description" | "communities"
-  >[];
+  experiments_count?: number;
   last_login: string;
 }
 

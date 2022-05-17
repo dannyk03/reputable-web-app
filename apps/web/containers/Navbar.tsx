@@ -47,16 +47,6 @@ export default function Navbar() {
               borderColor="gray.200"
               borderRadius="24px"
               _hover={{ cursor: "pointer" }}
-            >
-              <Text>Sign up</Text>
-            </Box>
-            <Box
-              py={2}
-              px={4}
-              border="1px solid"
-              borderColor="gray.200"
-              borderRadius="24px"
-              _hover={{ cursor: "pointer" }}
               onClick={() =>
                 loginWithRedirect({
                   audience: "https://api.reputable.health",
@@ -94,6 +84,7 @@ export default function Navbar() {
               <NoSSR>
                 <UserBadge w="fit-content" />
               </NoSSR>
+              {/* 
               <Flex
                 borderRadius="50%"
                 border="1px solid"
@@ -114,6 +105,7 @@ export default function Navbar() {
                   borderRadius="50%"
                 />
               </Flex>
+              */}
             </HStack>
           </>
         )}

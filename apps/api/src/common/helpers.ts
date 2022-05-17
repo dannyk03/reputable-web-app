@@ -21,6 +21,7 @@ export const makeArray = (v: any) => {
 export function mapFromArray<T extends Record<string, any>>(
   arr: T[],
   keyMapperFn: (obj: T) => string,
+  valueMapperFn?: (obj: T) => any,
 ) {
   const map = new Map<string, T | T[]>();
   arr.map((object) => {

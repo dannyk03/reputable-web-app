@@ -13,7 +13,9 @@ export default function ExperimentMarkerInfo({
 }: React.PropsWithChildren<ExperimentMarkerInfoProps>) {
   return (
     <Card noShadow w="100%">
-      <Heading size="sm">Health markers to track</Heading>
+      <Heading fontSize="20px" fontWeight={600} color="primary.800">
+        Health markers to track
+      </Heading>
       <Divider my="4" />
       <ul>
         {markers.map((marker) => (

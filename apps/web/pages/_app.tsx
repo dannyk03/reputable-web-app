@@ -7,6 +7,7 @@ import React from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import { APIContextProvider } from "../providers/ApiContext";
 import { ReactQueryDevtools } from "react-query/devtools";
+import { DefaultSeo } from "next-seo";
 
 axios.defaults.baseURL = process.env.API_URL;
 
@@ -24,6 +25,25 @@ function Reputable({ Component, pageProps }) {
       <APIContextProvider>
         <QueryClientProvider client={queryClient}>
           <ChakraProvider theme={reputableTheme}>
+            <DefaultSeo
+              openGraph={{
+                type: "website",
+                locale: "en_IE",
+                title: "Reputable Health",
+                description:
+                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+                url: "https://reputable.health/",
+                site_name: "Reputable",
+                images: [
+                  {
+                    url: `https://drive.google.com/uc?export=view&id=1gRt4IwsUbN_ROLS1ao0vbwww9smap6JM`,
+                    width: 237,
+                    height: 161,
+                    alt: "Reputable Logo",
+                  },
+                ],
+              }}
+            />
             <MainLayout>
               <Hydrate state={pageProps.dehydratedState}>
                 <Component {...pageProps} />

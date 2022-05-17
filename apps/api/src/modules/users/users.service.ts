@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Scope } from '@nestjs/common';
+import { BadRequestException, forwardRef, Inject, Injectable, Scope } from '@nestjs/common';
 import * as DataLoader from 'dataloader';
 import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 import { plainToClass } from 'class-transformer';
@@ -8,6 +8,7 @@ import { mapFromArray } from 'src/common/helpers';
 import { Cron } from '@nestjs/schedule';
 import * as fs from 'fs';
 import * as moment from 'moment';
+import { CommentsService } from '../comments/comments.service';
 
 const getAuth0ManagementAccessToken = () => {
   const options: AxiosRequestConfig = {
@@ -41,7 +42,10 @@ export class UsersService {
     const usersMap = mapFromArray<User>(users, (u) => u.email);
     return emails.map((email) => usersMap.get(email) as User);
   });
-  constructor(private readonly communitiesService: CommunitiesService) {
+  constructor(
+    private readonly communitiesService: CommunitiesService,
+    @Inject(forwardRef(() => CommentsService))
+  ) {
     this.client = axios.create({
       baseURL: `${process.env.AUTH0_ISSUER_URL}api/v2`,
       timeout: 5000,
@@ -54,7 +58,7 @@ export class UsersService {
 
   @Cron('* 15 * * * *')
   async refreshToken() {
-    try{
+    try {
       const persistedToken = (
         await fs.promises.readFile('./auth0Token.txt')
       ).toString();
@@ -69,8 +73,8 @@ export class UsersService {
         }`;
         return;
       }
-    }catch(err){
-      console.log('Couldnt find accessToken, creating one..')
+    } catch (err) {
+      console.log('Couldnt find accessToken, creating one..');
     }
     return getAuth0ManagementAccessToken().then((token) => {
       this.client.defaults.headers['Authorization'] = `Bearer ${token}`;
@@ -112,13 +116,17 @@ export class UsersService {
       });
   }
 
-  async makeTransaction(from: string, to: string, amount: number) {
+  async tipUser(from: string, to: string, amount: number) {
     return this.client.get<User>(`users/${from}`).then(async (response) => {
       if (response.data.user_metadata.tokens - amount < 0) {
         throw new BadRequestException(
           'Insufficient funds to perform transaction.',
         );
       }
+      const toUser = await this.client
+        .get<User>(`users/${to}`)
+        .then((r) => r.data);
+
       const fromUser = response.data;
       // Normally this should be a transaction operation with rollbacks if any
       // operation fails in the process
@@ -129,7 +137,11 @@ export class UsersService {
       });
       await this.client.patch<User>(`/users/${to}`, {
         user_metadata: {
-          tokens: fromUser.user_metadata.tokens + amount,
+          tokens: toUser.user_metadata.tokens + amount,
+          tips: [
+            ...(toUser.user_metadata.tips || []),
+            { userId: from, amount },
+          ],
         },
       });
       this.loaderForExperiments.clearAll();

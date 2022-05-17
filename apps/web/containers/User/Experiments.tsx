@@ -14,7 +14,7 @@ import {
 import type { IUser } from "@reputable/types";
 import { useRouter } from "next/router";
 import React from "react";
-import ExperimentsLogo from "../../components/Icons/ExperimentsLogo";
+import ExperimentsIcon from "../../components/Icons/ExperimentsIcon";
 import ReputableLogo from "../../components/Icons/ReputableLogo";
 import makeAvatar from "../../helpers/makeAvatar";
 import moment from "moment";
@@ -66,7 +66,7 @@ export default function UserExperiments({
               </Text>
             </HStack>
             <HStack align="center">
-              <Icon as={ExperimentsLogo} width="20px" height="20px" />
+              <Icon as={ExperimentsIcon} width="20px" height="20px" />
               <Text>{data?.experiments.length}</Text>
             </HStack>
             <HStack>

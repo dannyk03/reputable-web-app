@@ -5,7 +5,7 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  VStack,
+  Progress,
   Icon,
   useDisclosure,
   NumberInput,
@@ -15,8 +15,9 @@ import {
   NumberDecrementStepper,
   HStack,
 } from "@chakra-ui/react";
-import React from "react";
+import React, { useEffect } from "react";
 import { useTipExperiment } from "../_api/Experiments/mutations";
+import { useTipUser } from "../_api/Users/mutations";
 import { PrimaryButton } from "./Button";
 import ReputableLogo from "./Icons/ReputableLogo";
 
@@ -27,12 +28,26 @@ import ReputableLogo from "./Icons/ReputableLogo";
 export default function TipModal({
   children,
   experimentId,
-}: React.PropsWithChildren<{ experimentId: string }>) {
+  userId,
+}: React.PropsWithChildren<{ experimentId?: string; userId?: string }>) {
   const [value, setValue] = React.useState("1");
-
-  const { mutate, isLoading } = useTipExperiment(experimentId);
+  const tipExperimentHook = useTipExperiment(experimentId);
+  const tipUserHook = useTipUser(userId, experimentId);
+  let mutate, isSuccess, isLoading;
+  if (userId) {
+    mutate = tipUserHook.mutate;
+    isSuccess = tipUserHook.isSuccess;
+    isLoading = tipUserHook.isLoading;
+  } else {
+    mutate = tipExperimentHook.mutate;
+    isSuccess = tipExperimentHook.isSuccess;
+    isLoading = tipExperimentHook.isLoading;
+  }
 
   const { isOpen, onOpen, onClose } = useDisclosure();
+  useEffect(() => {
+    if (isSuccess) onClose();
+  }, [isSuccess, onClose]);
   const finalRef = React.useRef();
   return (
     <>
@@ -43,6 +58,9 @@ export default function TipModal({
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
+          {isLoading && (
+            <Progress size="xs" isIndeterminate color="primary.500" />
+          )}
           <ModalHeader>Tip this experiment</ModalHeader>
           <ModalCloseButton />
           <ModalBody mb={3}>
@@ -63,7 +81,9 @@ export default function TipModal({
                 disabled={isLoading}
                 w="30%"
                 text="Tip REPT"
-                onClick={() => mutate({ experimentId, tip: parseInt(value) })}
+                onClick={() => {
+                  mutate({ tip: parseInt(value) });
+                }}
                 leftIcon={
                   <Icon
                     as={ReputableLogo}

@@ -54,12 +54,10 @@ export class ExperimentsResolver {
 
   @ResolveField('comments', (returns) => [Comment])
   async getComments(@Parent() experiment: Experiment) {
-    return this.commentsService.loaderForExperiments
-      .load(experiment._id)
-      .then((r) => {
-        const returned = instanceToPlain(r, { exposeUnsetFields: false });
-        return returned;
-      });
+    console.log(
+      this.commentsService.loaderForExperiments.load(experiment.createdBy),
+    );
+    return this.commentsService.loaderForExperiments.load(experiment._id);
   }
 
   @ResolveField('createdBy', (returns) => User)

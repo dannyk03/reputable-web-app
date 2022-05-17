@@ -14,6 +14,7 @@ const query = gql`
         memberCount
       }
       tips {
+        userId
         amount
       }
       experimentPeriod
@@ -37,9 +38,14 @@ const query = gql`
         author {
           name
           user_id
+          experiments_count
           email
           user_metadata {
             tokens
+            tips {
+              userId
+              amount
+            }
           }
           picture
         }
@@ -49,8 +55,13 @@ const query = gql`
           updatedAt
           author {
             name
+            experiments_count
             user_metadata {
               tokens
+              tips {
+                userId
+                amount
+              }
             }
             user_id
             email

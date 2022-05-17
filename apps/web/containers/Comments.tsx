@@ -19,7 +19,7 @@ import type { PopulatedComment } from "@reputable/types";
 import Card from "../components/Card";
 import { useAuth0 } from "@auth0/auth0-react";
 import { PrimaryButton } from "../components/Button";
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import { useComment } from "../_api/Comments/mutations";
 import { useRouter } from "next/router";
 
@@ -35,12 +35,11 @@ export default function Comments({
 }: React.PropsWithChildren<CommentsProps>) {
   const theme = useTheme();
   const { user = {} } = useAuth0();
-  const { register, handleSubmit } =
+  const { register, handleSubmit, reset } =
     useForm<Pick<PopulatedComment, "text" | "experiment" | "replyTo">>();
   const router = useRouter();
   const { create, remove } = useComment(router.query.id as string);
   const [batchSize, setBatchSize] = React.useState(5);
-  const [refresh, setRefresh] = React.useState(false);
 
   const onLoadMore = () => {
     setBatchSize((prevBatch) => prevBatch + 5);
@@ -79,6 +78,7 @@ export default function Comments({
               ...values,
               experiment: router.query.id as string,
             });
+            reset();
           })}
         >
           <HStack align="end">

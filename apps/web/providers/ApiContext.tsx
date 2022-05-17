@@ -18,6 +18,10 @@ const meQuery = gql`
       picture
       user_metadata {
         tokens
+        tips {
+          userId
+          amount
+        }
         communities
       }
       user_id

@@ -13,8 +13,17 @@ import {
   HStack,
   VStack,
 } from "@chakra-ui/react";
+import {
+  FacebookShareButton,
+  FacebookIcon,
+  TwitterShareButton,
+  TwitterIcon,
+  LinkedinShareButton,
+  LinkedinIcon,
+  RedditShareButton,
+  RedditIcon,
+} from "react-share";
 import { BsThreeDots } from "react-icons/bs";
-import { FcShare } from "react-icons/fc";
 import Comments from "../../containers/Comments";
 import React from "react";
 import AboutExperiment from "../../components/Experiments/About";
@@ -28,6 +37,7 @@ import TipModal from "../../components/TipModal";
 import Image from "next/image";
 import { useAuth0 } from "@auth0/auth0-react";
 import calculateContributions from "../../helpers/calculateContributions";
+import { useApiContext } from "../../providers/ApiContext";
 
 interface ExperimentsSingleViewProps {
   experiment: PopulatedExperiment;
@@ -38,9 +48,14 @@ export default function ExperimentsSingleView({
   experiment: data,
 }: React.PropsWithChildren<ExperimentsSingleViewProps>) {
   const { isAuthenticated } = useAuth0();
+  const { user } = useApiContext();
   const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
     data.tips
   );
+  const tipFromCurrentUser = data.tips.filter(
+    (t) => t.userId === user?.user_id
+  );
+  const alreadyTippedByUser = tipFromCurrentUser.length > 0;
   return (
     <Flex direction={"row"} gap="90px">
       <Box flexGrow={1}>
@@ -83,9 +98,18 @@ export default function ExperimentsSingleView({
             Duplicate
           </Button>
           */}
-            <Button leftIcon={<FcShare />} height={7} variant="ghost" size="sm">
-              Share
-            </Button>
+            <FacebookShareButton url={window.location.href} title={data.title}>
+              <FacebookIcon round size={20} />
+            </FacebookShareButton>
+            <TwitterShareButton url={window.location.href} title={data.title}>
+              <TwitterIcon round size={20} />
+            </TwitterShareButton>
+            <LinkedinShareButton url={window.location.href} title={data.title}>
+              <LinkedinIcon round size={20} />
+            </LinkedinShareButton>
+            <RedditShareButton url={window.location.href} title={data.title}>
+              <RedditIcon round size={20} />
+            </RedditShareButton>
             <IconButton
               aria-label="Show more options"
               height={7}
@@ -108,9 +132,13 @@ export default function ExperimentsSingleView({
           <TipModal experimentId={data._id}>
             <PrimaryButton
               w="100%"
-              disabled={!isAuthenticated}
+              disabled={!isAuthenticated || alreadyTippedByUser}
               text={
-                isAuthenticated ? "Tip REPT" : "Sign in to tip this experiment"
+                isAuthenticated
+                  ? alreadyTippedByUser
+                    ? `Tipped ${tipFromCurrentUser[0].amount} REPT`
+                    : "Tip REPT"
+                  : "Sign in to tip this experiment"
               }
               leftIcon={
                 <Icon
@@ -125,7 +153,7 @@ export default function ExperimentsSingleView({
           <HStack align="center">
             <Icon as={ReputableLogo} width="18px" height="18px" />
             <Text size="18px" fontWeight={600} lineHeight="28px">
-              {totalTokens} REPT received
+              {Math.round(parseFloat(totalTokens))} REPT received
             </Text>
             <ContributionsModal tips={data.tips || []}>
               <Text

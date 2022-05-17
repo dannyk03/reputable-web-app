@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CommentsResolver } from './comments.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -13,7 +13,7 @@ import { UsersModule } from '../users/users.module';
         schema: CommentSchema,
       },
     ]),
-    UsersModule,
+    forwardRef(() => UsersModule),
   ],
   providers: [CommentsResolver, CommentsService],
   exports: [CommentsService],

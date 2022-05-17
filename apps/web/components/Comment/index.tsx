@@ -7,10 +7,10 @@ import {
   HStack,
   Icon,
   Text,
-  Textarea,
   VStack,
 } from "@chakra-ui/react";
 import moment from "moment";
+import NextLink from "next/link";
 import makeAvatar from "../../helpers/makeAvatar";
 import Image from "next/image";
 import React from "react";
@@ -23,6 +23,9 @@ import Card from "../Card";
 import { ClickOutside } from "../../hooks/useClickOutside";
 import ReputableLogo from "../Icons/ReputableLogo";
 import { PrimaryButton } from "../Button";
+import TipModal from "../TipModal";
+import TipsIcon from "../Icons/TipsIcon";
+import ExperimentsIcon from "../Icons/ExperimentsIcon";
 
 interface CommentProps {
   data: Partial<PopulatedComment>;
@@ -54,31 +57,33 @@ export default function Comment({
       <Box {...restProps} pl={replyTo !== null ? 12 : 0} pt={5}>
         <Flex justify="start"></Flex>
         <Flex justify={"start"} align="center" position="relative">
-          <Avatar
-            id={id}
-            width={"40px"}
-            height={"40px"}
-            name="Profile Photo"
-            src={author.picture ?? makeAvatar("User")}
-            onClick={() => setUserCardOpen(true)}
-          />
-          <Text
-            pl="2"
-            fontWeight={600}
-            color="gray.700"
-            onClick={() => setUserCardOpen(true)}
-          >
-            Tolga Oguz
-          </Text>
+          <Flex align={"center"} cursor="pointer">
+            <Avatar
+              id={id}
+              width={"40px"}
+              height={"40px"}
+              name="Profile Photo"
+              src={author.picture ?? makeAvatar("User")}
+              onClick={() => setUserCardOpen(true)}
+            />
+            <Text
+              pl="2"
+              fontWeight={600}
+              color="gray.700"
+              onClick={() => setUserCardOpen(true)}
+            >
+              {author.name}
+            </Text>
+          </Flex>
           <Text pl="2" fontWeight={400} color="gray.600">
             {timeAgo}
           </Text>
-          <ClickOutside
-            onClickOutside={() => {
-              setUserCardOpen(false);
-            }}
-          >
-            {isUserCardOpen && (
+          {isUserCardOpen && (
+            <ClickOutside
+              onClickOutside={() => {
+                setUserCardOpen(false);
+              }}
+            >
               <Card
                 py={6}
                 px="60px"
@@ -103,31 +108,50 @@ export default function Comment({
                     color="gray.700"
                     onClick={() => setUserCardOpen(true)}
                   >
-                    Tolga Oguz
+                    {author.name}
                   </Text>
                   <HStack>
                     <HStack alignItems="center">
                       <Icon
-                        as={ReputableLogo}
+                        as={TipsIcon}
                         width="14px"
                         height="14px"
                         color="gray.600"
                       />
                       <Text size="12px" lineHeight="26px" color="gray.600">
-                        {author?.user_metadata?.tokens}
+                        {(author?.user_metadata?.tips || []).reduce(
+                          (prev, curr) => (prev += curr.amount),
+                          0
+                        )}
+                      </Text>
+                    </HStack>
+                    <HStack alignItems="center">
+                      <Icon
+                        as={ExperimentsIcon}
+                        width="14px"
+                        height="14px"
+                        color="gray.600"
+                      />
+                      <Text size="12px" lineHeight="26px" color="gray.600">
+                        {author?.experiments_count}
                       </Text>
                     </HStack>
                   </HStack>
-                  <PrimaryButton
-                    text="See full profile"
-                    size="sm"
-                    fontSize="14px"
-                    height="32px"
-                  />
+                  <NextLink
+                    passHref
+                    href={`/user/${encodeURIComponent(author.email)}`}
+                  >
+                    <PrimaryButton
+                      text="See full profile"
+                      size="sm"
+                      fontSize="14px"
+                      height="32px"
+                    />
+                  </NextLink>
                 </VStack>
               </Card>
-            )}
-          </ClickOutside>
+            </ClickOutside>
+          )}
         </Flex>
         <Flex pl={12}>
           <Text>{text}</Text>
@@ -154,6 +178,27 @@ export default function Comment({
               <Text pl="6px">Reply</Text>
             </Button>
           )}
+          <TipModal
+            userId={data?.author?.user_id}
+            experimentId={router.query.id as string}
+          >
+            <Button
+              leftIcon={
+                <Icon
+                  as={ReputableLogo}
+                  color="gray.600"
+                  width="14px"
+                  height="14px"
+                />
+              }
+              colorScheme="gray"
+              variant="ghost"
+              height={6}
+              ml={1}
+            >
+              <Text pl="6px">Tip REPT</Text>
+            </Button>
+          </TipModal>
           {user && user.email === author.email && (
             <Button
               colorScheme="red"

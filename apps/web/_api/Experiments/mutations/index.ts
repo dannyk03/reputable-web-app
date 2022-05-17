@@ -25,7 +25,10 @@ export const useTipExperiment = (experimentId?: string) => {
     "tipExperiment",
     (params) => {
       return client
-        .request<{ tipExperiment: IMessageResponse }>(tipExperiment, params)
+        .request<{ tipExperiment: IMessageResponse }>(tipExperiment, {
+          experimentId,
+          ...params,
+        })
         .then((r) => r.tipExperiment);
     },
     {

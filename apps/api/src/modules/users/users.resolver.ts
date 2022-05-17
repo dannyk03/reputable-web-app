@@ -5,14 +5,13 @@ import {
   Args,
   ResolveField,
   Parent,
+  Int,
 } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { MessageResponse } from 'src/common/entities/response';
 import { CurrentUser, Public } from 'src/decorators';
-import { Comment } from '../comments/entities/comment.entity';
 import { ExperimentsService } from '../experiments/experiments.service';
-import { Experiment } from '../experiments/entities/experiment.entity';
 
 @Resolver(() => User)
 export class UsersResolver {
@@ -38,12 +37,12 @@ export class UsersResolver {
   }
 
   @Mutation(() => MessageResponse)
-  makeTransaction(
-    @Args('from') from: string,
-    @Args('to') to: string,
-    @Args('amount') amount: number,
+  tipUser(
+    @CurrentUser() user: User,
+    @Args('userId') to: string,
+    @Args('tip', { type: () => Int }) amount: number,
   ) {
-    return this.usersService.makeTransaction(from, to, amount);
+    return this.usersService.tipUser(user.user_id, to, amount);
   }
 
   @Mutation(() => MessageResponse)
@@ -54,9 +53,10 @@ export class UsersResolver {
     return this.usersService.joinCommunity(user.email, community);
   }
 
-  @ResolveField('experiments', (returns) => [Experiment])
+  @ResolveField('experiments_count', (returns) => Int)
   async getExperiments(@Parent() user: User) {
     const usersLoader = this.experimentsService.loaderForUsers;
-    return usersLoader.load(user.email);
+    const experiments = await usersLoader.load(user.email);
+    return experiments?.length ?? 0;
   }
 }
