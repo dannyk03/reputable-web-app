@@ -24,15 +24,15 @@ registerEnumType(ExperimentStatus, {
 
 @ObjectType()
 export class ExperimentDescription implements IExperimentDescription {
-  @Field()
+  @Field({ nullable: true })
   idea?: string;
-  @Field()
+  @Field({ nullable: true })
   goal?: string;
-  @Field()
+  @Field({ nullable: true })
   summary?: string;
-  @Field()
+  @Field({ nullable: true })
   results?: string;
-  @Field()
+  @Field({ nullable: true })
   design?: string;
 }
 

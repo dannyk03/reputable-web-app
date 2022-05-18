@@ -12,6 +12,7 @@ import {
   Text,
   HStack,
   VStack,
+  Divider,
 } from "@chakra-ui/react";
 import {
   FacebookShareButton,
@@ -118,10 +119,17 @@ export default function ExperimentsSingleView({
             />
           </Flex>
         </Flex>
-        <Box
-          mt={6}
-          dangerouslySetInnerHTML={{ __html: data.description }}
-        ></Box>
+        <Divider mt={2} />
+        <Box mt={4}>
+          {Object.entries(data.description).map(([k, v]) => {
+            return (
+              <Box py={3}>
+                <Heading size="md">{k.toUpperCase()}</Heading>
+                <Text mt={4}>{v}</Text>
+              </Box>
+            );
+          })}
+        </Box>
         <Box mt="50px">
           <Comments comments={data.comments} />
         </Box>

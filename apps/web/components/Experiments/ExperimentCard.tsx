@@ -91,13 +91,12 @@ export default function ExperimentCard({
           mt={3}
           textOverflow="ellipsis"
           overflow="hidden"
-          dangerouslySetInnerHTML={{
-            __html: truncate(experiment.description, {
-              length: 400,
-              separator: "<br/>",
-            }),
-          }}
-        />
+        >
+          {truncate(experiment.description?.summary, {
+            length: 300,
+            separator: "\n",
+          })}
+        </Box>
         <HStack mt={3}>
           {experiment.communities.map((comm: ICommunity, idx: number) => (
             <Tag key={`${experiment._id}_tag_${idx}`}>

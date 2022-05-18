@@ -17,6 +17,13 @@ const query = gql`
         userId
         amount
       }
+      description {
+        goal
+        idea
+        design
+        summary
+        results
+      }
       experimentPeriod
       markers {
         name
@@ -71,7 +78,6 @@ const query = gql`
         }
       }
       status
-      description
       _id
     }
   }

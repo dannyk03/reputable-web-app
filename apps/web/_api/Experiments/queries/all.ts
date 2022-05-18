@@ -30,7 +30,13 @@ const query = gql`
       }
       experimentPeriod
       status
-      description
+      description {
+        goal
+        idea
+        design
+        summary
+        results
+      }
       _id
     }
   }
