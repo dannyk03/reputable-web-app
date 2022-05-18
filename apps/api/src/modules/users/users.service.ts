@@ -1,4 +1,10 @@
-import { BadRequestException, forwardRef, Inject, Injectable, Scope } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  Scope,
+} from '@nestjs/common';
 import * as DataLoader from 'dataloader';
 import axios, { AxiosRequestConfig, AxiosInstance } from 'axios';
 import { plainToClass } from 'class-transformer';
@@ -45,6 +51,7 @@ export class UsersService {
   constructor(
     private readonly communitiesService: CommunitiesService,
     @Inject(forwardRef(() => CommentsService))
+    private commentsService: CommentsService,
   ) {
     this.client = axios.create({
       baseURL: `${process.env.AUTH0_ISSUER_URL}api/v2`,
@@ -145,6 +152,7 @@ export class UsersService {
         },
       });
       this.loaderForExperiments.clearAll();
+      this.commentsService.loaderForExperiments.clearAll();
       return {
         message: 'Transaction successful!',
       };

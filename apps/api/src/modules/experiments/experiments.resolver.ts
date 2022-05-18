@@ -54,9 +54,7 @@ export class ExperimentsResolver {
 
   @ResolveField('comments', (returns) => [Comment])
   async getComments(@Parent() experiment: Experiment) {
-    console.log(
-      this.commentsService.loaderForExperiments.load(experiment.createdBy),
-    );
+    console.log('experimentId', experiment._id);
     return this.commentsService.loaderForExperiments.load(experiment._id);
   }
 

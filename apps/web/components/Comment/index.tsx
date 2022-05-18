@@ -26,6 +26,7 @@ import { PrimaryButton } from "../Button";
 import TipModal from "../TipModal";
 import TipsIcon from "../Icons/TipsIcon";
 import ExperimentsIcon from "../Icons/ExperimentsIcon";
+import CommentForm from "./Form";
 
 interface CommentProps {
   data: Partial<PopulatedComment>;
@@ -51,7 +52,8 @@ export default function Comment({
   const router = useRouter();
   const { user } = useApiContext();
   const [showReplies, setShowReplies] = React.useState(false);
-  const { remove } = useComment(router.query.id as string);
+  const [showReplyForm, setShowReplyForm] = React.useState(false);
+  const { create, remove } = useComment(router.query.id as string);
   return (
     <>
       <Box {...restProps} pl={replyTo !== null ? 12 : 0} pt={5}>
@@ -168,7 +170,13 @@ export default function Comment({
           />
           */}
           {replyTo === null && (
-            <Button colorScheme="gray" variant="ghost" height={6} ml={1}>
+            <Button
+              colorScheme="gray"
+              variant="ghost"
+              height={6}
+              ml={1}
+              onClick={() => setShowReplyForm((prev) => !prev)}
+            >
               <Image
                 src="/icons/Comment.svg"
                 width={14}
@@ -231,6 +239,21 @@ export default function Comment({
           )}
         </Flex>
       </Box>
+      <Collapse in={showReplyForm}>
+        <CommentForm
+          mt={5}
+          ml={12}
+          h="70px"
+          placeholder="Add a reply"
+          onSubmit={(data) => {
+            create.mutate({
+              replyTo: _id,
+              text: data.text,
+              experiment: router.query.id as string,
+            });
+          }}
+        />
+      </Collapse>
       <Collapse in={showReplies}>
         {replies.map((comment, idx) => (
           <Comment key={`reply_${comment._id}`} data={comment} />

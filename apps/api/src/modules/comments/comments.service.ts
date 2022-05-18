@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { CreateCommentInput } from './dto/create-comment.input';
@@ -33,6 +33,7 @@ export class CommentsService {
   constructor(
     @InjectModel(Comment.name)
     private commentsModel: ReturnModelType<typeof Comment>,
+    @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
   ) {}
 
