@@ -173,7 +173,13 @@ export const generateExperiment = async (users) => {
         communities.map((c) => c.slug),
         faker.datatype.number({ min: 1, max: 1 }),
       ),
-      description: faker.lorem.paragraphs(5, '<br/>'),
+      description: {
+        goal: faker.lorem.paragraph(faker.random.number({ min: 3, max: 8 })),
+        idea: faker.lorem.paragraph(faker.random.number({ min: 3, max: 8 })),
+        design: faker.lorem.paragraph(faker.random.number({ min: 3, max: 8 })),
+        results: faker.lorem.paragraph(faker.random.number({ min: 3, max: 8 })),
+        summary: faker.lorem.paragraph(faker.random.number({ min: 3, max: 8 })),
+      },
       createdBy:
         users[faker.datatype.number({ min: 0, max: users.length - 1 })].email,
     };

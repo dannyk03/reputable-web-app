@@ -29,7 +29,7 @@ export type TCreateExperiment = Pick<
 
 const steps = [
   {
-    title: "Title and description",
+    title: "Experiment Title and Description",
     description: "Please provide an in-depth explanation for your experiment",
     container: <FirstStep />,
   },
@@ -42,36 +42,7 @@ const steps = [
 ];
 
 export default function CreateExperimentView() {
-  const [currentStep, setCurrentStep] = React.useState<number>(0);
-  const next = () => setCurrentStep((prevStep) => Math.min(prevStep + 1, 2));
-  const prev = () => setCurrentStep((prevStep) => Math.max(prevStep - 1, 0));
   const methods = useForm<TCreateExperiment>();
-
-  /**
-   * For initial validation
-   */
-  useEffect(() => {
-    methods.trigger().then((errors) => {
-      const { formState } = methods;
-      const values = methods.getValues();
-      const step1Completed = !(
-        formState.errors.hasOwnProperty("title") ||
-        formState.errors.hasOwnProperty("description")
-      );
-    });
-  }, [methods]);
-
-  // Should be in the same order with steps, needs to change based on methods
-  // That's why its in the function itself, not defined outside like steps constant
-  const stepPropsArray: (Record<string, any> & StepProps)[] = [
-    {
-      canFinish:
-        methods.formState.errors.hasOwnProperty("description") ||
-        methods.formState.errors.hasOwnProperty("title"),
-      onFinish: () => next(),
-    },
-    {},
-  ];
 
   return (
     <FormProvider {...methods}>

@@ -1,7 +1,11 @@
 import { ObjectType, Field, registerEnumType, Int } from '@nestjs/graphql';
 import { BaseMongoEntity } from '../../../common/entities/mongo';
 import { buildSchema, DocumentType, index, prop } from '@typegoose/typegoose';
-import type { IExperiment, IExperimentResultMarker } from '@reputable/types';
+import type {
+  IExperiment,
+  IExperimentDescription,
+  IExperimentResultMarker,
+} from '@reputable/types';
 import { ExperimentStatus } from '@reputable/types';
 import { convertMinsToHrsMins, XOR } from '../../../common/helpers';
 import { Comment } from '../../comments/entities/comment.entity';
@@ -17,6 +21,20 @@ interface MarkerPrettifiers {
 registerEnumType(ExperimentStatus, {
   name: 'ExperimentStatus',
 });
+
+@ObjectType()
+export class ExperimentDescription implements IExperimentDescription {
+  @Field()
+  idea?: string;
+  @Field()
+  goal?: string;
+  @Field()
+  summary?: string;
+  @Field()
+  results?: string;
+  @Field()
+  design?: string;
+}
 
 /*
 registerEnumType(MarkerValueChangeType, {
@@ -126,9 +144,9 @@ export class Experiment extends BaseMongoEntity implements IExperiment {
   @Field(() => [Community])
   @prop({ type: () => [String], required: true })
   public communities: string[];
-  @Field()
+  @Field(() => ExperimentDescription)
   @prop({ required: true })
-  public description: string;
+  public description: ExperimentDescription;
   @Field(() => [ExperimentResultMarker])
   @prop({ required: true })
   public markers: ExperimentResultMarker[];

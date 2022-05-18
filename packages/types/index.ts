@@ -95,12 +95,20 @@ export interface IExperimentResult {
 }
 */
 
+export interface IExperimentDescription {
+  goal?: string;
+  idea?: string;
+  design?: string;
+  results?: string;
+  summary?: string;
+}
+
 export interface IExperiment extends BaseMongoEntity {
   title: string;
   status: ExperimentStatus;
   createdBy: string;
   communities: string[];
-  description: string;
+  description?: IExperimentDescription;
   /*
   results: IExperimentResult[];
   startDate: Date;
