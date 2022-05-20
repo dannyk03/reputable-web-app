@@ -11,7 +11,6 @@ FROM node:14-alpine
 RUN apk update
 WORKDIR /app
 COPY --from=0 /app/out/json/ .
-COPY --from=0 /app/out/yarn.lock ./yarn.lock
 RUN yarn install
 
 FROM node:14-alpine
