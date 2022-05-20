@@ -96,9 +96,9 @@ export class ExperimentsService {
       .exec();
   }
 
-  remove(id: string) {
+  remove(_id: string, userEmail: string) {
     return this.experimentModel
-      .findByIdAndRemove(id)
+      .findOneAndRemove({ _id, createdBy: userEmail })
       .orFail()
       .exec()
       .then((r) => {

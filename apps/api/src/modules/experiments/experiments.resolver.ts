@@ -87,8 +87,8 @@ export class ExperimentsResolver {
   }
 
   @Mutation(() => MessageResponse)
-  removeExperiment(@Args('_id') _id: string) {
-    return this.experimentsService.remove(_id);
+  removeExperiment(@Args('_id') _id: string, @CurrentUser() user: User) {
+    return this.experimentsService.remove(_id, user.email);
   }
 
   @Mutation(() => MessageResponse)
