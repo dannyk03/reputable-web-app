@@ -2,6 +2,7 @@ import { gql, request } from "graphql-request";
 import { useQuery, QueryClient } from "react-query";
 import { useApiContext } from "../../../providers/ApiContext";
 import type { PopulatedExperiment } from "@reputable/types";
+import { pickBy } from "lodash";
 
 export interface ExperimentsParams {
   GET: {
@@ -10,8 +11,8 @@ export interface ExperimentsParams {
 }
 
 const query = gql`
-  query ($community: String) {
-    experiments(community: $community) {
+  query ($community: String, $createdBy: String) {
+    experiments(community: $community, createdBy: $createdBy) {
       title
       tips {
         amount
@@ -42,11 +43,15 @@ const query = gql`
   }
 `;
 
-export const useExperiments = (community?: string) => {
+export const useExperiments = (params: {
+  community?: string;
+  createdBy?: string;
+}) => {
   const { client } = useApiContext();
-
-  return useQuery<PopulatedExperiment[]>(["experiments", { community }], () =>
-    client.request(query, { community }).then((r) => {
+  const q = pickBy(params, (v) => v);
+  console.log("q", q);
+  return useQuery<PopulatedExperiment[]>(["experiments", q], () =>
+    client.request(query, q).then((r) => {
       return r.experiments;
     })
   );

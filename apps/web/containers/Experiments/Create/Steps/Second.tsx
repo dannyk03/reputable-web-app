@@ -5,49 +5,74 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
   HStack,
+  InputGroup,
+  InputRightAddon,
+  IconButton,
   Box,
+  Icon,
 } from "@chakra-ui/react";
-import { StepProps, TCreateExperiment } from "..";
+import { TCreateExperiment, StepProps } from "..";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import Card from "../../../../components/Card";
-import { ExperimentResultMarker } from "../../../../types";
-import moment from "moment";
-import { TimeIcon } from "@chakra-ui/icons";
-
-export interface SecondStepProps extends StepProps {
-  resultMarkers?: ExperimentResultMarker[];
-}
+import { AddIcon, ArrowBackIcon, DeleteIcon } from "@chakra-ui/icons";
+import MarkerInput from "../components/MarkerInput";
+import { PrimaryButton } from "../../../../components/Button";
+import TextLink from "../../../../components/TextLink";
 
 export default function SecondStep({
-  resultMarkers,
-}: React.PropsWithChildren<SecondStepProps>) {
-  const { register, setValue, trigger, getValues, control } =
+  onSubmit,
+  prev,
+}: React.PropsWithChildren<StepProps>) {
+  const { register, setValue, trigger, getValues, control, handleSubmit } =
     useFormContext<TCreateExperiment>();
-  const startDateMoment = moment(getValues("startDate"));
-  const endDateMoment = moment(getValues("endDate"));
-  const { fields, append, remove } = useFieldArray({
+
+  const { fields, append, remove, move } = useFieldArray({
     control,
-    name: "results",
+    name: "markers",
   });
+
   return (
-    <VStack align="start" gap={6} width="100%">
-      <Card>
-        <Text
-          fontSize="20px"
-          fontWeight={600}
-          lineHeight="28px"
-          color="primary.800"
+    <form
+      onKeyPress={(e) => {
+        if (e.key === "Enter") e.preventDefault();
+      }}
+      onSubmit={handleSubmit((data) => onSubmit(data))}
+    >
+      <VStack align="start" gap={6} width="100%">
+        <HStack
+          _hover={{ cursor: "pointer", textDecoration: "underline" }}
+          onClick={() => prev()}
         >
-          Health Markers to Track
-        </Text>
-        <Text color="gray.700" fontSize="18px" lineHeight="28px" mt={2}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </Text>
-        <Divider my={4} />
-        {/* 
+          <Icon as={ArrowBackIcon} size="sm" />
+          <Text fontSize={16}>Back</Text>
+        </HStack>
+        <Card w="100%">
+          <Text
+            fontSize="20px"
+            fontWeight={600}
+            lineHeight="28px"
+            color="primary.800"
+          >
+            Experiment Period
+          </Text>
+          <Text color="gray.700" fontSize="18px" lineHeight="28px" mt={2}>
+            How long this experiment shoul run for?
+          </Text>
+          <Divider my={4} />
+          <FormControl w="fit-content">
+            <FormLabel htmlFor="experimentPeriod">Value</FormLabel>
+            <InputGroup size="md">
+              <Input
+                type="number"
+                min={0}
+                placeholder="Experiment Period"
+                {...register("experimentPeriod", { valueAsNumber: true })}
+              />
+              <InputRightAddon>days</InputRightAddon>
+            </InputGroup>
+          </FormControl>
+          {/* 
         <FormControl>
           <FormLabel htmlFor="healthMarker">
             Add Health Marker Results
@@ -83,59 +108,57 @@ export default function SecondStep({
           </FormControl>
         ))}
       */}
-      </Card>
-      <Card>
-        <Text
-          fontSize="20px"
-          fontWeight={600}
-          lineHeight="28px"
-          color="primary.800"
-        >
-          Experiment Period
-        </Text>
-        <Text color="gray.700" fontSize="18px" lineHeight="28px" mt={2}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua.
-        </Text>
-        <Divider my={4} />
-        <HStack justify="start">
-          <Box minW="280px">
-            <FormControl w="100%">
-              <FormLabel htmlFor="startDate">Start date</FormLabel>
-              <Input
-                type="date"
-                placeholder="Select a health marker"
-                {...register("startDate", {
-                  required: true,
-                  valueAsDate: true,
-                })}
-              ></Input>
-            </FormControl>
-            <FormControl mt={5} w="100%">
-              <FormLabel htmlFor="endDate">End date</FormLabel>
-              <Input
-                type="date"
-                placeholder="Select a health marker"
-                {...register("endDate", { required: true, valueAsDate: true })}
-              ></Input>
-            </FormControl>
-          </Box>
-          <Box
-            borderRadius="12px"
-            border="1px solid"
-            borderColor="gray.200"
-            p={2.5}
-            ml="40px"
+        </Card>
+        <Card w="100%">
+          <Text
+            fontSize="20px"
+            fontWeight={600}
+            lineHeight="28px"
+            color="primary.800"
           >
-            <HStack height="28px">
-              <TimeIcon w="20px" h="20px" color="#FF8A84" />
-              <Text color="gray.400" fontSize="20px" lineHeight="28px">
-                {endDateMoment.diff(startDateMoment, "days") || 0} days selected
-              </Text>
-            </HStack>
-          </Box>
-        </HStack>
-      </Card>
-    </VStack>
+            Health Markers to Track
+          </Text>
+          <Text color="gray.700" fontSize="18px" lineHeight="28px" mt={2}>
+            What health markers are you tracking in this experiment?
+          </Text>
+          <Divider my={4} />
+          <VStack align={"start"}>
+            {fields.map((field, index) => {
+              return (
+                <HStack align="end">
+                  <MarkerInput index={index} />
+                  <Box pb={1}>
+                    <IconButton
+                      onClick={() => remove(index)}
+                      aria-label="Remove Marker"
+                      variant="outline"
+                      size="sm"
+                      colorScheme="red"
+                      icon={<DeleteIcon />}
+                    />
+                  </Box>
+                </HStack>
+              );
+            })}
+            <IconButton
+              onClick={() => append({ name: "", devices: [] })}
+              aria-label="Add Health Marker"
+              variant="outline"
+              size="sm"
+              colorScheme="primary"
+              icon={<AddIcon />}
+            />
+          </VStack>
+        </Card>
+        <PrimaryButton
+          pos="absolute"
+          top="145px"
+          right="16px"
+          size="md"
+          text="Create Experiment"
+          type="submit"
+        />
+      </VStack>
+    </form>
   );
 }

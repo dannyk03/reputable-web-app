@@ -8,7 +8,9 @@ import NoSSR from "../../components/NoSSR";
 
 export default function ExperimentSingle() {
   const router = useRouter();
-  const { data, isLoading } = useExperiment(router.query.id as string);
+  const { data, isLoading, isFetching, isRefetching } = useExperiment(
+    router.query.id as string
+  );
   if (!router.query.id || isLoading) {
     return <></>;
   }
@@ -18,7 +20,7 @@ export default function ExperimentSingle() {
         <NextSeo
           openGraph={{
             title: data.title,
-            description: truncate(data.description, {
+            description: truncate(data.description.goal, {
               length: 150,
               separator: "<br/>",
             }),
@@ -44,7 +46,10 @@ export default function ExperimentSingle() {
           }}
         />
       </NoSSR>
-      <ExperimentSingleView experiment={data} />
+      <ExperimentSingleView
+        experiment={data}
+        isLoading={isLoading || isRefetching}
+      />
     </>
   );
 }

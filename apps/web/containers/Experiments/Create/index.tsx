@@ -4,10 +4,13 @@ import { CreateInfoCard } from "../../../components/Experiments";
 import TextLink from "../../../components/TextLink";
 import React, { useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import { IExperiment } from "../../../types";
+import { IExperiment } from "@reputable/types";
 import FirstStep from "./Steps/First";
 import { PrimaryButton } from "../../../components/Button";
 import SecondStep from "./Steps/Second";
+import StepperLayout from "./Steps/Layout";
+import { useExperiment } from "../../../_api/Experiments/mutations";
+import { useRouter } from "next/router";
 
 export interface IStep {
   title: string;
@@ -19,12 +22,14 @@ export interface StepProps {
    * Indicates if user can click Next or Finish
    */
   canFinish?: boolean;
-  onFinish?: () => void;
+  onSubmit?: (data) => void;
+  next?: () => void;
+  prev?: () => void;
 }
 
 export type TCreateExperiment = Pick<
   IExperiment,
-  "description" | "title" | "startDate" | "endDate" | "results"
+  "description" | "title" | "experimentPeriod" | "markers"
 >;
 
 const steps = [
@@ -42,37 +47,45 @@ const steps = [
 ];
 
 export default function CreateExperimentView() {
-  const methods = useForm<TCreateExperiment>();
+  const methods = useForm<TCreateExperiment>({ reValidateMode: "onChange" });
+  const router = useRouter();
+  const { create } = useExperiment();
+  const [currentStep, setCurrentStep] = React.useState<number>(1);
+
+  if (!router.query.community) {
+    return <></>;
+  }
+
+  const next = () => setCurrentStep((prevStep) => Math.min(prevStep + 1, 2));
+  const prev = () => setCurrentStep((prevStep) => Math.max(prevStep - 1, 0));
+
+  // Should be in the same order with steps, needs to change based on methods
+  // That's why its in the function itself, not defined outside like steps constant
+  const stepPropsArray: (Record<string, any> & StepProps)[] = [
+    {
+      onSubmit: () => next(),
+    },
+    {
+      onSubmit: (data) =>
+        create.mutate({ ...data, communities: [router.query.community] }),
+    },
+  ];
 
   return (
     <FormProvider {...methods}>
-      <form>
-        <HStack align="start" gap={24}>
-          <VStack align="start" flexGrow={1} gap={6}>
-            <TextLink label="Back" href="/" icon={<ArrowBackIcon />} />
-            {React.cloneElement(
-              steps[currentStep].container,
-              stepPropsArray[currentStep]
-            )}
-          </VStack>
-          <VStack align="end">
-            <PrimaryButton
-              size="md"
-              text="Next"
-              disabled={stepPropsArray[currentStep]?.canFinish ?? true}
-              onClick={
-                stepPropsArray[currentStep]?.onFinish ??
-                (() => console.log("clicked"))
-              }
-            />
-            <CreateInfoCard
-              currentStep={currentStep}
-              totalSteps={steps.length}
-              step={steps[currentStep]}
-            />
-          </VStack>
-        </HStack>
-      </form>
+      <VStack align="start" flexGrow={1} gap={6}>
+        <StepperLayout
+          title={steps[currentStep].title}
+          description={steps[currentStep].description}
+          currentStep={currentStep}
+        >
+          {React.cloneElement(steps[currentStep].container, {
+            ...stepPropsArray[currentStep],
+            next,
+            prev,
+          })}
+        </StepperLayout>
+      </VStack>
     </FormProvider>
   );
 }

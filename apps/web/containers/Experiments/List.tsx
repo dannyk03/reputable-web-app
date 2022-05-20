@@ -33,7 +33,7 @@ export default function ExperimentsListView({
       <VStack w="260px" gap={5}>
         <CommunityCard community={community} />
         <PrimaryButton
-          onClick={() => router.push("/experiments/create")}
+          onClick={() => router.push(`/${community.slug}/create`)}
           text="Create new experiment"
           leftIcon={<AddIcon width="12px" height="12px" />}
         />

@@ -1,4 +1,5 @@
 import {
+  ChakraProps,
   CircularProgress,
   CircularProgressLabel,
   Flex,
@@ -13,7 +14,7 @@ import { MdInfo } from "react-icons/md";
 import { ArrowForwardIcon } from "@chakra-ui/icons";
 import TextLink from "../TextLink";
 
-export interface CreateInfoCardProps {
+export interface CreateInfoCardProps extends ChakraProps {
   currentStep: number;
   totalSteps: number;
   step: {
@@ -22,14 +23,19 @@ export interface CreateInfoCardProps {
   };
 }
 
-export default function CreateInfoCard({ currentStep, totalSteps, step }) {
+export default function CreateInfoCard({
+  currentStep,
+  totalSteps,
+  step,
+  ...restProps
+}) {
   /**
    * Current step value state will hold a value between 0-100
    * and it will be used to determine which step the is user at currently.
    */
   const stepValue = 100 / totalSteps;
   return (
-    <Card maxW="340px">
+    <Card maxW="340px" minW={"340px"} {...restProps}>
       <Flex justify="start" direction="column" gap={4}>
         <HStack align="center" color="primary.800">
           <Icon as={MdInfo} w="20px" h="20px" />
@@ -40,7 +46,7 @@ export default function CreateInfoCard({ currentStep, totalSteps, step }) {
         <HStack gap={2}>
           <CircularProgress
             size="96px"
-            value={currentStep * stepValue}
+            value={(currentStep + 1) * stepValue}
             color="green.400"
           >
             <CircularProgressLabel
@@ -49,7 +55,7 @@ export default function CreateInfoCard({ currentStep, totalSteps, step }) {
               color="gray.700"
               px={3}
             >
-              Step {currentStep}/{totalSteps}
+              Step {currentStep + 1}/{totalSteps}
             </CircularProgressLabel>
           </CircularProgress>
           <Text>{step.title ?? ""}</Text>

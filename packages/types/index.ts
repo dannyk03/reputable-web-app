@@ -66,7 +66,7 @@ export interface IComment extends BaseMongoEntity {
 
 export interface IExperimentResultMarker {
   name: string;
-  slug: string;
+  slug?: string;
   devices?: string[];
   /*
   more_is_better?: boolean;

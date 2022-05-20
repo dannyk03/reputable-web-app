@@ -25,14 +25,19 @@ registerEnumType(ExperimentStatus, {
 @ObjectType()
 export class ExperimentDescription implements IExperimentDescription {
   @Field({ nullable: true })
+  @prop()
   idea?: string;
   @Field({ nullable: true })
+  @prop()
   goal?: string;
   @Field({ nullable: true })
+  @prop()
   summary?: string;
   @Field({ nullable: true })
+  @prop()
   results?: string;
   @Field({ nullable: true })
+  @prop()
   design?: string;
 }
 
@@ -47,7 +52,7 @@ export class ExperimentResultMarker implements IExperimentResultMarker {
   @Field()
   @prop()
   name: string;
-  @Field()
+  @Field({ nullable: true })
   @prop()
   slug: string;
   @Field(() => [String], { nullable: true, defaultValue: [] })

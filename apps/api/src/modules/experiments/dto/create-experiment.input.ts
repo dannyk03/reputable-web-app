@@ -1,15 +1,47 @@
-import { InputType, Int, Field, GraphQLISODateTime } from '@nestjs/graphql';
+import {
+  InputType,
+  Int,
+  Field,
+  GraphQLISODateTime,
+  PartialType,
+} from '@nestjs/graphql';
+import {
+  ExperimentDescription,
+  ExperimentResultMarker,
+} from '../entities/experiment.entity';
+
+@InputType()
+class ExperimentDescriptionInput {
+  @Field({ nullable: true })
+  idea?: string;
+  @Field({ nullable: true })
+  goal?: string;
+  @Field({ nullable: true })
+  summary?: string;
+  @Field({ nullable: true })
+  results?: string;
+  @Field({ nullable: true })
+  design?: string;
+}
+
+@InputType()
+class ExperimentResultMarkerInput {
+  @Field()
+  name?: string;
+  @Field(() => [String], { nullable: true, defaultValue: [] })
+  devices?: string[];
+}
 
 @InputType()
 export class CreateExperimentInput {
   @Field()
   title: string;
+  @Field(() => ExperimentDescriptionInput)
+  description: ExperimentDescriptionInput;
+  @Field(() => [ExperimentResultMarkerInput])
+  markers: ExperimentResultMarkerInput[];
   @Field()
-  description: string;
-  @Field(() => GraphQLISODateTime)
-  startDate: Date;
-  @Field(() => GraphQLISODateTime)
-  endDate: Date;
-  @Field()
-  createdBy: string;
+  experimentPeriod: number;
+  @Field(() => [String])
+  communities: string[];
 }

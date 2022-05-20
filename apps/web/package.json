@@ -16,6 +16,7 @@
     "@dicebear/avatars": "^4.10.2",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
+    "@hookform/error-message": "^2.0.0",
     "@svgr/webpack": "^6.2.1",
     "@types/react-infinite-scroller": "^1.2.3",
     "axios": "^0.26.1",
@@ -38,6 +39,7 @@
     "react-infinite-scroller": "^1.2.6",
     "react-query": "^3.36.0",
     "react-share": "^4.4.0",
+    "react-tag-input-component": "^1.0.7",
     "react-xarrows": "^2.0.2"
   },
   "devDependencies": {

@@ -20,6 +20,7 @@ import makeAvatar from "../../helpers/makeAvatar";
 import moment from "moment";
 import { useApiContext } from "../../providers/ApiContext";
 import { ExperimentCard } from "../../components/Experiments";
+import { useExperiments } from "../../_api/Experiments/queries/all";
 
 interface UserExperimentsProps {
   data?: IUser;
@@ -30,6 +31,9 @@ export default function UserExperiments({
 }: React.PropsWithChildren<UserExperimentsProps>) {
   const router = useRouter();
   const { user } = useApiContext();
+  const { data: experiments = [], isLoading } = useExperiments({
+    createdBy: router.query.email as string,
+  });
 
   const lastLogin = moment(user?.last_login ?? Date.now()).fromNow();
   return (
@@ -67,7 +71,7 @@ export default function UserExperiments({
             </HStack>
             <HStack align="center">
               <Icon as={ExperimentsIcon} width="20px" height="20px" />
-              <Text>{data?.experiments.length}</Text>
+              <Text>{experiments.length}</Text>
             </HStack>
             <HStack>
               <Text color="gray.400" fontSize="14px" lineHeight="20px">
@@ -80,11 +84,11 @@ export default function UserExperiments({
       <Box display="block" w="100%">
         <Tabs>
           <TabList>
-            <Tab>Experiments ({data?.experiments.length})</Tab>
+            <Tab>Experiments ({experiments.length})</Tab>
           </TabList>
           <TabPanels>
             <TabPanel px={10}>
-              {(data?.experiments || []).map((exp) => (
+              {(experiments || []).map((exp) => (
                 <ExperimentCard experiment={exp} mt={5} />
               ))}
             </TabPanel>

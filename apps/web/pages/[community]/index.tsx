@@ -5,9 +5,9 @@ import { useExperiments } from "../../_api/Experiments/queries/all";
 
 export default function Experiments() {
   const router = useRouter();
-  const { data, isLoading, error, isFetching } = useExperiments(
-    router.query.community as string
-  );
+  const { data, isLoading, error, isFetching } = useExperiments({
+    community: router.query.community as string,
+  });
   if (!router.query?.community || isLoading) return <></>;
   const communityData = data[0].communities.filter(
     (c) => c.slug === router.query.community

@@ -32,10 +32,15 @@ export class ExperimentsService {
     private usersService: UsersService,
   ) {}
 
-  async create(createExperimentInput: CreateExperimentInput) {
+  async create(
+    createExperimentInput: CreateExperimentInput & { createdBy: string },
+  ) {
     return this.experimentModel
       .create(createExperimentInput)
-      .then((experiment) => plainToClass(Experiment, experiment.toJSON()));
+      .then((experiment) => {
+        this.loaderForUsers.clearAll();
+        return plainToClass(Experiment, experiment.toJSON());
+      });
   }
 
   async tipExperiment(experimentId: string, user: User, amount: number) {
@@ -71,7 +76,9 @@ export class ExperimentsService {
     selector: FilterQuery<ExperimentDocument>,
     projection?: Record<string, 1 | 0>,
   ) {
+    console.log('selector', selector);
     const selectorValidated = pickBy(selector, (val) => val);
+    console.log('selector', selectorValidated);
     const q = this.experimentModel.find(selectorValidated).sort({ _id: -1 });
     if (projection) q.select(projection);
     return q.lean({ virtuals: true, getters: true }).orFail().exec();
@@ -89,7 +96,16 @@ export class ExperimentsService {
       .exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} experiment`;
+  remove(id: string) {
+    return this.experimentModel
+      .findByIdAndRemove(id)
+      .orFail()
+      .exec()
+      .then((r) => {
+        this.loaderForUsers.clearAll();
+        return {
+          message: 'Experiment deleted successfully!',
+        };
+      });
   }
 }

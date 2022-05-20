@@ -6,8 +6,8 @@ import {
   Flex,
   Heading,
   HStack,
+  Progress,
   Text,
-  Textarea,
   useTheme,
 } from "@chakra-ui/react";
 import React from "react";
@@ -18,20 +18,22 @@ import { ArrowDownIcon } from "@chakra-ui/icons";
 import type { PopulatedComment } from "@reputable/types";
 import Card from "../components/Card";
 import { useAuth0 } from "@auth0/auth0-react";
-import { PrimaryButton } from "../components/Button";
-import { useForm, useFormContext } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useComment } from "../_api/Comments/mutations";
 import { useRouter } from "next/router";
+import CommentForm from "../components/Comment/Form";
 
 // React-XArrows will throw a warning if this is removed.
 React.useLayoutEffect = React.useEffect;
 
 export interface CommentsProps {
   comments: PopulatedComment[];
+  isLoading?: boolean;
 }
 
 export default function Comments({
   comments = [],
+  isLoading,
 }: React.PropsWithChildren<CommentsProps>) {
   const theme = useTheme();
   const { user = {} } = useAuth0();
@@ -46,88 +48,67 @@ export default function Comments({
   };
 
   return (
-    <Card>
-      <Heading fontSize="20px" fontWeight={600} color="gray.700">
-        {" "}
-        The Conversation ({comments.length})
-      </Heading>
-      <Text
-        py={1}
-        fontSize="18px"
-        color="gray.600"
-        fontWeight={400}
-        lineHeight="28px"
-      >
-        Start a discussion, not a fire. Post with kindness.
-      </Text>
-      <Divider my={5} />
-      {/*
+    <Card p={0}>
+      {isLoading && <Progress isIndeterminate />}
+      <Box p={6}>
+        <Heading fontSize="20px" fontWeight={600} color="gray.700">
+          {" "}
+          The Conversation ({comments.length})
+        </Heading>
+        <Text
+          py={1}
+          fontSize="18px"
+          color="gray.600"
+          fontWeight={400}
+          lineHeight="28px"
+        >
+          Start a discussion, not a fire. Post with kindness.
+        </Text>
+        <Divider my={5} />
+        {/*
         Sort will go here.
        */}
-      <Flex w="100%">
-        <Avatar
-          width={"40px"}
-          height={"40px"}
-          name="Profile Photo"
-          src={user.picture ?? makeAvatar(user.given_name ?? "User")}
-        />
-        <form
-          style={{ width: "100%" }}
-          onSubmit={handleSubmit((values) => {
+        <CommentForm
+          h="100px"
+          placeholder="Add a comment"
+          onSubmit={(data) => {
             create.mutate({
-              ...values,
+              text: data.text,
               experiment: router.query.id as string,
             });
-            reset();
+          }}
+        />
+        <Xwrapper>
+          {comments.slice(0, batchSize).map((comment, index) => {
+            return (
+              <Box key={`parent_comment_${index}`}>
+                <Comment id={`comment_${index}`} data={comment} />
+                {index !== 0 && (
+                  <Xarrow
+                    start={`comment_${index - 1}`}
+                    end={`comment_${index}`}
+                    color={theme.colors.gray[200]}
+                    showHead={false}
+                    strokeWidth={1}
+                  />
+                )}
+              </Box>
+            );
           })}
-        >
-          <HStack align="end">
-            <Textarea
-              ml={3}
-              h="100px"
-              placeholder="Add a comment"
-              required
-              {...register("text", {
-                minLength: {
-                  value: 10,
-                  message: "Your comment should be at least 20 chars long.",
-                },
-              })}
-            />
-            <PrimaryButton fontSize="14px" h={8} type="submit" text="Submit" />
-          </HStack>
-        </form>
-      </Flex>
-      <Xwrapper>
-        {comments.slice(0, batchSize).map((comment, index) => {
-          return (
-            <Box key={`parent_comment_${index}`}>
-              <Comment id={`comment_${index}`} data={comment} />
-              {index !== 0 && (
-                <Xarrow
-                  start={`comment_${index - 1}`}
-                  end={`comment_${index}`}
-                  color={theme.colors.gray[200]}
-                  showHead={false}
-                  strokeWidth={1}
-                />
-              )}
-            </Box>
-          );
-        })}
-      </Xwrapper>
-      <Flex justify="center" align="center" mt={5}>
-        <Button
-          leftIcon={<ArrowDownIcon />}
-          onClick={() => onLoadMore()}
-          disabled={comments.slice(0, batchSize).length === comments.length}
-          height={7}
-          variant="ghost"
-          size="sm"
-        >
-          Load More
-        </Button>
-      </Flex>
+        </Xwrapper>
+        <Flex justify="center" align="center" mt={5}>
+          <Button
+            leftIcon={<ArrowDownIcon />}
+            onClick={() => onLoadMore()}
+            disabled={comments.slice(0, batchSize).length === comments.length}
+            height={7}
+            variant="ghost"
+            size="sm"
+          >
+            Load More
+          </Button>
+        </Flex>
+      </Box>
     </Card>
   );
 }

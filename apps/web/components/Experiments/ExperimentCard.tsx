@@ -9,6 +9,7 @@ import {
   Spacer,
   LinkOverlay,
   Text,
+  IconButton,
 } from "@chakra-ui/react";
 import React from "react";
 import makeAvatar from "../../helpers/makeAvatar";
@@ -20,6 +21,9 @@ import { truncate } from "lodash";
 import ReputableLogo from "../Icons/ReputableLogo";
 import Image from "next/image";
 import calculateContributions from "../../helpers/calculateContributions";
+import { useRouter } from "next/router";
+import { useExperiment } from "../../_api/Experiments/mutations";
+import { DeleteIcon } from "@chakra-ui/icons";
 
 export interface ExperimentCardProps extends ChakraProps {
   experiment: Pick<
@@ -32,87 +36,113 @@ export default function ExperimentCard({
   experiment,
   ...restProps
 }: React.PropsWithChildren<ExperimentCardProps>) {
+  const router = useRouter();
   const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
     experiment.tips
   );
+  const { remove } = useExperiment({
+    community: router.query.community as string,
+    createdBy: experiment.createdBy.email,
+  });
   return (
     <Card {...restProps} noShadow>
-      <LinkBox>
-        <HStack>
-          <Avatar
-            width={"32px"}
-            height={"32px"}
-            name="Profile Photo"
-            src={experiment.createdBy.picture ?? makeAvatar("Some name")}
-          />
-          <Text
-            color="gray.700"
-            fontWeight={600}
-            lineHeight="28px"
-            fontSize={18}
-          >
-            {experiment.createdBy.name}
-          </Text>
-
-          <Text
-            color="gray.600"
-            fontWeight={400}
-            lineHeight="24px"
-            fontSize="16px"
-          >
-            2 days ago
-          </Text>
-          <Spacer />
-          <HStack alignItems="center">
-            <Icon as={ReputableLogo} width="20px" height="20px" />
-            <Text size="16px" lineHeight="24px">
-              {totalTokens}
-            </Text>
-          </HStack>
-        </HStack>
-        <NextLink href={`/experiments/${experiment._id}`} passHref>
-          <LinkOverlay>
+      <HStack w="100%" align={"start"}>
+        <LinkBox flexGrow={1}>
+          <HStack>
+            <Avatar
+              width={"32px"}
+              height={"32px"}
+              name="Profile Photo"
+              src={experiment.createdBy.picture ?? makeAvatar("Some name")}
+            />
             <Text
-              fontSize="24px"
-              lineHeight="32px"
+              color="gray.700"
               fontWeight={600}
-              color="gray.800"
-              mt={2}
+              lineHeight="28px"
+              fontSize={18}
             >
-              {experiment.title}
+              {experiment.createdBy.name}
             </Text>
-          </LinkOverlay>
-        </NextLink>
-        <Box
-          color="gray.600"
-          fontSize="18px"
-          lineHeight="28px"
-          fontWeight={400}
-          mt={3}
-          textOverflow="ellipsis"
-          overflow="hidden"
-        >
-          {truncate(experiment.description?.summary, {
-            length: 300,
-            separator: "\n",
-          })}
-        </Box>
-        <HStack mt={3}>
-          {experiment.communities.map((comm: ICommunity, idx: number) => (
-            <Tag key={`${experiment._id}_tag_${idx}`}>
-              <HStack>
-                <Image
-                  alt="Sleep Community"
-                  src={comm.icon}
-                  width="14px"
-                  height="14px"
-                />
-                <Text>{comm.name}</Text>
-              </HStack>
-            </Tag>
-          ))}
-        </HStack>
-      </LinkBox>
+
+            <Text
+              color="gray.600"
+              fontWeight={400}
+              lineHeight="24px"
+              fontSize="16px"
+            >
+              2 days ago
+            </Text>
+            <Spacer />
+            <HStack alignItems="center">
+              <Icon as={ReputableLogo} width="20px" height="20px" />
+              <Text size="16px" lineHeight="24px">
+                {totalTokens}
+              </Text>
+            </HStack>
+          </HStack>
+          <NextLink
+            href={`/${router.query.community}/${experiment._id}`}
+            passHref
+          >
+            <LinkOverlay>
+              <Text
+                fontSize="24px"
+                lineHeight="32px"
+                fontWeight={600}
+                color="gray.800"
+                mt={2}
+              >
+                {experiment.title}
+              </Text>
+            </LinkOverlay>
+          </NextLink>
+          <Box
+            color="gray.600"
+            fontSize="18px"
+            lineHeight="28px"
+            fontWeight={400}
+            mt={3}
+            textOverflow="ellipsis"
+            overflow="hidden"
+          >
+            {truncate(experiment.description?.summary, {
+              length: 300,
+              separator: "\n",
+            })}
+          </Box>
+          <HStack mt={3}>
+            {experiment.communities.map((comm: ICommunity, idx: number) => (
+              <Tag key={`${experiment._id}_tag_${idx}`}>
+                <HStack>
+                  <Image
+                    alt="Sleep Community"
+                    src={comm.icon}
+                    width="14px"
+                    height="14px"
+                  />
+                  <Text>{comm.name}</Text>
+                </HStack>
+              </Tag>
+            ))}
+          </HStack>
+        </LinkBox>
+        <IconButton
+          ml={2}
+          onClick={() => {
+            if (
+              window.confirm(
+                "Are you sure about deleting this experiment? This "
+              )
+            )
+              remove.mutate({ _id: experiment._id });
+          }}
+          aria-label="Remove Experiment"
+          variant="outline"
+          size="sm"
+          colorScheme="red"
+          icon={<DeleteIcon />}
+        />
+      </HStack>
     </Card>
   );
 }

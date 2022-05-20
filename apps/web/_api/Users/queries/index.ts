@@ -13,24 +13,7 @@ const userByEmailQuery = gql`
         communities
       }
       user_id
-      experiments {
-        _id
-        title
-        description
-        communities {
-          name
-          icon
-          slug
-        }
-        tips {
-          userId
-          amount
-        }
-        createdBy {
-          picture
-          name
-        }
-      }
+      experiments_count
       last_login
     }
   }

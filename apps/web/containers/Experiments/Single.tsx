@@ -3,7 +3,6 @@
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Button,
   Flex,
   Heading,
   IconButton,
@@ -42,10 +41,11 @@ import { useApiContext } from "../../providers/ApiContext";
 
 interface ExperimentsSingleViewProps {
   experiment: PopulatedExperiment;
+  isLoading?: boolean;
 }
 
 export default function ExperimentsSingleView({
-  children,
+  isLoading,
   experiment: data,
 }: React.PropsWithChildren<ExperimentsSingleViewProps>) {
   const { isAuthenticated } = useAuth0();
@@ -58,7 +58,7 @@ export default function ExperimentsSingleView({
   );
   const alreadyTippedByUser = tipFromCurrentUser.length > 0;
   return (
-    <Flex direction={"row"} gap="90px">
+    <HStack align={"start"} justify="start" gap="90px" w="100%">
       <Box flexGrow={1}>
         <TextLink
           _focus={{ outline: "none" }}
@@ -131,7 +131,7 @@ export default function ExperimentsSingleView({
           })}
         </Box>
         <Box mt="50px">
-          <Comments comments={data.comments} />
+          <Comments isLoading={isLoading} comments={data.comments} />
         </Box>
       </Box>
 
@@ -183,6 +183,6 @@ export default function ExperimentsSingleView({
           <ExperimentMarkerInfo markers={data.markers} />
         </Box>
       </Flex>
-    </Flex>
+    </HStack>
   );
 }

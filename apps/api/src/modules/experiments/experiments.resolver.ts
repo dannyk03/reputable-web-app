@@ -30,20 +30,27 @@ export class ExperimentsResolver {
     private readonly communitiesService: CommunitiesService,
   ) {}
 
-  @Mutation(() => Experiment)
+  @Mutation(() => MessageResponse)
   createExperiment(
     @Args('experiment') createExperimentInput: CreateExperimentInput,
+    @CurrentUser() user: User,
   ) {
-    return this.experimentsService.create(createExperimentInput);
+    return this.experimentsService
+      .create({ ...createExperimentInput, createdBy: user.email })
+      .then(() => ({
+        message: 'Created experiment successfully!',
+      }));
   }
 
   @Public()
   @Query(() => [Experiment], { name: 'experiments' })
   findAll(
-    @Args('community', { type: () => String, nullable: true })
+    @Args('community', { nullable: true })
     community?: string,
+    @Args('createdBy', { nullable: true })
+    createdBy?: string,
   ) {
-    return this.experimentsService.query({ communities: community });
+    return this.experimentsService.query({ communities: community, createdBy });
   }
 
   @Public()
@@ -79,9 +86,9 @@ export class ExperimentsResolver {
     return this.experimentsService.update(experimentId, updateExperimentInput);
   }
 
-  @Mutation(() => Experiment)
-  removeExperiment(@Args('id', { type: () => Int }) id: number) {
-    return this.experimentsService.remove(id);
+  @Mutation(() => MessageResponse)
+  removeExperiment(@Args('_id') _id: string) {
+    return this.experimentsService.remove(_id);
   }
 
   @Mutation(() => MessageResponse)
