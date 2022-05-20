@@ -50,7 +50,7 @@ export default function CreateExperimentView() {
   const methods = useForm<TCreateExperiment>({ reValidateMode: "onChange" });
   const router = useRouter();
   const { create } = useExperiment();
-  const [currentStep, setCurrentStep] = React.useState<number>(1);
+  const [currentStep, setCurrentStep] = React.useState<number>(0);
 
   if (!router.query.community) {
     return <></>;
