@@ -24,6 +24,7 @@ import calculateContributions from "../../helpers/calculateContributions";
 import { useRouter } from "next/router";
 import { useExperiment } from "../../_api/Experiments/mutations";
 import { DeleteIcon } from "@chakra-ui/icons";
+import { useApiContext } from "../../providers/ApiContext";
 
 export interface ExperimentCardProps extends ChakraProps {
   experiment: Pick<
@@ -37,6 +38,7 @@ export default function ExperimentCard({
   ...restProps
 }: React.PropsWithChildren<ExperimentCardProps>) {
   const router = useRouter();
+  const { user } = useApiContext();
   const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
     experiment.tips
   );
@@ -126,22 +128,24 @@ export default function ExperimentCard({
             ))}
           </HStack>
         </LinkBox>
-        <IconButton
-          ml={2}
-          onClick={() => {
-            if (
-              window.confirm(
-                "Are you sure about deleting this experiment? This "
+        {user.email === experiment.createdBy.email && (
+          <IconButton
+            ml={2}
+            onClick={() => {
+              if (
+                window.confirm(
+                  "Are you sure about deleting this experiment? This "
+                )
               )
-            )
-              remove.mutate({ _id: experiment._id });
-          }}
-          aria-label="Remove Experiment"
-          variant="outline"
-          size="sm"
-          colorScheme="red"
-          icon={<DeleteIcon />}
-        />
+                remove.mutate({ _id: experiment._id });
+            }}
+            aria-label="Remove Experiment"
+            variant="outline"
+            size="sm"
+            colorScheme="red"
+            icon={<DeleteIcon />}
+          />
+        )}
       </HStack>
     </Card>
   );
