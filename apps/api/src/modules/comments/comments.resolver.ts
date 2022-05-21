@@ -5,7 +5,7 @@ import { CreateCommentInput } from './dto/create-comment.input';
 import { UpdateCommentInput } from './dto/update-comment.input';
 import { CurrentUser, Public } from 'src/decorators';
 import { MessageResponse } from 'src/common/entities/response';
-import { User } from '../users/entities/user.entity';
+import { User, UserMetaData } from '../users/entities/user.entity';
 import { UnauthorizedException } from '@nestjs/common';
 
 @Resolver(() => Comment)
@@ -53,7 +53,7 @@ export class CommentsResolver {
   }
 
   @Mutation(() => MessageResponse)
-  removeComment(@Args('_id') _id: string) {
+  removeComment(@Args('_id') _id: string, @CurrentUser() user: User) {
     if (!user.app_metadata.isApproved)
       throw new UnauthorizedException(
         'You have to be an approved user to create an experiment',
