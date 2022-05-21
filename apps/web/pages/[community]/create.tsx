@@ -1,16 +1,32 @@
-import { useAuth0 } from "@auth0/auth0-react";
+import { useToast } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import CreateExperiment from "../../containers/Experiments/Create";
+import { useApiContext } from "../../providers/ApiContext";
+
+const id = "create-experiment-toast";
 
 export default function CraeteExperimentView() {
-  const { user, isAuthenticated } = useAuth0();
+  const { user } = useApiContext();
   const router = useRouter();
+  const toast = useToast();
+  const authorized = user?.app_metadata?.isApproved;
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!authorized) {
       router.push("/");
     }
-  });
-  if (!isAuthenticated) return <></>;
+    return () => {
+      if (!toast.isActive(id))
+        toast({
+          title: "Access Denied",
+          description:
+            "You have to be approved by an admin to create experiments",
+          status: "warning",
+          isClosable: true,
+          variant: "top-accent",
+        });
+    };
+  }, [router, toast, user, authorized]);
+  if (!authorized) return <></>;
   return <CreateExperiment />;
 }

@@ -19,7 +19,7 @@ export class UserMetaData implements IUserMetadata {
 
 @ObjectType()
 export class AppMetaData implements IAppMetadata {
-  @Field()
+  @Field({ nullable: true })
   isApproved?: boolean;
 }
 

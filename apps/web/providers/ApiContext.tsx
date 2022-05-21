@@ -16,6 +16,9 @@ const meQuery = gql`
       email
       email_verified
       picture
+      app_metadata {
+        isApproved
+      }
       user_metadata {
         tokens
         tips {
@@ -52,7 +55,10 @@ export function APIContextProvider({ children }: React.PropsWithChildren<{}>) {
       getAccessTokenSilently({ audience: "https://api.reputable.health" }).then(
         (token) => {
           client.setHeader("Authorization", `Bearer ${token}`);
-          client.request(meQuery).then((r) => setUser(r.me));
+          client.request(meQuery).then((r) => {
+            console.log(r.me);
+            setUser(r.me);
+          });
         }
       );
   }, [isAuthenticated, getAccessTokenSilently, r]);
