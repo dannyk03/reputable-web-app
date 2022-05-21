@@ -2,6 +2,7 @@ import { useToast } from "@chakra-ui/react";
 import type { IMessageResponse } from "@reputable/types";
 import { gql } from "graphql-request";
 import { pickBy } from "lodash";
+import { useRouter } from "next/router";
 import { useMutation, useQueryClient } from "react-query";
 import { TCreateExperiment } from "../../../containers/Experiments/Create";
 import { useApiContext } from "../../../providers/ApiContext";
@@ -35,13 +36,15 @@ export const useExperiment = (params?: {
   createdBy?: string;
 }) => {
   const { client } = useApiContext();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const q = pickBy(params, (v) => v);
   const toast = useToast();
-  console.log("q for mutations", q);
   const config = {
     onSuccess: (data: IMessageResponse) => {
-      queryClient.invalidateQueries(["experiments", q]);
+      queryClient
+        .invalidateQueries(["experiments", q])
+        .then(() => router.push(`/${params.community}`));
       toast({
         title: "Success!",
         description: data.message,

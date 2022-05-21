@@ -67,7 +67,10 @@ export default function SecondStep({
                 type="number"
                 min={0}
                 placeholder="Experiment Period"
-                {...register("experimentPeriod", { valueAsNumber: true })}
+                {...register("experimentPeriod", {
+                  valueAsNumber: true,
+                  required: true,
+                })}
               />
               <InputRightAddon>days</InputRightAddon>
             </InputGroup>

@@ -49,7 +49,9 @@ const steps = [
 export default function CreateExperimentView() {
   const methods = useForm<TCreateExperiment>({ reValidateMode: "onChange" });
   const router = useRouter();
-  const { create } = useExperiment();
+  const { create } = useExperiment({
+    community: router.query.community as string,
+  });
   const [currentStep, setCurrentStep] = React.useState<number>(0);
 
   if (!router.query.community) {
@@ -66,8 +68,9 @@ export default function CreateExperimentView() {
       onSubmit: () => next(),
     },
     {
-      onSubmit: (data) =>
-        create.mutate({ ...data, communities: [router.query.community] }),
+      onSubmit: (data) => {
+        create.mutate({ ...data, communities: [router.query.community] });
+      },
     },
   ];
 

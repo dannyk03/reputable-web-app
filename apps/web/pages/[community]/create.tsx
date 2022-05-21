@@ -12,10 +12,8 @@ export default function CraeteExperimentView() {
   const toast = useToast();
   const authorized = user?.app_metadata?.isApproved;
   useEffect(() => {
-    if (!authorized) {
+    if (!authorized && user) {
       router.push("/");
-    }
-    return () => {
       if (!toast.isActive(id))
         toast({
           title: "Access Denied",
@@ -25,7 +23,7 @@ export default function CraeteExperimentView() {
           isClosable: true,
           variant: "top-accent",
         });
-    };
+    }
   }, [router, toast, user, authorized]);
   if (!authorized) return <></>;
   return <CreateExperiment />;

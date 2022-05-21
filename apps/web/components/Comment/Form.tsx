@@ -3,6 +3,7 @@ import { ChakraProps, Flex, HStack, Textarea, Avatar } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import makeAvatar from "../../helpers/makeAvatar";
 import { PrimaryButton } from "../Button";
+import Modal from "../Modal";
 
 interface Props extends ChakraProps {
   onSubmit: (data: any) => void;
@@ -42,7 +43,17 @@ export default function CommentForm({ onSubmit, ...restProps }: Props) {
             })}
             {...restProps}
           />
-          <PrimaryButton fontSize="14px" h={8} type="submit" text="Submit" />
+          {!user?.app_metadata?.isApproved ? (
+            <Modal
+              title="Information"
+              button={<PrimaryButton fontSize="14px" h={8} text="Submit" />}
+            >
+              You have to be approved by an administrator to be able to leave a
+              comment.
+            </Modal>
+          ) : (
+            <PrimaryButton fontSize="14px" h={8} type="submit" text="Submit" />
+          )}
         </HStack>
       </form>
     </Flex>
