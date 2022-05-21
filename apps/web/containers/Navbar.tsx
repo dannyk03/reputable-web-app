@@ -81,9 +81,7 @@ export default function Navbar() {
                   {APIUser?.user_metadata?.tokens} REPT
                 </Text>
               </HStack>
-              <NoSSR>
-                <UserBadge w="fit-content" />
-              </NoSSR>
+              <UserBadge w="fit-content" />
               {/* 
               <Flex
                 borderRadius="50%"

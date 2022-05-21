@@ -43,6 +43,10 @@ export enum MarkerValueChangeType {
 }
 */
 
+export interface IAppMetadata {
+  isApproved?: boolean;
+}
+
 export interface IUser {
   created_at: Date;
   email: string;
@@ -52,6 +56,7 @@ export interface IUser {
   tips?: ITip[];
   user_id: string;
   user_metadata?: IUserMetadata;
+  app_metadata?: IAppMetadata;
   experiments_count?: number;
   last_login: string;
 }

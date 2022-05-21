@@ -20,6 +20,7 @@ import { instanceToPlain } from 'class-transformer';
 import { CommunitiesService } from '../communities/communities.service';
 import { Community } from '../communities/entities/community.entity';
 import { MessageResponse } from 'src/common/entities/response';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Resolver(() => Experiment)
 export class ExperimentsResolver {
@@ -35,6 +36,10 @@ export class ExperimentsResolver {
     @Args('experiment') createExperimentInput: CreateExperimentInput,
     @CurrentUser() user: User,
   ) {
+    if (!user.app_metadata.isApproved)
+      throw new UnauthorizedException(
+        'You have to be an approved user to create an experiment',
+      );
     return this.experimentsService
       .create({ ...createExperimentInput, createdBy: user.email })
       .then(() => ({

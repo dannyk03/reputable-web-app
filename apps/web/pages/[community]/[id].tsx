@@ -16,36 +16,34 @@ export default function ExperimentSingle() {
   }
   return (
     <>
-      <NoSSR>
-        <NextSeo
-          openGraph={{
-            title: data.title,
-            description: truncate(data.description.goal, {
-              length: 150,
-              separator: "<br/>",
-            }),
-            url: `${window.location.origin}/experiments/${data._id}`,
-            type: "article",
-            article: {
-              publishedTime: String(data.createdAt),
-              modifiedTime: String(data.updatedAt),
-              authors: [
-                `${window.location.origin}/user/${encodeURIComponent(
-                  data.createdBy.email
-                )}`,
-              ],
-            },
-            images: [
-              {
-                url: `https://drive.google.com/uc?export=view&id=1QZBZvOpf0GV2BIhHTRokd7-EYFJpv22J`,
-                width: 900,
-                height: 965,
-                alt: "Reputable Logo",
-              },
+      <NextSeo
+        openGraph={{
+          title: data.title,
+          description: truncate(data.description.goal, {
+            length: 150,
+            separator: "<br/>",
+          }),
+          url: `${window.location.origin}/experiments/${data._id}`,
+          type: "article",
+          article: {
+            publishedTime: String(data.createdAt),
+            modifiedTime: String(data.updatedAt),
+            authors: [
+              `${window.location.origin}/user/${encodeURIComponent(
+                data.createdBy.email
+              )}`,
             ],
-          }}
-        />
-      </NoSSR>
+          },
+          images: [
+            {
+              url: `https://drive.google.com/uc?export=view&id=1QZBZvOpf0GV2BIhHTRokd7-EYFJpv22J`,
+              width: 900,
+              height: 965,
+              alt: "Reputable Logo",
+            },
+          ],
+        }}
+      />
       <ExperimentSingleView
         experiment={data}
         isLoading={isLoading || isRefetching}

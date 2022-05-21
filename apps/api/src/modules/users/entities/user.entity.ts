@@ -1,7 +1,10 @@
 import { ObjectType, Field, GraphQLISODateTime, Int } from '@nestjs/graphql';
-import { ITip, IUser, PopulatedExperiment } from '@reputable/types';
-import type { IUserMetadata } from '@reputable/types';
-import { Experiment } from '../../../modules/experiments/entities/experiment.entity';
+import type {
+  IUserMetadata,
+  IAppMetadata,
+  ITip,
+  IUser,
+} from '@reputable/types';
 import { Tip } from '../../../common/entities/tip';
 
 @ObjectType()
@@ -12,6 +15,12 @@ export class UserMetaData implements IUserMetadata {
   tips?: ITip[];
   @Field(() => [String], { nullable: true, defaultValue: [] })
   communities?: string[];
+}
+
+@ObjectType()
+export class AppMetaData implements IAppMetadata {
+  @Field()
+  isApproved?: boolean;
 }
 
 @ObjectType()
@@ -30,6 +39,8 @@ export class User implements IUser {
   user_id: string;
   @Field(() => UserMetaData, { nullable: true })
   user_metadata?: UserMetaData;
+  @Field(() => AppMetaData, { nullable: true })
+  app_metadata?: AppMetaData;
   @Field(() => Int)
   experiments_count?: number;
   @Field()

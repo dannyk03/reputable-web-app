@@ -6,6 +6,7 @@ import { UpdateCommentInput } from './dto/update-comment.input';
 import { CurrentUser, Public } from 'src/decorators';
 import { MessageResponse } from 'src/common/entities/response';
 import { User } from '../users/entities/user.entity';
+import { UnauthorizedException } from '@nestjs/common';
 
 @Resolver(() => Comment)
 export class CommentsResolver {
@@ -16,6 +17,10 @@ export class CommentsResolver {
     @CurrentUser() user: User,
     @Args('createCommentInput') createCommentInput: CreateCommentInput,
   ) {
+    if (!user.app_metadata.isApproved)
+      throw new UnauthorizedException(
+        'You have to be an approved user to create an experiment',
+      );
     return this.commentsService
       .create({ ...createCommentInput, author: user.email })
       .then((r) => {
@@ -49,6 +54,10 @@ export class CommentsResolver {
 
   @Mutation(() => MessageResponse)
   removeComment(@Args('_id') _id: string) {
+    if (!user.app_metadata.isApproved)
+      throw new UnauthorizedException(
+        'You have to be an approved user to create an experiment',
+      );
     return this.commentsService.remove(_id).then(() => ({
       message: 'Removed comment!',
     }));

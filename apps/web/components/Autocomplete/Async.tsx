@@ -1,15 +1,4 @@
-import { SearchIcon } from "@chakra-ui/icons";
-import {
-  Box,
-  CircularProgress,
-  Collapse,
-  Input,
-  InputGroup,
-  InputLeftElement,
-  InputRightElement,
-  ListItem,
-  UnorderedList,
-} from "@chakra-ui/react";
+import { Box, Collapse, ListItem, UnorderedList } from "@chakra-ui/react";
 import { useCombobox, UseComboboxProps } from "downshift";
 import { debounce } from "lodash";
 
@@ -70,9 +59,13 @@ export default function AutocompleteAsync<T>({
     },
   });
   return (
-    <NoSSR>
+    <Box>
       <Box {...restProps}>
-        <SearchInput placeholder="Search" inputGroupProps={getComboboxProps()} inputProps={getInputProps()} />
+        <SearchInput
+          placeholder="Search"
+          inputGroupProps={getComboboxProps()}
+          inputProps={getInputProps()}
+        />
         <UnorderedList {...getMenuProps()} listStyleType="none" mx={0}>
           <Collapse in={isOpen} animateOpacity>
             <Box
@@ -96,6 +89,6 @@ export default function AutocompleteAsync<T>({
           </Collapse>
         </UnorderedList>
       </Box>
-    </NoSSR>
+    </Box>
   );
 }

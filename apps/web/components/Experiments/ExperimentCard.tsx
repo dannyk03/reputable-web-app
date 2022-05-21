@@ -4,7 +4,6 @@ import {
   ChakraProps,
   HStack,
   Icon,
-  Link,
   LinkBox,
   Spacer,
   LinkOverlay,
@@ -65,7 +64,6 @@ export default function ExperimentCard({
             >
               {experiment.createdBy.name}
             </Text>
-
             <Text
               color="gray.600"
               fontWeight={400}
@@ -128,7 +126,7 @@ export default function ExperimentCard({
             ))}
           </HStack>
         </LinkBox>
-        {user.email === experiment.createdBy.email && (
+        {user?.email === experiment.createdBy.email && (
           <IconButton
             ml={2}
             onClick={() => {
