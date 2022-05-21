@@ -27,6 +27,7 @@ import TipModal from "../TipModal";
 import TipsIcon from "../Icons/TipsIcon";
 import ExperimentsIcon from "../Icons/ExperimentsIcon";
 import CommentForm from "./Form";
+import Modal from "../Modal";
 
 interface CommentProps {
   data: Partial<PopulatedComment>;
@@ -186,27 +187,54 @@ export default function Comment({
               <Text pl="6px">Reply</Text>
             </Button>
           )}
-          <TipModal
-            userId={data?.author?.user_id}
-            experimentId={router.query.id as string}
-          >
-            <Button
-              leftIcon={
-                <Icon
-                  as={ReputableLogo}
-                  color="gray.600"
-                  width="14px"
-                  height="14px"
-                />
+          {!user?.app_metadata?.isApproved ? (
+            <Modal
+              title="Information"
+              button={
+                <Button
+                  leftIcon={
+                    <Icon
+                      as={ReputableLogo}
+                      color="gray.600"
+                      width="14px"
+                      height="14px"
+                    />
+                  }
+                  colorScheme="gray"
+                  variant="ghost"
+                  height={6}
+                  ml={1}
+                >
+                  <Text pl="6px">Tip REPT</Text>
+                </Button>
               }
-              colorScheme="gray"
-              variant="ghost"
-              height={6}
-              ml={1}
             >
-              <Text pl="6px">Tip REPT</Text>
-            </Button>
-          </TipModal>
+              You have to be approved by an administrator to be able to tip
+              another user.
+            </Modal>
+          ) : (
+            <TipModal
+              userId={data?.author?.user_id}
+              experimentId={router.query.id as string}
+            >
+              <Button
+                leftIcon={
+                  <Icon
+                    as={ReputableLogo}
+                    color="gray.600"
+                    width="14px"
+                    height="14px"
+                  />
+                }
+                colorScheme="gray"
+                variant="ghost"
+                height={6}
+                ml={1}
+              >
+                <Text pl="6px">Tip REPT</Text>
+              </Button>
+            </TipModal>
+          )}
           {user && user.email === author.email && (
             <Button
               colorScheme="red"

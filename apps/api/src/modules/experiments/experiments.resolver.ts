@@ -16,7 +16,6 @@ import { CommentsService } from '../comments/comments.service';
 import { Comment } from '../comments/entities/comment.entity';
 import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
-import { instanceToPlain } from 'class-transformer';
 import { CommunitiesService } from '../communities/communities.service';
 import { Community } from '../communities/entities/community.entity';
 import { MessageResponse } from 'src/common/entities/response';
@@ -102,6 +101,10 @@ export class ExperimentsResolver {
     @Args('id') id: string,
     @CurrentUser() user: User,
   ) {
+    if (!user.app_metadata.isApproved)
+      throw new UnauthorizedException(
+        'You have to be an approved user to create an experiment',
+      );
     return this.experimentsService.tipExperiment(id, user, tip);
   }
 }

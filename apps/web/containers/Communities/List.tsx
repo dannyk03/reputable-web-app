@@ -56,13 +56,6 @@ export default function CommunitiesListView({
                       >
                         {community.name}
                       </Text>
-                      <Text
-                        lineHeight="28px"
-                        fontSize="18px"
-                        fontWeight={400}
-                      >{`${formatter.format(community.memberCount)} member${
-                        community.memberCount > 1 ? "s" : ""
-                      }`}</Text>
                     </VStack>
                   </Flex>
                 </Box>

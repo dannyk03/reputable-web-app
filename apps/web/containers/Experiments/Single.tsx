@@ -38,6 +38,7 @@ import Image from "next/image";
 import { useAuth0 } from "@auth0/auth0-react";
 import calculateContributions from "../../helpers/calculateContributions";
 import { useApiContext } from "../../providers/ApiContext";
+import Modal from "../../components/Modal";
 
 interface ExperimentsSingleViewProps {
   experiment: PopulatedExperiment;
@@ -53,6 +54,7 @@ export default function ExperimentsSingleView({
   const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
     data.tips
   );
+  console.log(user);
   const tipFromCurrentUser = data.tips.filter(
     (t) => t.userId === user?.user_id
   );
@@ -137,27 +139,57 @@ export default function ExperimentsSingleView({
 
       <Flex minW="400px" direction="column" gap={6}>
         <VStack gap={4}>
-          <TipModal experimentId={data._id}>
-            <PrimaryButton
-              w="100%"
-              disabled={!isAuthenticated || alreadyTippedByUser}
-              text={
-                isAuthenticated
-                  ? alreadyTippedByUser
-                    ? `Tipped ${tipFromCurrentUser[0].amount} REPT`
-                    : "Tip REPT"
-                  : "Sign in to tip this experiment"
-              }
-              leftIcon={
-                <Icon
-                  as={ReputableLogo}
-                  color="white"
-                  width="16px"
-                  height="16px"
+          {!user?.app_metadata?.isApproved ? (
+            <Modal
+              title="Information"
+              button={
+                <PrimaryButton
+                  w="100%"
+                  disabled={!isAuthenticated || alreadyTippedByUser}
+                  text={
+                    isAuthenticated
+                      ? alreadyTippedByUser
+                        ? `Tipped ${tipFromCurrentUser[0].amount} REPT`
+                        : "Tip REPT"
+                      : "Sign in to tip this experiment"
+                  }
+                  leftIcon={
+                    <Icon
+                      as={ReputableLogo}
+                      color="white"
+                      width="16px"
+                      height="16px"
+                    />
+                  }
                 />
               }
-            />
-          </TipModal>
+            >
+              You have to be approved by an administrator to be able to tip an
+              experiment.
+            </Modal>
+          ) : (
+            <TipModal experimentId={data._id}>
+              <PrimaryButton
+                w="100%"
+                disabled={!isAuthenticated || alreadyTippedByUser}
+                text={
+                  isAuthenticated
+                    ? alreadyTippedByUser
+                      ? `Tipped ${tipFromCurrentUser[0].amount} REPT`
+                      : "Tip REPT"
+                    : "Sign in to tip this experiment"
+                }
+                leftIcon={
+                  <Icon
+                    as={ReputableLogo}
+                    color="white"
+                    width="16px"
+                    height="16px"
+                  />
+                }
+              />
+            </TipModal>
+          )}
           <HStack align="center">
             <Icon as={ReputableLogo} width="18px" height="18px" />
             <Text size="18px" fontWeight={600} lineHeight="28px">

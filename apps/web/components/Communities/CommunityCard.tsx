@@ -44,21 +44,6 @@ export default function CommunityCard({
           >
             {community.name}
           </Text>
-          <Text
-            lineHeight="28px"
-            fontSize="18px"
-            fontWeight={400}
-          >{`${formatter.format(community.memberCount)} members`}</Text>
-          {user && (
-            <Button
-              disabled={alreadyJoined || isLoading}
-              variant="outline"
-              onClick={() => mutate()}
-              leftIcon={alreadyJoined && <CheckIcon />}
-            >
-              {alreadyJoined ? "Joined" : "Join"}
-            </Button>
-          )}
         </VStack>
       </Flex>
     </Card>
