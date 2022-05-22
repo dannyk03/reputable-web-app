@@ -4,7 +4,6 @@ import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
 import { useExperiment } from "../../_api/Experiments/queries/single";
 import { truncate } from "lodash";
-import NoSSR from "../../components/NoSSR";
 
 export default function ExperimentSingle() {
   const router = useRouter();

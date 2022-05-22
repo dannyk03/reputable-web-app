@@ -76,12 +76,10 @@ export class ExperimentsService {
     selector: FilterQuery<ExperimentDocument>,
     projection?: Record<string, 1 | 0>,
   ) {
-    console.log('selector', selector);
     const selectorValidated = pickBy(selector, (val) => val);
-    console.log('selector', selectorValidated);
     const q = this.experimentModel.find(selectorValidated).sort({ _id: -1 });
     if (projection) q.select(projection);
-    return q.lean({ virtuals: true, getters: true }).orFail().exec();
+    return q.lean({ virtuals: true, getters: true }).exec();
   }
 
   findOne(_id: string) {

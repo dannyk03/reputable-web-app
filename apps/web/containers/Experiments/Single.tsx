@@ -145,12 +145,10 @@ export default function ExperimentsSingleView({
               button={
                 <PrimaryButton
                   w="100%"
-                  disabled={!isAuthenticated || alreadyTippedByUser}
+                  disabled={!isAuthenticated}
                   text={
                     isAuthenticated
-                      ? alreadyTippedByUser
-                        ? `Tipped ${tipFromCurrentUser[0].amount} REPT`
-                        : "Tip REPT"
+                      ? "Tip REPT"
                       : "Sign in to tip this experiment"
                   }
                   leftIcon={
@@ -171,12 +169,10 @@ export default function ExperimentsSingleView({
             <TipModal experimentId={data._id}>
               <PrimaryButton
                 w="100%"
-                disabled={!isAuthenticated || alreadyTippedByUser}
+                disabled={!isAuthenticated}
                 text={
                   isAuthenticated
-                    ? alreadyTippedByUser
-                      ? `Tipped ${tipFromCurrentUser[0].amount} REPT`
-                      : "Tip REPT"
+                    ? "Tip REPT"
                     : "Sign in to tip this experiment"
                 }
                 leftIcon={

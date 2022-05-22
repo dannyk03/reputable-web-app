@@ -11,6 +11,10 @@ const userByEmailQuery = gql`
       user_metadata {
         tokens
         communities
+        tips {
+          userId
+          amount
+        }
       }
       user_id
       experiments_count

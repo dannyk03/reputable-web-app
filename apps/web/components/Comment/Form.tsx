@@ -2,6 +2,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { ChakraProps, Flex, HStack, Textarea, Avatar } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import makeAvatar from "../../helpers/makeAvatar";
+import { useApiContext } from "../../providers/ApiContext";
 import { PrimaryButton } from "../Button";
 import Modal from "../Modal";
 
@@ -12,7 +13,8 @@ interface Props extends ChakraProps {
 
 export default function CommentForm({ onSubmit, ...restProps }: Props) {
   const { register, handleSubmit, reset } = useForm<any>();
-  const { isAuthenticated, user } = useAuth0();
+  const { isAuthenticated } = useAuth0();
+  const { user } = useApiContext();
   if (!isAuthenticated) {
     return <></>;
   }
@@ -22,7 +24,7 @@ export default function CommentForm({ onSubmit, ...restProps }: Props) {
         width={"40px"}
         height={"40px"}
         name="Profile Photo"
-        src={user?.picture ?? makeAvatar(user?.given_name ?? "User")}
+        src={user?.picture ?? makeAvatar(user?.name ?? "User")}
       />
       <form
         style={{ width: "100%" }}

@@ -28,6 +28,7 @@ import TipsIcon from "../Icons/TipsIcon";
 import ExperimentsIcon from "../Icons/ExperimentsIcon";
 import CommentForm from "./Form";
 import Modal from "../Modal";
+import calculateContributions from "../../helpers/calculateContributions";
 
 interface CommentProps {
   data: Partial<PopulatedComment>;
@@ -55,6 +56,9 @@ export default function Comment({
   const [showReplies, setShowReplies] = React.useState(false);
   const [showReplyForm, setShowReplyForm] = React.useState(false);
   const { create, remove } = useComment(router.query.id as string);
+  const { totalTokens } = calculateContributions(
+    author?.user_metadata?.tips || []
+  );
   return (
     <>
       <Box {...restProps} pl={replyTo !== null ? 12 : 0} pt={5}>
@@ -93,7 +97,7 @@ export default function Comment({
                 position="absolute"
                 top="30px"
                 left="50px"
-                zIndex={9}
+                zIndex={999}
                 backgroundColor="white"
                 borderRadius="16px"
               >
@@ -122,10 +126,7 @@ export default function Comment({
                         color="gray.600"
                       />
                       <Text size="12px" lineHeight="26px" color="gray.600">
-                        {(author?.user_metadata?.tips || []).reduce(
-                          (prev, curr) => (prev += curr.amount),
-                          0
-                        )}
+                        {Math.round(parseFloat(totalTokens))}
                       </Text>
                     </HStack>
                     <HStack alignItems="center">

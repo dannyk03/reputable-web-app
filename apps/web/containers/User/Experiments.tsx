@@ -21,6 +21,7 @@ import moment from "moment";
 import { useApiContext } from "../../providers/ApiContext";
 import { ExperimentCard } from "../../components/Experiments";
 import { useExperiments } from "../../_api/Experiments/queries/all";
+import calculateContributions from "../../helpers/calculateContributions";
 
 interface UserExperimentsProps {
   data?: IUser;
@@ -34,6 +35,10 @@ export default function UserExperiments({
   const { data: experiments = [], isLoading } = useExperiments({
     createdBy: router.query.email as string,
   });
+
+  const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
+    data?.user_metadata?.tips || []
+  );
 
   const lastLogin = moment(user?.last_login ?? Date.now()).fromNow();
   return (
@@ -66,7 +71,7 @@ export default function UserExperiments({
             <HStack alignItems="center">
               <Icon as={ReputableLogo} width="20px" height="20px" />
               <Text size="16px" lineHeight="24px">
-                {data?.user_metadata.tokens}
+                {Math.round(parseFloat(totalTokens))}
               </Text>
             </HStack>
             <HStack align="center">
