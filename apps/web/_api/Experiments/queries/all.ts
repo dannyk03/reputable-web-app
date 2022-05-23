@@ -39,6 +39,8 @@ const query = gql`
         results
       }
       _id
+      createdAt
+      updatedAt
     }
   }
 `;
@@ -49,7 +51,6 @@ export const useExperiments = (params: {
 }) => {
   const { client } = useApiContext();
   const q = pickBy(params, (v) => v);
-  console.log("q", q);
   return useQuery<PopulatedExperiment[]>(["experiments", q], () =>
     client.request(query, q).then((r) => {
       return r.experiments;

@@ -7,7 +7,7 @@ import { truncate } from "lodash";
 
 export default function ExperimentSingle() {
   const router = useRouter();
-  const { data, isLoading, isFetching, isRefetching } = useExperiment(
+  const { data, isLoading, isRefetching } = useExperiment(
     router.query.id as string
   );
   if (!router.query.id || isLoading) {

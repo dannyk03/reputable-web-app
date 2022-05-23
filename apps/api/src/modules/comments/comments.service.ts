@@ -60,22 +60,32 @@ export class CommentsService {
           (comment.replies || []).map((reply) => userEmails.add(reply.author));
         });
         await Promise.all(
-          Array.from(userEmails).map((email: string) =>
-            this.usersService
-              .findOne(email)
-              .then((user) => (emailToUser[user.email] = user)),
-          ),
+          Array.from(userEmails)
+            .map((email: string) => {
+              return this.usersService
+                .findOne(email)
+                .then((user) => (emailToUser[user.email] = user))
+                .catch((err) => {
+                  return undefined;
+                });
+            })
+            .filter((v) => v),
         );
-        return comments.map((comment) => {
-          return {
-            ...(comment as unknown as PopulatedComment),
-            author: emailToUser[comment.author],
-            replies: comment.replies.map((r) => ({
-              ...r,
-              author: emailToUser[r.author],
-            })),
-          };
-        });
+        return comments
+          .map((comment) => {
+            if (!emailToUser[comment.author]) {
+              return undefined;
+            }
+            return {
+              ...(comment as unknown as PopulatedComment),
+              author: emailToUser[comment.author],
+              replies: comment.replies.map((r) => ({
+                ...r,
+                author: emailToUser[r.author],
+              })),
+            };
+          })
+          .filter((v) => v);
       });
   }
 

@@ -59,6 +59,7 @@ export default function Comment({
   const { totalTokens } = calculateContributions(
     author?.user_metadata?.tips || []
   );
+
   return (
     <>
       <Box {...restProps} pl={replyTo !== null ? 12 : 0} pt={5}>
@@ -214,27 +215,29 @@ export default function Comment({
               another user.
             </Modal>
           ) : (
-            <TipModal
-              userId={data?.author?.user_id}
-              experimentId={router.query.id as string}
-            >
-              <Button
-                leftIcon={
-                  <Icon
-                    as={ReputableLogo}
-                    color="gray.600"
-                    width="14px"
-                    height="14px"
-                  />
-                }
-                colorScheme="gray"
-                variant="ghost"
-                height={6}
-                ml={1}
+            user && (
+              <TipModal
+                userId={data?.author?.user_id}
+                experimentId={router.query.id as string}
               >
-                <Text pl="6px">Tip REPT</Text>
-              </Button>
-            </TipModal>
+                <Button
+                  leftIcon={
+                    <Icon
+                      as={ReputableLogo}
+                      color="gray.600"
+                      width="14px"
+                      height="14px"
+                    />
+                  }
+                  colorScheme="gray"
+                  variant="ghost"
+                  height={6}
+                  ml={1}
+                >
+                  <Text pl="6px">Tip REPT</Text>
+                </Button>
+              </TipModal>
+            )
           )}
           {user && user.email === author.email && (
             <Button

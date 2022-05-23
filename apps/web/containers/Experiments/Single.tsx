@@ -54,7 +54,6 @@ export default function ExperimentsSingleView({
   const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
     data.tips
   );
-  console.log(user);
   const tipFromCurrentUser = data.tips.filter(
     (t) => t.userId === user?.user_id
   );

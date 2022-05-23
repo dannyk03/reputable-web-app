@@ -24,11 +24,19 @@ import { useRouter } from "next/router";
 import { useExperiment } from "../../_api/Experiments/mutations";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useApiContext } from "../../providers/ApiContext";
+import moment from "moment";
 
 export interface ExperimentCardProps extends ChakraProps {
   experiment: Pick<
     PopulatedExperiment,
-    "tips" | "createdBy" | "title" | "_id" | "description" | "communities"
+    | "tips"
+    | "createdBy"
+    | "title"
+    | "_id"
+    | "description"
+    | "communities"
+    | "updatedAt"
+    | "createdAt"
   >;
 }
 
@@ -41,6 +49,9 @@ export default function ExperimentCard({
   const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
     experiment.tips
   );
+  const timeAgo = moment(
+    new Date(experiment.updatedAt || experiment.createdAt)
+  ).fromNow();
   const { remove } = useExperiment({
     community: router.query.community as string,
     createdBy: experiment.createdBy.email,
@@ -70,7 +81,7 @@ export default function ExperimentCard({
               lineHeight="24px"
               fontSize="16px"
             >
-              2 days ago
+              {timeAgo}
             </Text>
             <Spacer />
             <HStack alignItems="center">
