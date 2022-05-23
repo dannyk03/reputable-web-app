@@ -15,7 +15,13 @@ export default function StepperLayout({
   currentStep,
 }: React.PropsWithChildren<StepperLayoutProps>) {
   return (
-    <HStack justify="stretch" width="100%" align="start" gap={20}>
+    <HStack
+      justify="stretch"
+      width="100%"
+      align="start"
+      gap={20}
+      position="relative"
+    >
       <Box flexGrow={1}>{children}</Box>
       <VStack align="end">
         <CreateInfoCard

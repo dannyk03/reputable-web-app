@@ -155,7 +155,7 @@ export default function SecondStep({
         </Card>
         <PrimaryButton
           pos="absolute"
-          top="145px"
+          top="-20px"
           right="16px"
           size="md"
           text="Create Experiment"

@@ -81,7 +81,7 @@ export default function FirstStep({
         />
         <PrimaryButton
           pos="absolute"
-          top="145px"
+          top="-20px"
           w="100px"
           right="16px"
           size="md"
