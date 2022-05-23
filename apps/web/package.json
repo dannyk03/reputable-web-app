@@ -19,6 +19,7 @@
     "@hookform/error-message": "^2.0.0",
     "@types/react-infinite-scroller": "^1.2.3",
     "axios": "^0.26.1",
+    "cookies-next": "^2.0.4",
     "downshift": "^6.1.7",
     "draft-js": "^0.11.7",
     "draftjs-to-html": "^0.9.1",

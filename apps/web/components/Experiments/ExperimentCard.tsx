@@ -25,6 +25,7 @@ import { useExperiment } from "../../_api/Experiments/mutations";
 import { DeleteIcon } from "@chakra-ui/icons";
 import { useApiContext } from "../../providers/ApiContext";
 import moment from "moment";
+import NoMedicalAdviceImage from "../Icons/NoMedicalAdvice";
 
 export interface ExperimentCardProps extends ChakraProps {
   experiment: Pick<
