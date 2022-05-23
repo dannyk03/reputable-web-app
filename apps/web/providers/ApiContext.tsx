@@ -3,6 +3,7 @@ import { gql, GraphQLClient } from "graphql-request";
 import { useAuth0 } from "@auth0/auth0-react";
 import type { IUser } from "@reputable/types";
 
+console.log(process.env.API_URL);
 const API_URL = process.env.API_URL.endsWith("/")
   ? process.env.API_URL.slice(0, -1)
   : process.env.API_URL;
