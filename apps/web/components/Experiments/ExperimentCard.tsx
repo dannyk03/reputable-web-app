@@ -116,7 +116,7 @@ export default function ExperimentCard({
             textOverflow="ellipsis"
             overflow="hidden"
           >
-            {truncate(experiment.description?.summary, {
+            {truncate(experiment.description?.goal, {
               length: 300,
               separator: "\n",
             })}
