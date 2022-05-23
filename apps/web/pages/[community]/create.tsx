@@ -10,10 +10,12 @@ export default function CraeteExperimentView() {
   const { user } = useApiContext();
   const router = useRouter();
   const toast = useToast();
-  const authorized = user?.app_metadata?.isApproved;
+  const authorized = user?.app_metadata?.isApproved || false;
   useEffect(() => {
-    if (!authorized && user) {
+    console.log("authorized", authorized, "user", user);
+    if (!authorized) {
       router.push("/");
+      console.log(toast.isActive(id));
       if (!toast.isActive(id))
         toast({
           title: "Access Denied",
