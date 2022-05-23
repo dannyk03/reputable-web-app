@@ -4,7 +4,6 @@ import type { ICommunity } from "@reputable/types";
 import Image from "next/image";
 import Card from "../Card";
 import { useJoinCommunity } from "../../_api/Users/mutations";
-import { CheckIcon } from "@chakra-ui/icons";
 import { useApiContext } from "../../providers/ApiContext";
 
 export interface CommunityCardProps {

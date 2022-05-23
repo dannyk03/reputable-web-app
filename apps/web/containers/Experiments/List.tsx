@@ -48,7 +48,7 @@ export default function ExperimentsListView({
   }, [searchInput, experiments]);
 
   return (
-    <Flex direction="row">
+    <Flex direction="row" justify={"space-between"} w="100%">
       <VStack w="260px" gap={5}>
         <CommunityCard community={community} />
         {!user?.app_metadata?.isApproved ? (
