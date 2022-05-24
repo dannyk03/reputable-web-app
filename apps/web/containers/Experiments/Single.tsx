@@ -204,7 +204,10 @@ export default function ExperimentsSingleView({
           </HStack>
         </VStack>
         <Box>
-          <AboutExperiment experimentId={data._id} experimentPeriod={28} />
+          <AboutExperiment
+            experimentId={data._id}
+            experimentPeriod={data.experimentPeriod ?? 28}
+          />
         </Box>
         <Box>
           <ExperimentMarkerInfo markers={data.markers} />

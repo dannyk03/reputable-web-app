@@ -57,7 +57,7 @@ export default function SecondStep({
             Experiment Period
           </Text>
           <Text color="gray.700" fontSize="18px" lineHeight="28px" mt={2}>
-            How long this experiment shoul run for?
+            How long should this experiment run for?
           </Text>
           <Divider my={4} />
           <FormControl w="fit-content">
