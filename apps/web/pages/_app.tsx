@@ -26,6 +26,21 @@ function Reputable({ Component, pageProps }) {
         <QueryClientProvider client={queryClient}>
           <ChakraProvider theme={reputableTheme}>
             <DefaultSeo
+              additionalLinkTags={[
+                {
+                  rel: "icon",
+                  href: "/favicons/favicon.ico",
+                },
+                {
+                  rel: "apple-touch-icon",
+                  href: "/favicons/apple-touch-icon.png",
+                  sizes: "76x76",
+                },
+                {
+                  rel: "manifest",
+                  href: "/site.webmanifest",
+                },
+              ]}
               openGraph={{
                 type: "website",
                 locale: "en_IE",

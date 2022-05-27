@@ -12,6 +12,7 @@ import {
   HStack,
   VStack,
   Divider,
+  Link,
 } from "@chakra-ui/react";
 import {
   FacebookShareButton,
@@ -39,6 +40,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 import calculateContributions from "../../helpers/calculateContributions";
 import { useApiContext } from "../../providers/ApiContext";
 import Modal from "../../components/Modal";
+import NextLink from "next/link";
 
 interface ExperimentsSingleViewProps {
   experiment: PopulatedExperiment;
@@ -51,13 +53,7 @@ export default function ExperimentsSingleView({
 }: React.PropsWithChildren<ExperimentsSingleViewProps>) {
   const { isAuthenticated } = useAuth0();
   const { user } = useApiContext();
-  const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
-    data.tips
-  );
-  const tipFromCurrentUser = data.tips.filter(
-    (t) => t.userId === user?.user_id
-  );
-  const alreadyTippedByUser = tipFromCurrentUser.length > 0;
+  const { totalTokens } = calculateContributions(data.tips);
   return (
     <HStack align={"start"} justify="start" gap="90px" w="100%">
       <Box flexGrow={1}>
@@ -89,9 +85,16 @@ export default function ExperimentsSingleView({
               </HStack>
             ))}
             <Text fontSize="18px">by</Text>
-            <Text color="gray.700" fontSize="18px" fontWeight={600}>
-              {data.createdBy.name}
-            </Text>
+            <NextLink
+              href={`/user/${encodeURIComponent(data.createdBy.email)}`}
+              passHref
+            >
+              <Link>
+                <Text color="gray.700" fontSize="18px" fontWeight={600}>
+                  {data.createdBy.name}
+                </Text>
+              </Link>
+            </NextLink>
           </Flex>
           <Spacer />
           <Flex gap={2}>
