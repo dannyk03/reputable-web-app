@@ -31,7 +31,7 @@ function Reputable({ Component, pageProps }) {
                 locale: "en_IE",
                 title: "Reputable Health",
                 description:
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+                  "Join a community of biohackers.  Experiment, earn and optimize your health.",
                 url: "https://reputable.health/",
                 site_name: "Reputable",
                 images: [
