@@ -20,6 +20,7 @@ import { CommunitiesService } from '../communities/communities.service';
 import { Community } from '../communities/entities/community.entity';
 import { MessageResponse } from 'src/common/entities/response';
 import { UnauthorizedException } from '@nestjs/common';
+import { makeArray } from '../../common/helpers';
 
 @Resolver(() => Experiment)
 export class ExperimentsResolver {
@@ -69,8 +70,15 @@ export class ExperimentsResolver {
   }
 
   @ResolveField('createdBy', (returns) => User)
-  getUser(@Parent() experiment: Experiment) {
-    return this.usersService.loaderForExperiments.load(experiment.createdBy);
+  async getUser(@Parent() experiment: Experiment) {
+    // Auth0 treats same emails as different accounts if they are
+    // registered using different identity providers e.g. GAuth and Username-Pass
+    // see the link: https://community.auth0.com/t/duplicate-users-duplicate-emails-as-different-users/18300
+    // https://auth0.com/docs/manage-users/user-accounts/user-account-linking/link-user-accounts
+    const user = makeArray(
+      await this.usersService.loaderForExperiments.load(experiment.createdBy),
+    )[0];
+    return user;
   }
 
   @Public()

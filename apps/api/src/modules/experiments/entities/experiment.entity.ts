@@ -141,7 +141,7 @@ export class Experiment extends BaseMongoEntity implements IExperiment {
     enum: ExperimentStatus,
   })
   public status: ExperimentStatus;
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   @prop({
     required: true,
   })
