@@ -25,7 +25,7 @@ export class CommunitiesService {
   ) {}
 
   findAll() {
-    return this.communitiesModel.find({}).orFail().exec();
+    return this.communitiesModel.find({}).sort({ order: -1 }).orFail().exec();
   }
 
   findOne(slug: string) {
