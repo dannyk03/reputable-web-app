@@ -1,31 +1,31 @@
 import {
   Avatar,
-  Box,
   ChakraProps,
   HStack,
   Icon,
   LinkBox,
   Spacer,
   LinkOverlay,
+  Link,
   Text,
   IconButton,
+  Tooltip,
 } from "@chakra-ui/react";
 import React from "react";
-import makeAvatar from "../../helpers/makeAvatar";
+import makeAvatar from "../../../helpers/makeAvatar";
 import NextLink from "next/link";
-import Tag from "../Tag";
-import Card from "../Card";
+import Tag from "../../Tag";
+import Card from "../../Card";
 import type { PopulatedExperiment, ICommunity } from "@reputable/types";
-import { truncate } from "lodash";
-import ReputableLogo from "../Icons/ReputableLogo";
+import ReputableLogo from "../../Icons/ReputableLogo";
 import Image from "next/image";
-import calculateContributions from "../../helpers/calculateContributions";
+import calculateContributions from "../../../helpers/calculateContributions";
 import { useRouter } from "next/router";
-import { useExperiment } from "../../_api/Experiments/mutations";
-import { DeleteIcon } from "@chakra-ui/icons";
-import { useApiContext } from "../../providers/ApiContext";
+import { useExperiment } from "../../../_api/Experiments/mutations";
+import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
+import { useApiContext } from "../../../providers/ApiContext";
 import moment from "moment";
-import NoMedicalAdviceImage from "../Icons/NoMedicalAdvice";
+import ExperimentCardContent from "./components/ExperimentCardContent";
 
 export interface ExperimentCardProps extends ChakraProps {
   experiment: Pick<
@@ -47,9 +47,7 @@ export default function ExperimentCard({
 }: React.PropsWithChildren<ExperimentCardProps>) {
   const router = useRouter();
   const { user } = useApiContext();
-  const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
-    experiment.tips
-  );
+  const { totalTokens } = calculateContributions(experiment.tips);
   const timeAgo = moment(
     new Date(experiment.updatedAt || experiment.createdAt)
   ).fromNow();
@@ -106,22 +104,9 @@ export default function ExperimentCard({
               >
                 {experiment.title}
               </Text>
+              <ExperimentCardContent content={experiment.description?.goal} />
             </LinkOverlay>
           </NextLink>
-          <Box
-            color="gray.600"
-            fontSize="18px"
-            lineHeight="28px"
-            fontWeight={400}
-            mt={3}
-            textOverflow="ellipsis"
-            overflow="hidden"
-          >
-            {truncate(experiment.description?.goal, {
-              length: 300,
-              separator: "\n",
-            })}
-          </Box>
           <HStack mt={3}>
             {experiment.communities.map((comm: ICommunity, idx: number) => (
               <Tag key={`${experiment._id}_tag_${idx}`}>
@@ -139,22 +124,43 @@ export default function ExperimentCard({
           </HStack>
         </LinkBox>
         {user?.email === experiment.createdBy.email && (
-          <IconButton
-            ml={2}
-            onClick={() => {
-              if (
-                window.confirm(
-                  "Are you sure about deleting this experiment? This "
-                )
-              )
-                remove.mutate({ _id: experiment._id });
-            }}
-            aria-label="Remove Experiment"
-            variant="outline"
-            size="sm"
-            colorScheme="red"
-            icon={<DeleteIcon />}
-          />
+          <HStack>
+            <Tooltip label="Update Experiment">
+              <NextLink
+                href={`/${router.query.community}/${experiment._id}/edit`}
+                passHref
+              >
+                <Link>
+                  <IconButton
+                    ml={2}
+                    aria-label="Update Experiment"
+                    variant="outline"
+                    size="sm"
+                    colorScheme="yellow"
+                    icon={<EditIcon />}
+                  />
+                </Link>
+              </NextLink>
+            </Tooltip>
+            <Tooltip label="Delete Experiment">
+              <IconButton
+                ml={2}
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      "Are you sure about deleting this experiment? This "
+                    )
+                  )
+                    remove.mutate({ _id: experiment._id });
+                }}
+                aria-label="Remove Experiment"
+                variant="outline"
+                size="sm"
+                colorScheme="red"
+                icon={<DeleteIcon />}
+              />
+            </Tooltip>
+          </HStack>
         )}
       </HStack>
     </Card>

@@ -31,6 +31,7 @@ export const communities: Omit<ICommunity, '_id'>[] = [
     icon: 'https://drive.google.com/uc?id=1kHhGvQNewsLJmVptDD_EjAQzXLgB4sig',
     slug: 'sleep',
     memberCount: 0,
+    order: 1,
   },
   {
     name: 'Longevity',
@@ -72,6 +73,12 @@ export const communities: Omit<ICommunity, '_id'>[] = [
     name: 'Blood Sugar',
     icon: 'https://drive.google.com/uc?id=1TgLWQfpU7AddazWNZk_mK6auvZnUVCTE',
     slug: 'blood-sugar',
+    memberCount: 0,
+  },
+  {
+    name: 'Sexual Health',
+    icon: 'https://drive.google.com/uc?id=1hhIp4J69EZxWQEzSsYK9aeYuuMmudRJW',
+    slug: 'sexual-health',
     memberCount: 0,
   },
 ];

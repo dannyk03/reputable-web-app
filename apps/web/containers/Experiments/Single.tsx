@@ -41,6 +41,12 @@ import calculateContributions from "../../helpers/calculateContributions";
 import { useApiContext } from "../../providers/ApiContext";
 import Modal from "../../components/Modal";
 import NextLink from "next/link";
+import "@uiw/react-markdown-preview/markdown.css";
+import dynamic from "next/dynamic";
+
+const MDPreview = dynamic(() => import("@uiw/react-markdown-preview"), {
+  ssr: false,
+}) as unknown as React.FC<any>;
 
 interface ExperimentsSingleViewProps {
   experiment: PopulatedExperiment;
@@ -98,11 +104,6 @@ export default function ExperimentsSingleView({
           </Flex>
           <Spacer />
           <Flex gap={2}>
-            {/*
-          <Button leftIcon={<ArrowBackIcon />} variant="ghost" size="sm">
-            Duplicate
-          </Button>
-          */}
             <FacebookShareButton url={window.location.href} title={data.title}>
               <FacebookIcon round size={20} />
             </FacebookShareButton>
@@ -126,12 +127,13 @@ export default function ExperimentsSingleView({
         <Divider mt={2} />
         <Box mt={4}>
           {Object.entries(data.description).map(([k, v]) => {
-            return (
-              <Box py={3}>
-                <Heading size="md">{k.toUpperCase()}</Heading>
-                <Text mt={4}>{v}</Text>
-              </Box>
-            );
+            if (v && v.trim() !== "")
+              return (
+                <Box key={k} py={3}>
+                  <Heading size="lg">{k.toUpperCase()}</Heading>
+                  <MDPreview style={{ marginTop: "12px" }} source={v} />
+                </Box>
+              );
           })}
         </Box>
         <Box mt="50px">

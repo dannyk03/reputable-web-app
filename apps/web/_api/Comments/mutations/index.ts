@@ -2,7 +2,6 @@ import { useToast } from "@chakra-ui/react";
 import type { IComment } from "@reputable/types";
 import type { IMessageResponse } from "@reputable/types";
 import { gql } from "graphql-request";
-import { useFormContext } from "react-hook-form";
 import { useMutation, useQueryClient } from "react-query";
 import { useApiContext } from "../../../providers/ApiContext";
 

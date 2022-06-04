@@ -30,6 +30,8 @@ class ExperimentResultMarkerInput {
   name?: string;
   @Field(() => [String], { nullable: true, defaultValue: [] })
   devices?: string[];
+  @Field({ nullable: true })
+  slug?: string;
 }
 
 @InputType()

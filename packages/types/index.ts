@@ -27,6 +27,7 @@ export interface ICommunity extends BaseMongoEntity {
   icon: string;
   memberCount?: number;
   slug: string;
+  order?: number;
 }
 
 export enum ExperimentStatus {

@@ -59,7 +59,7 @@ export default function Comment({
   const { totalTokens } = calculateContributions(
     author?.user_metadata?.tips || []
   );
-
+  if (!author) return null;
   return (
     <>
       <Box {...restProps} pl={replyTo !== null ? 12 : 0} pt={5}>

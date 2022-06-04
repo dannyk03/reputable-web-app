@@ -18,13 +18,13 @@ import Card from "../../../../components/Card";
 import { AddIcon, ArrowBackIcon, DeleteIcon } from "@chakra-ui/icons";
 import MarkerInput from "../components/MarkerInput";
 import { PrimaryButton } from "../../../../components/Button";
-import TextLink from "../../../../components/TextLink";
 
 export default function SecondStep({
   onSubmit,
   prev,
+  buttonText,
 }: React.PropsWithChildren<StepProps>) {
-  const { register, setValue, trigger, getValues, control, handleSubmit } =
+  const { register, control, handleSubmit } =
     useFormContext<TCreateExperiment>();
 
   const { fields, append, remove, move } = useFieldArray({

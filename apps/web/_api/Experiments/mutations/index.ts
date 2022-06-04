@@ -4,7 +4,7 @@ import { gql } from "graphql-request";
 import { pickBy } from "lodash";
 import { useRouter } from "next/router";
 import { useMutation, useQueryClient } from "react-query";
-import { TCreateExperiment } from "../../../containers/Experiments/Create";
+import { TCreateExperiment } from "../../../containers/Experiments/Form";
 import { useApiContext } from "../../../providers/ApiContext";
 
 const tipExperiment = gql`
@@ -18,6 +18,14 @@ const tipExperiment = gql`
 const createExperimentMutation = gql`
   mutation ($createExperimentInput: CreateExperimentInput!) {
     createExperiment(experiment: $createExperimentInput) {
+      message
+    }
+  }
+`;
+
+const updateExperimentMutation = gql`
+  mutation ($_id: String!, $updateExperimentInput: UpdateExperimentInput!) {
+    updateExperiment(_id: $_id, experiment: $updateExperimentInput) {
       message
     }
   }
@@ -86,9 +94,27 @@ export const useExperiment = (params?: {
     config
   );
 
+  const updateExperiment = useMutation<
+    IMessageResponse,
+    Error,
+    { _id: string; data: TCreateExperiment & { _id: string } }
+  >(
+    "updateExperiment",
+    (params) => {
+      return client
+        .request(updateExperimentMutation, {
+          _id: params._id,
+          updateExperimentInput: params.data,
+        })
+        .then((r) => r.updateExperiment);
+    },
+    config
+  );
+
   return {
     create: createExperiment,
     remove: removeExperiment,
+    update: updateExperiment,
   };
 };
 

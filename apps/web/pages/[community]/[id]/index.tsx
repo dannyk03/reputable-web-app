@@ -1,8 +1,8 @@
-import ExperimentSingleView from "../../containers/Experiments/Single";
+import ExperimentSingleView from "../../../containers/Experiments/Single";
 import React from "react";
 import { NextSeo } from "next-seo";
 import { useRouter } from "next/router";
-import { useExperiment } from "../../_api/Experiments/queries/single";
+import { useExperiment } from "../../../_api/Experiments/queries/single";
 import { truncate } from "lodash";
 import { setCookies, getCookie } from "cookies-next";
 import {
@@ -20,7 +20,7 @@ import {
   Divider,
   Box,
 } from "@chakra-ui/react";
-import { PrimaryButton } from "../../components/Button";
+import { PrimaryButton } from "../../../components/Button";
 import Image from "next/image";
 
 export default function ExperimentSingle() {

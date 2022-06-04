@@ -1,12 +1,8 @@
-import { ArrowBackIcon } from "@chakra-ui/icons";
-import { HStack, VStack, useTheme } from "@chakra-ui/react";
-import { CreateInfoCard } from "../../../components/Experiments";
-import TextLink from "../../../components/TextLink";
-import React, { useEffect } from "react";
+import { VStack } from "@chakra-ui/react";
+import React from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { IExperiment } from "@reputable/types";
 import FirstStep from "./Steps/First";
-import { PrimaryButton } from "../../../components/Button";
 import SecondStep from "./Steps/Second";
 import StepperLayout from "./Steps/Layout";
 import { useExperiment } from "../../../_api/Experiments/mutations";
@@ -25,6 +21,7 @@ export interface StepProps {
   onSubmit?: (data) => void;
   next?: () => void;
   prev?: () => void;
+  buttonText?: string;
 }
 
 export type TCreateExperiment = Pick<
@@ -37,6 +34,7 @@ const steps = [
     title: "Experiment Title and Description",
     description: "Please provide an in-depth explanation for your experiment",
     container: <FirstStep />,
+    buttonText: "Next",
   },
   {
     title: "Experiment Details",
@@ -46,10 +44,18 @@ const steps = [
   },
 ];
 
-export default function CreateExperimentView() {
-  const methods = useForm<TCreateExperiment>({ reValidateMode: "onChange" });
+export default function ExperimentFormView({
+  defaultValues,
+}: {
+  defaultValues?: TCreateExperiment;
+}) {
+  const methods = useForm<TCreateExperiment>({
+    reValidateMode: "onChange",
+    criteriaMode: "all",
+    defaultValues,
+  });
   const router = useRouter();
-  const { create } = useExperiment({
+  const { create, update } = useExperiment({
     community: router.query.community as string,
   });
   const [currentStep, setCurrentStep] = React.useState<number>(0);
@@ -69,8 +75,11 @@ export default function CreateExperimentView() {
     },
     {
       onSubmit: (data) => {
-        create.mutate({ ...data, communities: [router.query.community] });
+        if (defaultValues)
+          update.mutate({ _id: router.query.id as string, data });
+        else create.mutate({ ...data, communities: [router.query.community] });
       },
+      buttonText: defaultValues ? "Update Experiment" : "Create Experiment",
     },
   ];
 

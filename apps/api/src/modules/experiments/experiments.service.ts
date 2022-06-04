@@ -86,9 +86,13 @@ export class ExperimentsService {
     return this.experimentModel.findById(_id).orFail().lean().exec();
   }
 
-  update(_id: string, updateExperimentInput: UpdateExperimentInput) {
+  update(
+    _id: string,
+    user: string,
+    updateExperimentInput: UpdateExperimentInput,
+  ) {
     return this.experimentModel
-      .updateOne({ _id }, updateExperimentInput)
+      .updateOne({ _id, user }, updateExperimentInput)
       .orFail()
       .lean()
       .exec();

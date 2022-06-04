@@ -89,12 +89,17 @@ export class ExperimentsResolver {
     );
   }
 
-  @Mutation(() => Experiment)
+  @Mutation(() => MessageResponse)
   updateExperiment(
+    @CurrentUser() user: User,
     @Args('_id') experimentId: string,
     @Args('experiment') updateExperimentInput: UpdateExperimentInput,
   ) {
-    return this.experimentsService.update(experimentId, updateExperimentInput);
+    return this.experimentsService
+      .update(experimentId, user.email, updateExperimentInput)
+      .then(() => ({
+        message: 'Created experiment successfully!',
+      }));
   }
 
   @Mutation(() => MessageResponse)

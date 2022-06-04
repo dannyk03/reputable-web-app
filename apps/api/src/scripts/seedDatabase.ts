@@ -99,25 +99,28 @@ function getRandomSubarray(arr: any[], size: number) {
 
 async function main() {
   console.log('Starting script...');
-  console.log(ExperimentStatus);
-  console.log(Object.keys(ExperimentStatus));
-  console.log(Object.values(ExperimentStatus));
+
   const client = new MongoClient(process.env.DB_URL);
   await client.connect();
   const db = client.db();
+
   console.log('Connected to database');
   console.log('Dropping collections...');
+
   await db.dropCollection('experiments');
   await db.dropCollection('comments');
   await db.dropCollection('communities');
+
   console.log('Starting experiment seeding');
+
   const accessToken = await getAuth0ManagementAccessToken();
+
   console.log('Retrieved access token for auth0');
   axios.defaults.headers['Authorization'] = `Bearer  ${accessToken}`;
   console.log('Retrieving possible users we can sample from');
   const users = await getUsers();
-  console.log(users);
   console.log('Retrieved', users.length, 'users');
+
   const newExperiments = await Promise.all(
     [...new Array(40)].map(() => generateExperiment(users)),
   );

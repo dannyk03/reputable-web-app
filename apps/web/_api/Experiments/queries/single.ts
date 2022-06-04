@@ -87,9 +87,14 @@ export const useExperiment = (_id: string) => {
   const { client } = useApiContext();
 
   return useQuery<PopulatedExperiment>(["experiments", { _id }], () =>
-    client.request(query, { _id }).then((r) => {
-      return r.experiment;
-    })
+    client
+      .request(query, { _id })
+      .then((r) => {
+        return r.experiment;
+      })
+      .catch((err) => {
+        if (!_id) return undefined;
+      })
   );
 };
 
