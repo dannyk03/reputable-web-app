@@ -36,7 +36,7 @@ interface IAPIContext {
   client?: GraphQLClient;
   user?: IUser;
   refreshUser?: () => void;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 const APIContext = React.createContext<IAPIContext>({});

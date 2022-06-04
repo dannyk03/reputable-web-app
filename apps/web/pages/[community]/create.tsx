@@ -26,5 +26,5 @@ export default function CraeteExperimentView() {
     }
   }, [router, toast, user, authorized]);
   if (!authorized) return <></>;
-  return <ExperimentForm de />;
+  return <ExperimentForm />;
 }
