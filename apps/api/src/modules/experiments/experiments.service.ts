@@ -79,7 +79,26 @@ export class ExperimentsService {
     const selectorValidated = pickBy(selector, (val) => val);
     const q = this.experimentModel.find(selectorValidated).sort({ _id: -1 });
     if (projection) q.select(projection);
-    return q.lean({ virtuals: true, getters: true }).exec();
+    return q
+      .lean({ virtuals: true, getters: true })
+      .exec()
+      .then((experiments) => {
+        // Eventually this should be taken to database level and .find() query
+        // should be converted to an aggregation function, but for now I'll
+        // stick to sorting experiments here.
+        // Sorts experiments by total tips, descending
+        return experiments.sort((a, b) => {
+          const first = (a.tips || []).reduce(
+            (prev, curr) => (prev += curr.amount),
+            0,
+          );
+          const second = (b.tips || []).reduce(
+            (prev, curr) => (prev += curr.amount),
+            0,
+          );
+          return second - first;
+        });
+      });
   }
 
   findOne(_id: string) {

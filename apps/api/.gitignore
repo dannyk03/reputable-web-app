@@ -4,3 +4,4 @@ dist
 schema.gql
 auth0Token.txt
 .env
+mongodb
