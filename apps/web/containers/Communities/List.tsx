@@ -23,7 +23,7 @@ export default function CommunitiesListView({
   const formatter = Intl.NumberFormat("en", { notation: "compact" });
   return (
     <Box maxW="960px">
-      <Grid mt={10} gap={6} templateColumns="repeat(4, 1fr)">
+      <Grid gap={[4, 6]} templateColumns={["repeat(2, 1fr)", "repeat(4, 1fr)"]}>
         {data.map((community, index) => (
           <NextLink
             key={`community_${index}`}
@@ -50,7 +50,7 @@ export default function CommunitiesListView({
                       </Box>
                       <Text
                         color="gray.800"
-                        fontSize="24px"
+                        fontSize={["18px", "24px"]}
                         lineHeight="32px"
                         fontWeight={600}
                       >

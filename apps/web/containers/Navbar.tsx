@@ -10,29 +10,29 @@ import {
   Link,
 } from "@chakra-ui/react";
 import Logo from "../components/Icons/Logo";
-import { BiBell } from "react-icons/bi";
 import Image from "next/image";
+import { FiLogIn } from "react-icons/fi";
 import NextLink from "next/link";
 import { useApiContext } from "../providers/ApiContext";
 import { useAuth0 } from "@auth0/auth0-react";
+import { Show, Hide } from "@chakra-ui/react";
 import UserBadge from "../components/UserBadge";
-import NoSSR from "../components/NoSSR";
 
 export default function Navbar() {
   const theme = useTheme();
-  const { loginWithPopup, loginWithRedirect, isAuthenticated, user } =
-    useAuth0();
+  const { loginWithRedirect, user } = useAuth0();
   const { user: APIUser } = useApiContext();
   return (
     <Flex flexDirection="column">
-      <HStack py={10}>
+      <HStack py={[4, 10]} alignContent="center">
         <NextLink href={"/"} passHref>
           <Link>
             <Icon
               _focus={{ textDecoration: "none" }}
               as={Logo}
-              w="180px"
-              h="44px"
+              mt={[1, 0]}
+              w={["130px", "180px"]}
+              h={["32px", "44px"]}
               fill={theme.colors.primary[800]}
             />
           </Link>
@@ -40,21 +40,36 @@ export default function Navbar() {
         <Spacer />
         {!user ? (
           <>
-            <Box
-              py={2}
-              px={4}
-              border="1px solid"
-              borderColor="gray.200"
-              borderRadius="24px"
-              _hover={{ cursor: "pointer" }}
-              onClick={() =>
-                loginWithRedirect({
-                  audience: "https://api.reputable.health",
-                })
-              }
-            >
-              <Text>Sign in</Text>
-            </Box>
+            <Hide below="md">
+              <Box
+                py={2}
+                px={4}
+                border="1px solid"
+                borderColor="gray.200"
+                borderRadius="24px"
+                _hover={{ cursor: "pointer" }}
+                onClick={() =>
+                  loginWithRedirect({
+                    audience: "https://api.reputable.health",
+                  })
+                }
+              >
+                <Text>Sign in</Text>
+              </Box>
+            </Hide>
+            <Show below="md">
+              <Icon
+                as={FiLogIn}
+                w="38px"
+                h="38px"
+                p={2}
+                onClick={() =>
+                  loginWithRedirect({
+                    audience: "https://api.reputable.health",
+                  })
+                }
+              ></Icon>
+            </Show>
           </>
         ) : (
           <>
