@@ -53,8 +53,9 @@ export default function ExperimentCard({
   ).fromNow();
   const { remove } = useExperiment({
     community: router.query.community as string,
-    createdBy: experiment.createdBy.email,
+    createdBy: (experiment.createdBy || undefined)?.email,
   });
+  if (!experiment.createdBy) return <></>;
   return (
     <Card {...restProps} noShadow>
       <HStack w="100%" align={"start"}>

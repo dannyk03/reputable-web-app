@@ -69,16 +69,17 @@ export class ExperimentsResolver {
     return this.commentsService.loaderForExperiments.load(experiment._id);
   }
 
-  @ResolveField('createdBy', (returns) => User)
+  @ResolveField('createdBy', (returns) => User, { nullable: true })
   async getUser(@Parent() experiment: Experiment) {
     // Auth0 treats same emails as different accounts if they are
     // registered using different identity providers e.g. GAuth and Username-Pass
     // see the link: https://community.auth0.com/t/duplicate-users-duplicate-emails-as-different-users/18300
     // https://auth0.com/docs/manage-users/user-accounts/user-account-linking/link-user-accounts
-    const user = makeArray(
-      await this.usersService.loaderForExperiments.load(experiment.createdBy),
-    )[0];
-    return user;
+    const loadedUsers = await this.usersService.loaderForExperiments.load(
+      experiment.createdBy,
+    );
+    const user = makeArray(loadedUsers)[0];
+    return user ?? null;
   }
 
   @Public()

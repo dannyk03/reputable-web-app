@@ -25,24 +25,24 @@ export class AppMetaData implements IAppMetadata {
 
 @ObjectType()
 export class User implements IUser {
-  @Field(() => GraphQLISODateTime)
+  @Field(() => GraphQLISODateTime, { nullable: true })
   created_at: Date;
-  @Field()
+  @Field({ nullable: true })
   email: string;
-  @Field(() => Boolean)
+  @Field(() => Boolean, { nullable: true })
   email_verified: boolean;
   @Field({ nullable: true })
   picture: string;
-  @Field()
+  @Field({ nullable: true })
   name: string;
-  @Field()
+  @Field({ nullable: true })
   user_id: string;
   @Field(() => UserMetaData, { nullable: true })
   user_metadata?: UserMetaData;
   @Field(() => AppMetaData, { nullable: true })
   app_metadata?: AppMetaData;
-  @Field(() => Int)
+  @Field(() => Int, { nullable: true })
   experiments_count?: number;
-  @Field()
+  @Field({ nullable: true })
   last_login: string;
 }

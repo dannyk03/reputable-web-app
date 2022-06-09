@@ -9,7 +9,7 @@ import { User } from '../users/entities/user.entity';
 import { UsersService } from '../users/users.service';
 import { pickBy } from 'lodash';
 import * as DataLoader from 'dataloader';
-import { makeArray, mapFromArray } from 'src/common/helpers';
+import { mapFromArray } from 'src/common/helpers';
 
 @Injectable()
 export class ExperimentsService {
