@@ -31,7 +31,7 @@ export default function calculateContributions(tips: ITip[] = []) {
   ).toFixed(2);
   const totalTokens = (
     parseFloat(matchedAmount) + contributions.tokensTipped
-  ).toFixed(2);
+  ).toFixed(0);
   return {
     totalTokens,
     matchedAmount,

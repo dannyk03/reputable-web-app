@@ -39,12 +39,18 @@ export default function ContributionsModal({
         ...((children as JSX.Element).props || {}),
         onClick: () => onOpen(),
       })}
-      <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+      <Modal
+        size="sm"
+        finalFocusRef={finalRef}
+        isOpen={isOpen}
+        onClose={onClose}
+        isCentered
+      >
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Contributions</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody mb={4}>
             <VStack justify={"flex-start"} align="start">
               <HStack align="center">
                 <Icon as={ReputableLogo} width="18px" height="18px" />

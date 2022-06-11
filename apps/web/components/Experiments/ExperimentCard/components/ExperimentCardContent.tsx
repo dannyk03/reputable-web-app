@@ -3,6 +3,7 @@ import { Box } from "@chakra-ui/react";
 import "@uiw/react-markdown-preview/markdown.css";
 import dynamic from "next/dynamic";
 import MDPreviewT from "@uiw/react-markdown-preview";
+import { useMediaQuery } from "@chakra-ui/react";
 
 const MDPreview = dynamic(() => import("@uiw/react-markdown-preview"), {
   ssr: false,
@@ -15,6 +16,8 @@ export default function ExperimentCardContent({
 }) {
   const ref = React.useRef(null);
   const [height, setHeight] = React.useState(0);
+  const [isMobile] = useMediaQuery("(max-width: 30em");
+  console.log("isMobile", isMobile);
   React.useEffect(() => {
     const cHeight = ref.current.clientHeight;
     setHeight(cHeight);
@@ -51,7 +54,7 @@ export default function ExperimentCardContent({
       overflow="hidden"
       ref={ref}
     >
-      <MDPreview source={content} />
+      <MDPreview style={{ fontSize: isMobile && "14px" }} source={content} />
     </Box>
   );
 }

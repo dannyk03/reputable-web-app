@@ -45,9 +45,9 @@ export default function UserExperiments({
     <VStack textAlign="left" w="100%" justify="start" gap={10}>
       <HStack
         py={10}
-        px="75px"
+        px={[4, "75px"]}
         backgroundColor="primary.100"
-        w="100%"
+        w="100vw"
         align="center"
       >
         <Avatar
@@ -56,7 +56,7 @@ export default function UserExperiments({
           name="Profile Photo"
           src={data?.picture ?? makeAvatar(data?.user_id)}
         />
-        <VStack gap={2} pl={5} justify="flex-start">
+        <VStack gap={[0, 2]} pl={5} justify="flex-start">
           <Box w="100%">
             <Text
               color="gray.800"
@@ -92,7 +92,7 @@ export default function UserExperiments({
             <Tab>Experiments ({experiments.length})</Tab>
           </TabList>
           <TabPanels>
-            <TabPanel px={10}>
+            <TabPanel px={[0, 10]}>
               {(experiments || []).map((exp) => (
                 <ExperimentCard experiment={exp} mt={5} />
               ))}

@@ -23,6 +23,8 @@ const query = gql`
         name
         slug
         memberCount
+        bgColor
+        textColor
       }
       createdBy {
         name

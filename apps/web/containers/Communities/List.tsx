@@ -20,7 +20,6 @@ export default function CommunitiesListView({
   children,
   data = [],
 }: React.PropsWithChildren<CommunitiesListViewProps>) {
-  const formatter = Intl.NumberFormat("en", { notation: "compact" });
   return (
     <Box maxW="960px">
       <Grid gap={[4, 6]} templateColumns={["repeat(2, 1fr)", "repeat(4, 1fr)"]}>

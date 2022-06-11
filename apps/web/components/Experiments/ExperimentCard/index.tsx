@@ -3,13 +3,16 @@ import {
   ChakraProps,
   HStack,
   Icon,
+  VStack,
   LinkBox,
   Spacer,
   LinkOverlay,
   Link,
   Text,
   IconButton,
+  Show,
   Tooltip,
+  Hide,
 } from "@chakra-ui/react";
 import React from "react";
 import makeAvatar from "../../../helpers/makeAvatar";
@@ -67,26 +70,54 @@ export default function ExperimentCard({
               name="Profile Photo"
               src={experiment.createdBy.picture ?? makeAvatar("Some name")}
             />
-            <Text
-              color="gray.700"
-              fontWeight={600}
-              lineHeight="28px"
-              fontSize={18}
-            >
-              {experiment.createdBy.name}
-            </Text>
-            <Text
-              color="gray.600"
-              fontWeight={400}
-              lineHeight="24px"
-              fontSize="16px"
-            >
-              {timeAgo}
-            </Text>
+            <Hide below="md">
+              <Text
+                color="gray.700"
+                fontWeight={600}
+                lineHeight="28px"
+                fontSize={18}
+              >
+                {experiment.createdBy.name}
+              </Text>
+              <Text
+                color="gray.600"
+                fontWeight={400}
+                lineHeight="24px"
+                fontSize="16px"
+              >
+                {timeAgo}
+              </Text>
+            </Hide>
+            {/* Mobile View START */}
+            <Show below="md">
+              <VStack alignItems="start" justify={"center"}>
+                <Text
+                  color="gray.700"
+                  fontWeight={600}
+                  lineHeight="28px"
+                  fontSize={18}
+                >
+                  {experiment.createdBy.name}
+                </Text>
+                <Text
+                  style={{ marginTop: "-5px" }}
+                  color="gray.600"
+                  fontWeight={400}
+                  fontSize="16px"
+                >
+                  {timeAgo}
+                </Text>
+              </VStack>
+            </Show>
+            {/* Mobile View END */}
             <Spacer />
             <HStack alignItems="center">
               <Icon as={ReputableLogo} width="20px" height="20px" />
-              <Text size="16px" lineHeight="24px">
+              <Text
+                fontWeight={{ small: 600, medium: 400 }}
+                size="16px"
+                lineHeight="24px"
+              >
                 {totalTokens}
               </Text>
             </HStack>
@@ -97,8 +128,8 @@ export default function ExperimentCard({
           >
             <LinkOverlay>
               <Text
-                fontSize="24px"
-                lineHeight="32px"
+                fontSize={["20px", "24px"]}
+                lineHeight={["28px", "32px"]}
                 fontWeight={600}
                 color="gray.800"
                 mt={2}
@@ -110,7 +141,11 @@ export default function ExperimentCard({
           </NextLink>
           <HStack mt={3}>
             {experiment.communities.map((comm: ICommunity, idx: number) => (
-              <Tag key={`${experiment._id}_tag_${idx}`}>
+              <Tag
+                backgroundColor={comm.bgColor}
+                color={comm.textColor}
+                key={`${experiment._id}_tag_${idx}`}
+              >
                 <HStack>
                   <Image
                     alt="Sleep Community"

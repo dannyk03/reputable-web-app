@@ -1,5 +1,5 @@
 import { AddIcon } from "@chakra-ui/icons";
-import { Flex, Box, VStack, HStack } from "@chakra-ui/react";
+import { Flex, Box, VStack, HStack, Hide } from "@chakra-ui/react";
 import React, { useEffect } from "react";
 import { PrimaryButton } from "../../components/Button";
 import { ExperimentCard } from "../../components/Experiments";
@@ -48,31 +48,33 @@ export default function ExperimentsListView({
   }, [searchInput, experiments]);
 
   return (
-    <Flex direction="row" justify={"space-between"} w="100%">
-      <VStack w="260px" gap={5}>
-        <CommunityCard community={community} />
-        {!user?.app_metadata?.isApproved ? (
-          <Modal
-            title="Information"
-            button={
-              <PrimaryButton
-                text="Create new experiment"
-                leftIcon={<AddIcon width="12px" height="12px" />}
-              />
-            }
-          >
-            You have to be approved by an administrator to be able to create an
-            experiment
-          </Modal>
-        ) : (
-          <PrimaryButton
-            onClick={() => router.push(`/${community.slug}/create`)}
-            text="Create new experiment"
-            leftIcon={<AddIcon width="12px" height="12px" />}
-          />
-        )}
-      </VStack>
-      <Box ml={10} width="100%">
+    <Flex direction="row" justify={["center", "space-between"]} w="100%">
+      <Hide below="md">
+        <VStack w={["100%", "260px"]} gap={5}>
+          <CommunityCard community={community} />
+          {!user?.app_metadata?.isApproved ? (
+            <Modal
+              title="Information"
+              button={
+                <PrimaryButton
+                  text="Create new experiment"
+                  leftIcon={<AddIcon width="12px" height="12px" />}
+                />
+              }
+            >
+              You have to be approved by an administrator to be able to create
+              an experiment
+            </Modal>
+          ) : (
+            <PrimaryButton
+              onClick={() => router.push(`/${community.slug}/create`)}
+              text="Create new experiment"
+              leftIcon={<AddIcon width="12px" height="12px" />}
+            />
+          )}
+        </VStack>
+      </Hide>
+      <Box ml={[0, 10]} width="100%">
         <HStack>
           <SearchInput
             value={searchInput}

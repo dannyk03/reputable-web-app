@@ -8,6 +8,7 @@ import {
   useTheme,
   Text,
   Link,
+  Button,
 } from "@chakra-ui/react";
 import Logo from "../components/Icons/Logo";
 import Image from "next/image";
@@ -58,17 +59,19 @@ export default function Navbar() {
               </Box>
             </Hide>
             <Show below="md">
-              <Icon
-                as={FiLogIn}
-                w="38px"
-                h="38px"
-                p={2}
-                onClick={() =>
-                  loginWithRedirect({
-                    audience: "https://api.reputable.health",
-                  })
-                }
-              ></Icon>
+              <Button variant="ghost">
+                <Icon
+                  as={FiLogIn}
+                  w="38px"
+                  h="38px"
+                  p={2}
+                  onClick={() =>
+                    loginWithRedirect({
+                      audience: "https://api.reputable.health",
+                    })
+                  }
+                ></Icon>
+              </Button>
             </Show>
           </>
         ) : (
@@ -97,28 +100,6 @@ export default function Navbar() {
                 </Text>
               </HStack>
               <UserBadge w="fit-content" />
-              {/* 
-              <Flex
-                borderRadius="50%"
-                border="1px solid"
-                p="10px"
-                justify="center"
-                borderColor="gray.200"
-                align="center"
-                position="relative"
-              >
-                <Icon as={BiBell} w="20px" h="20px" />
-                <Box
-                  bgColor="primary.500"
-                  position={"absolute"}
-                  w="12.5px"
-                  h="12.5px"
-                  right="-2px"
-                  bottom="0px"
-                  borderRadius="50%"
-                />
-              </Flex>
-              */}
             </HStack>
           </>
         )}

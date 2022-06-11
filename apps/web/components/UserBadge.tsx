@@ -7,6 +7,7 @@ import {
   Box,
   HStack,
   Text,
+  Hide,
   Avatar,
   ChakraProps,
   Link,
@@ -31,7 +32,7 @@ export default function UserBadge({
       <Box {...restProps}>
         <HStack
           py={2}
-          px={4}
+          px={[2, 4]}
           border="1px solid"
           borderColor="gray.200"
           borderRadius="24px"
@@ -44,15 +45,17 @@ export default function UserBadge({
             name="Profile Photo"
             src={user.picture ?? makeAvatar(user.user_id)}
           />
-          <Text
-            color="gray.700"
-            lineHeight="24px"
-            fontSize="16px"
-            fontWeight={600}
-          >
-            {user.name}
-          </Text>
-          {!isOpen ? <ChevronDownIcon /> : <ChevronUpIcon />}
+          <Hide below="md">
+            <Text
+              color="gray.700"
+              lineHeight="24px"
+              fontSize="16px"
+              fontWeight={600}
+            >
+              {user.name}
+            </Text>
+            {!isOpen ? <ChevronDownIcon /> : <ChevronUpIcon />}
+          </Hide>
         </HStack>
         <Box position="relative" />
         <Collapse in={isOpen} animateOpacity>
@@ -60,6 +63,7 @@ export default function UserBadge({
             mt="2px"
             borderRadius="12px"
             border="1px solid"
+            right={4}
             borderColor="gray.200"
             position="absolute"
             backgroundColor="white"

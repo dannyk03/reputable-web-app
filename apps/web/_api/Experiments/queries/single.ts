@@ -12,6 +12,8 @@ const query = gql`
         slug
         icon
         memberCount
+        bgColor
+        textColor
       }
       tips {
         userId

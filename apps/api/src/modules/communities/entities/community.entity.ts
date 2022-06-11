@@ -17,6 +17,12 @@ export class Community extends BaseMongoEntity implements ICommunity {
   @Field()
   @prop({ required: true })
   slug: string;
+  @Field()
+  @prop({ required: true })
+  bgColor: string;
+  @Field()
+  @prop({ required: true })
+  textColor: string;
 }
 
 export type CommunityDocument = DocumentType<Community>;

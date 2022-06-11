@@ -6,14 +6,13 @@ import { useExperiment } from "../../../_api/Experiments/queries/single";
 import { truncate } from "lodash";
 import { setCookies, getCookie } from "cookies-next";
 import {
-  Button,
   Modal,
   ModalBody,
   Text,
+  Hide,
   ModalFooter,
   ModalOverlay,
   ModalHeader,
-  ModalCloseButton,
   ModalContent,
   HStack,
   VStack,
@@ -71,9 +70,10 @@ export default function ExperimentSingle() {
           ],
         }}
       />
+      {/*
       <Modal
         closeOnOverlayClick={false}
-        size="4xl"
+        size={{ sm: "full", md: "2xl", lg: "4xl" }}
         isOpen={!noMedicalAdviceAccepted as boolean}
         onClose={() => setNoMedicalAdviceAccepted(true)}
       >
@@ -111,15 +111,17 @@ export default function ExperimentSingle() {
                   regards to experiments available on the Reputable platform.
                 </Text>
               </VStack>
-              <Box>
-                <Image
-                  alt="No Medical Advice"
-                  src="/icons/NoMedicalAdvice.png"
-                  width={320}
-                  layout="fixed"
-                  height={300}
-                />
-              </Box>
+              <Hide below="md">
+                <Box>
+                  <Image
+                    alt="No Medical Advice"
+                    src="/icons/NoMedicalAdvice.png"
+                    width={320}
+                    layout="fixed"
+                    height={300}
+                  />
+                </Box>
+              </Hide>
             </HStack>
           </ModalBody>
 
@@ -132,6 +134,7 @@ export default function ExperimentSingle() {
           </ModalFooter>
         </ModalContent>
       </Modal>
+      */}
       <ExperimentSingleView
         experiment={data}
         isLoading={isLoading || isRefetching}

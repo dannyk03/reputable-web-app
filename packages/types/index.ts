@@ -28,6 +28,8 @@ export interface ICommunity extends BaseMongoEntity {
   memberCount?: number;
   slug: string;
   order?: number;
+  bgColor: string;
+  textColor: string;
 }
 
 export enum ExperimentStatus {

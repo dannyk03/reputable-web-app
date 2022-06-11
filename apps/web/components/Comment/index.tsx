@@ -63,7 +63,6 @@ export default function Comment({
   return (
     <>
       <Box {...restProps} pl={replyTo !== null ? 12 : 0} pt={5}>
-        <Flex justify="start"></Flex>
         <Flex justify={"start"} align="center" position="relative">
           <Flex align={"center"} cursor="pointer">
             <Avatar
@@ -159,9 +158,9 @@ export default function Comment({
           )}
         </Flex>
         <Flex pl={12}>
-          <Text>{text}</Text>
+          <Text w="100%">{text}</Text>
         </Flex>
-        <Flex pl={12} pt="12px" align="center">
+        <Flex flexWrap={"wrap"} pl={12} pt="12px" align="center">
           {/*
           <Voting
             upvotes={upvotes}
@@ -255,19 +254,18 @@ export default function Comment({
             </Button>
           )}
           {replies.length > 0 && (
-            <>
-              <Text
-                color="primary.600"
-                _hover={{ textDecor: "underline", cursor: "pointer" }}
-                onClick={() =>
-                  setShowReplies((prevShowReplies) => !prevShowReplies)
-                }
-              >
-                {!showReplies
-                  ? `Show replies (${replies.length})`
-                  : "Hide replies"}
-              </Text>
-            </>
+            <Text
+              pt={[2, 0]}
+              color="primary.600"
+              _hover={{ textDecor: "underline", cursor: "pointer" }}
+              onClick={() =>
+                setShowReplies((prevShowReplies) => !prevShowReplies)
+              }
+            >
+              {!showReplies
+                ? `Show replies (${replies.length})`
+                : "Hide replies"}
+            </Text>
           )}
         </Flex>
       </Box>
