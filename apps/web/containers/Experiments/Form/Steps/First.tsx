@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  Heading,
-  Textarea,
-  useTheme,
-  VStack,
-  Input,
-  Text,
-} from "@chakra-ui/react";
+import { Heading, useTheme, VStack, Input, Text } from "@chakra-ui/react";
 import { StepProps, TCreateExperiment } from "..";
 import {
   Controller,
@@ -44,6 +37,7 @@ const ControlledEditor = ({
     }) => (
       <>
         <MDEditor
+          preview="edit"
           style={{
             border: error && "1px solid red",
             width: "100%",
