@@ -70,12 +70,12 @@ export default function ExperimentSingle() {
           ],
         }}
       />
-      {/*
       <Modal
         closeOnOverlayClick={false}
-        size={{ sm: "full", md: "2xl", lg: "4xl" }}
+        size={["sm", "2xl", "4xl"]}
         isOpen={!noMedicalAdviceAccepted as boolean}
         onClose={() => setNoMedicalAdviceAccepted(true)}
+        isCentered
       >
         <ModalOverlay />
         <ModalContent>
@@ -85,7 +85,7 @@ export default function ExperimentSingle() {
               <Divider pt={5} />
             </VStack>
           </ModalHeader>
-          <ModalBody>
+          <ModalBody overflowY={"auto"} maxH="320px">
             <HStack justify={"center"} align="center">
               <VStack pr={8}>
                 <Text color="gray.700">
@@ -134,7 +134,6 @@ export default function ExperimentSingle() {
           </ModalFooter>
         </ModalContent>
       </Modal>
-      */}
       <ExperimentSingleView
         experiment={data}
         isLoading={isLoading || isRefetching}

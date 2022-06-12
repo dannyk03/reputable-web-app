@@ -81,6 +81,8 @@ const query = gql`
       }
       status
       _id
+      createdAt
+      updatedAt
     }
   }
 `;

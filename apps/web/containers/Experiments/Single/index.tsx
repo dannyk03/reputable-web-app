@@ -14,6 +14,7 @@ import {
   Hide,
   Link,
   Avatar,
+  VStack,
 } from "@chakra-ui/react";
 import {
   FacebookShareButton,
@@ -55,9 +56,9 @@ export default function ExperimentsSingleView({
   isLoading,
   experiment: data,
 }: React.PropsWithChildren<ExperimentsSingleViewProps>) {
-  const { isAuthenticated } = useAuth0();
   const { user } = useApiContext();
-  const timeAgo = moment(new Date(data.updatedAt || data.createdAt)).fromNow();
+  console.log("data", data);
+  const timeAgo = moment(new Date(data.updatedAt ?? data.createdAt)).fromNow();
   const { totalTokens } = calculateContributions(data.tips);
   return (
     <Flex align={"start"} justify="start" w="100%">
@@ -72,48 +73,52 @@ export default function ExperimentsSingleView({
           }}
         />
         <Show below="md">
-          <HStack mt={8}>
-            <Avatar
-              width={"28px"}
-              height={"28px"}
-              name="Profile Photo"
-              src={data.createdBy.picture ?? makeAvatar(user.user_id)}
-            />
-            <NextLink
-              href={`/user/${encodeURIComponent(data.createdBy.email)}`}
-              passHref
-            >
-              <Link>
-                <Text color="gray.700" fontSize="18px" fontWeight={600}>
-                  {data.createdBy.name}
-                </Text>
-              </Link>
-            </NextLink>
-            <Text
-              color="gray.600"
-              fontWeight={400}
-              lineHeight="24px"
-              fontSize="16px"
-            >
-              {timeAgo}
-            </Text>
-            <Spacer />
-            <HStack alignItems="center">
-              <Icon
-                color="primary.500"
-                as={ReputableLogo}
-                width="20px"
-                height="20px"
-              />
+          <HStack mt={8} w="100%">
+            <VStack alignItems="start" w="100%">
+              <HStack w="100%">
+                <Avatar
+                  width={"28px"}
+                  height={"28px"}
+                  name="Profile Photo"
+                  src={data.createdBy.picture ?? makeAvatar(user.user_id)}
+                />
+                <NextLink
+                  href={`/user/${encodeURIComponent(data.createdBy.email)}`}
+                  passHref
+                >
+                  <Link>
+                    <Text color="gray.700" fontSize="18px" fontWeight={600}>
+                      {data.createdBy.name}
+                    </Text>
+                  </Link>
+                </NextLink>
+                <Spacer />
+                <HStack alignItems="center">
+                  <Icon
+                    color="primary.500"
+                    as={ReputableLogo}
+                    width="20px"
+                    height="20px"
+                  />
+                  <Text
+                    color="primary.500"
+                    fontWeight={[600, 400]}
+                    size="16px"
+                    lineHeight="24px"
+                  >
+                    {totalTokens}
+                  </Text>
+                </HStack>
+              </HStack>
               <Text
-                color="primary.500"
-                fontWeight={[600, 400]}
-                size="16px"
+                color="gray.600"
+                fontWeight={400}
                 lineHeight="24px"
+                fontSize="16px"
               >
-                {totalTokens}
+                {timeAgo}
               </Text>
-            </HStack>
+            </VStack>
           </HStack>
         </Show>
         <Heading
