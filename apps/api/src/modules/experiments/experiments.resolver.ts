@@ -75,12 +75,11 @@ export class ExperimentsResolver {
     // registered using different identity providers e.g. GAuth and Username-Pass
     // see the link: https://community.auth0.com/t/duplicate-users-duplicate-emails-as-different-users/18300
     // https://auth0.com/docs/manage-users/user-accounts/user-account-linking/link-user-accounts
-    /*const loadedUsers = await this.usersService.loaderForExperiments.load(
+    const loadedUsers = await this.usersService.loaderForExperiments.load(
       experiment.createdBy,
     );
     const user = makeArray(loadedUsers)[0];
-    */
-    const user = await this.usersService.findOne(experiment.createdBy);
+
     return user ?? null;
   }
 

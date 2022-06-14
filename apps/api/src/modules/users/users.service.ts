@@ -97,9 +97,14 @@ export class UsersService {
 
   async findAll() {
     // Get all users paginated
-    return this.client.get<User[]>('/users').then(function (response) {
-      return response.data.map((user) => plainToClass(User, user));
-    });
+    const promises = await Promise.all([
+      this.client.get('/users?page=0&per_page=50'),
+      this.client.get('/users?page=1&per_page=50'),
+    ]);
+
+    return promises.reduce((prev, curr) => {
+      return prev.concat(curr.data);
+    }, []) as unknown as User[];
   }
 
   async findById(id: string) {
