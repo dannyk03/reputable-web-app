@@ -48,9 +48,15 @@ export class ExperimentsService {
       return new BadRequestException('Insufficient funds');
     return await Promise.all([
       this.experimentModel
-        .findByIdAndUpdate(experimentId, {
-          $push: { tips: { userId: user.user_id, amount } },
-        })
+        .findOneAndUpdate(
+          {
+            _id: experimentId,
+            createdBy: { $ne: user.email },
+          },
+          {
+            $push: { tips: { userId: user.user_id, amount } },
+          },
+        )
         .orFail()
         .exec(),
       this.usersService.updateOne(user.user_id, {

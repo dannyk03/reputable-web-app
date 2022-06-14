@@ -96,6 +96,7 @@ export class UsersService {
   }
 
   async findAll() {
+    // Get all users paginated
     return this.client.get<User[]>('/users').then(function (response) {
       return response.data.map((user) => plainToClass(User, user));
     });
@@ -124,6 +125,7 @@ export class UsersService {
   }
 
   async tipUser(from: string, to: string, amount: number) {
+    if (from === to) throw new BadRequestException('Can not tip yourself');
     return this.client.get<User>(`users/${from}`).then(async (response) => {
       if (response.data.user_metadata.tokens - amount < 0) {
         throw new BadRequestException(

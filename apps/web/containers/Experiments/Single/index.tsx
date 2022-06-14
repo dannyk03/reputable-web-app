@@ -154,7 +154,7 @@ export default function ExperimentsSingleView({
                 )
               )
             )}
-            <Hide>
+            <Hide below="md">
               <Text fontSize="18px">by</Text>
               <NextLink
                 href={`/user/${encodeURIComponent(data.createdBy.email)}`}
@@ -166,6 +166,12 @@ export default function ExperimentsSingleView({
                   </Text>
                 </Link>
               </NextLink>
+              <Avatar
+                width={"32px"}
+                height={"32px"}
+                name="Profile Photo"
+                src={data.createdBy.picture ?? makeAvatar("Some name")}
+              />
             </Hide>
           </Flex>
           <Spacer />
