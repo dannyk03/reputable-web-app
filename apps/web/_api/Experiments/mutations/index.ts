@@ -1,9 +1,7 @@
 import { useToast } from "@chakra-ui/react";
 import type { IMessageResponse } from "@reputable/types";
 import { gql } from "graphql-request";
-import { pickBy } from "lodash";
-import { useRouter } from "next/router";
-import { useMutation, useQueryClient } from "react-query";
+import { MutationOptions, useMutation, useQueryClient } from "react-query";
 import { TCreateExperiment } from "../../../containers/Experiments/Form";
 import { useApiContext } from "../../../providers/ApiContext";
 
@@ -40,19 +38,19 @@ const removeExperimentMutation = gql`
 `;
 
 export const useExperiment = (params?: {
-  community?: string;
-  createdBy?: string;
+  configs?: Partial<Record<"create" | "update" | "remove", MutationOptions>>;
 }) => {
   const { client } = useApiContext();
-  const router = useRouter();
   const queryClient = useQueryClient();
-  const q = pickBy(params, (v) => v);
   const toast = useToast();
-  const config = {
-    onSuccess: (data: IMessageResponse) => {
-      queryClient
-        .invalidateQueries(["experiments", q])
-        .then(() => router.push(`/${params.community}`));
+  const cfg = (type: "create" | "update" | "remove") => ({
+    onSuccess: (data: IMessageResponse, variables, ctx) => {
+      if (params.configs[type].onSuccess) {
+        params.configs[type].onSuccess(data, variables, ctx);
+      } else {
+        queryClient.invalidateQueries(["experiments"]);
+      }
+      console.log("toast will call");
       toast({
         title: "Success!",
         description: data.message,
@@ -61,7 +59,7 @@ export const useExperiment = (params?: {
         variant: "top-accent",
       });
     },
-  };
+  });
 
   const createExperiment = useMutation<
     IMessageResponse,
@@ -75,9 +73,7 @@ export const useExperiment = (params?: {
           createExperimentInput: params,
         })
         .then((r) => r.createExperiment),
-    {
-      ...config,
-    }
+    cfg("create")
   );
 
   const removeExperiment = useMutation<
@@ -86,12 +82,11 @@ export const useExperiment = (params?: {
     { _id: string }
   >(
     "removeExperiment",
-    (params) => {
-      return client
+    (params) =>
+      client
         .request(removeExperimentMutation, params)
-        .then((r) => r.removeExperiment);
-    },
-    config
+        .then((r) => r.removeExperiment),
+    cfg("remove")
   );
 
   const updateExperiment = useMutation<
@@ -100,15 +95,14 @@ export const useExperiment = (params?: {
     { _id: string; data: TCreateExperiment & { _id: string } }
   >(
     "updateExperiment",
-    (params) => {
-      return client
+    (params) =>
+      client
         .request(updateExperimentMutation, {
           _id: params._id,
           updateExperimentInput: params.data,
         })
-        .then((r) => r.updateExperiment);
-    },
-    config
+        .then((r) => r.updateExperiment),
+    cfg("update")
   );
 
   return {

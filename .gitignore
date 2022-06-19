@@ -9,3 +9,5 @@ out
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
 .env
+
+*.mongodb

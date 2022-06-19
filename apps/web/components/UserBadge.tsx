@@ -29,7 +29,7 @@ export default function UserBadge({
         if (isOpen) onToggle();
       }}
     >
-      <Box {...restProps}>
+      <Box {...restProps} pos="relative">
         <HStack
           py={2}
           px={[2, 4]}

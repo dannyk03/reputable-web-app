@@ -11,6 +11,11 @@ import { communities, experimentResultMarkers } from '../common/data';
 import type { IExperiment } from '@reputable/types';
 import { ExperimentStatus } from '@reputable/types';
 
+const u = [
+  { email: 'tolgaouzz@gmail.com' },
+  { email: 'tolga.oguz@toptal.com' },
+];
+
 const pickRandomFromArray = (arr: any[]) => {
   return arr[
     faker.datatype.number({
@@ -100,7 +105,9 @@ function getRandomSubarray(arr: any[], size: number) {
 async function main() {
   console.log('Starting script...');
 
-  const client = new MongoClient(process.env.DB_URL);
+  const client = new MongoClient(
+    'mongodb+srv://root:DESEc5v6m3z8VHW@reputable.n5wxx.mongodb.net/Staging?retryWrites=true&w=majority',
+  );
   await client.connect();
   const db = client.db();
 
@@ -118,7 +125,7 @@ async function main() {
   console.log('Retrieved access token for auth0');
   axios.defaults.headers['Authorization'] = `Bearer  ${accessToken}`;
   console.log('Retrieving possible users we can sample from');
-  const users = await getUsers();
+  const users = u;
   console.log('Retrieved', users.length, 'users');
 
   const newExperiments = await Promise.all(

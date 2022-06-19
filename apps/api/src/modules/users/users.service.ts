@@ -40,6 +40,8 @@ const getAuth0ManagementAccessToken = () => {
     });
 };
 
+// TODO: Auth0 can be created as an independent module so that we can use it in scripts etc easily.
+
 @Injectable()
 export class UsersService {
   private client: AxiosInstance;

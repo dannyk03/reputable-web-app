@@ -21,6 +21,8 @@ export class UserMetaData implements IUserMetadata {
 export class AppMetaData implements IAppMetadata {
   @Field({ nullable: true })
   isApproved?: boolean;
+  @Field({ nullable: true })
+  role?: 'admin';
 }
 
 @ObjectType()

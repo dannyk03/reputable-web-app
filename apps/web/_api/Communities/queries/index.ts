@@ -10,6 +10,8 @@ const communitiesQuery = gql`
       icon
       slug
       memberCount
+      isEnabled
+      isPublished
     }
   }
 `;

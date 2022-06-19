@@ -98,7 +98,7 @@ export class ExperimentsResolver {
     @Args('experiment') updateExperimentInput: UpdateExperimentInput,
   ) {
     return this.experimentsService
-      .update(experimentId, user.email, updateExperimentInput)
+      .update(experimentId, user, updateExperimentInput)
       .then(() => ({
         message: 'Created experiment successfully!',
       }));
@@ -106,7 +106,7 @@ export class ExperimentsResolver {
 
   @Mutation(() => MessageResponse)
   removeExperiment(@Args('_id') _id: string, @CurrentUser() user: User) {
-    return this.experimentsService.remove(_id, user.email);
+    return this.experimentsService.remove(_id, user);
   }
 
   @Mutation(() => MessageResponse)

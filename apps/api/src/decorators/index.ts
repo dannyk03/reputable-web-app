@@ -38,6 +38,12 @@ export const DeserializedMongoId = () =>
     }),
   );
 
+/**
+ *
+ * @param cls Any entity class with typegoose decorators.
+ * @param postTransformFn Optional. Transforms each record after findOne and find queries for the entity.
+ * @returns
+ */
 export const TransformQueries = <T>(
   cls: ClassConstructor<T>,
   postTransformFn?: (docs: T[]) => T[],
@@ -46,6 +52,7 @@ export const TransformQueries = <T>(
     pre<T>(
       ['findOne', 'find'],
       function (this: Query<any, DocumentType<T>>, next) {
+        // Convert POJOs from MongoDB to class instances.
         this.transform((docs: DocumentType<T> | DocumentType<T>[]) => {
           const docsAsArray = Array.isArray(docs) ? docs : [docs];
           let transformedInstances: T[] = docsAsArray.map((d) =>

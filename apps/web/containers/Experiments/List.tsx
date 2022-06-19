@@ -52,7 +52,7 @@ export default function ExperimentsListView({
       <Hide below="md">
         <VStack w={["100%", "260px"]} gap={5}>
           <CommunityCard community={community} />
-          {!user?.app_metadata?.isApproved ? (
+          {!(user?.app_metadata?.role === "admin") ? (
             <Modal
               title="Information"
               button={

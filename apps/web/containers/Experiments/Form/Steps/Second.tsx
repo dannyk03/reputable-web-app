@@ -158,7 +158,7 @@ export default function SecondStep({
           top="-20px"
           right="16px"
           size="md"
-          text="Create Experiment"
+          text={buttonText}
           type="submit"
         />
       </VStack>

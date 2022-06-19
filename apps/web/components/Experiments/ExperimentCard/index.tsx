@@ -29,6 +29,7 @@ import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
 import { useApiContext } from "../../../providers/ApiContext";
 import moment from "moment";
 import ExperimentCardContent from "./components/ExperimentCardContent";
+import { useQueryClient } from "react-query";
 
 export interface ExperimentCardProps extends ChakraProps {
   experiment: Pick<
@@ -49,15 +50,51 @@ export default function ExperimentCard({
   ...restProps
 }: React.PropsWithChildren<ExperimentCardProps>) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { user } = useApiContext();
   const { totalTokens } = calculateContributions(experiment.tips);
   const timeAgo = moment(
     new Date(experiment.updatedAt || experiment.createdAt)
   ).fromNow();
+  const k = router.query.community
+    ? ["experiments", { community: router.query.community }]
+    : ["experiments", { createdBy: router.query.email }];
   const { remove } = useExperiment({
-    community: router.query.community as string,
-    createdBy: (experiment.createdBy || undefined)?.email,
+    configs: {
+      remove: {
+        // When mutate is called:
+        onMutate: async (newTodo) => {
+          // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+          await queryClient.cancelQueries("experiments");
+
+          // Snapshot the previous value
+          const previousExperiments = queryClient.getQueryData(k);
+
+          // Optimistically update to the new value
+          queryClient.setQueryData(k, (old) => [
+            ...(old as PopulatedExperiment[]),
+            newTodo,
+          ]);
+
+          // Return a context object with the snapshotted value
+          return { previousExperiments };
+        },
+        // If the mutation fails, use the context returned from onMutate to roll back
+        onError: (
+          err,
+          newTodo,
+          context: { previousExperiments: PopulatedExperiment[] }
+        ) => {
+          queryClient.setQueryData(k, context.previousExperiments);
+        },
+        // Always refetch after error or success:
+        onSettled: () => {
+          queryClient.invalidateQueries(k);
+        },
+      },
+    },
   });
+  console.log("user", user);
   if (!experiment.createdBy) return <></>;
   return (
     <Card {...restProps} noShadow>
@@ -123,7 +160,7 @@ export default function ExperimentCard({
             </HStack>
           </HStack>
           <NextLink
-            href={`/${router.query.community}/${experiment._id}`}
+            href={`/${experiment.communities[0].slug}/${experiment._id}`}
             passHref
           >
             <LinkOverlay>
@@ -159,45 +196,46 @@ export default function ExperimentCard({
             ))}
           </HStack>
         </LinkBox>
-        {user?.email === experiment.createdBy.email && (
-          <HStack>
-            <Tooltip label="Update Experiment">
-              <NextLink
-                href={`/${router.query.community}/${experiment._id}/edit`}
-                passHref
-              >
-                <Link>
-                  <IconButton
-                    ml={2}
-                    aria-label="Update Experiment"
-                    variant="outline"
-                    size="sm"
-                    colorScheme="yellow"
-                    icon={<EditIcon />}
-                  />
-                </Link>
-              </NextLink>
-            </Tooltip>
-            <Tooltip label="Delete Experiment">
-              <IconButton
-                ml={2}
-                onClick={() => {
-                  if (
-                    window.confirm(
-                      "Are you sure about deleting this experiment? This "
+        {user?.email === experiment.createdBy.email ||
+          (user?.app_metadata?.role === "admin" && (
+            <HStack>
+              <Tooltip label="Update Experiment">
+                <NextLink
+                  href={`/${experiment.communities[0].slug}/${experiment._id}/edit`}
+                  passHref
+                >
+                  <Link>
+                    <IconButton
+                      ml={2}
+                      aria-label="Update Experiment"
+                      variant="outline"
+                      size="sm"
+                      colorScheme="yellow"
+                      icon={<EditIcon />}
+                    />
+                  </Link>
+                </NextLink>
+              </Tooltip>
+              <Tooltip label="Delete Experiment">
+                <IconButton
+                  ml={2}
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Are you sure about deleting this experiment? This "
+                      )
                     )
-                  )
-                    remove.mutate({ _id: experiment._id });
-                }}
-                aria-label="Remove Experiment"
-                variant="outline"
-                size="sm"
-                colorScheme="red"
-                icon={<DeleteIcon />}
-              />
-            </Tooltip>
-          </HStack>
-        )}
+                      remove.mutate({ _id: experiment._id });
+                  }}
+                  aria-label="Remove Experiment"
+                  variant="outline"
+                  size="sm"
+                  colorScheme="red"
+                  icon={<DeleteIcon />}
+                />
+              </Tooltip>
+            </HStack>
+          ))}
       </HStack>
     </Card>
   );

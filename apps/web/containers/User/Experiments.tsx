@@ -22,6 +22,7 @@ import { useApiContext } from "../../providers/ApiContext";
 import { ExperimentCard } from "../../components/Experiments";
 import { useExperiments } from "../../_api/Experiments/queries/all";
 import calculateContributions from "../../helpers/calculateContributions";
+import { useUserByEmail } from "../../_api/Users/queries";
 
 interface UserExperimentsProps {
   data?: IUser;
@@ -31,13 +32,14 @@ export default function UserExperiments({
   data,
 }: React.PropsWithChildren<UserExperimentsProps>) {
   const router = useRouter();
-  const { user } = useApiContext();
   const { data: experiments = [], isLoading } = useExperiments({
     createdBy: router.query.email as string,
   });
 
+  const { data: user } = useUserByEmail(router.query.email as string);
+
   const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
-    data?.user_metadata?.tips || []
+    user?.user_metadata?.tips || []
   );
 
   const lastLogin = moment(user?.last_login ?? Date.now()).fromNow();
@@ -71,7 +73,8 @@ export default function UserExperiments({
             <HStack alignItems="center">
               <Icon as={ReputableLogo} width="20px" height="20px" />
               <Text size="16px" lineHeight="24px">
-                {Math.round(parseFloat(totalTokens))}
+                {Math.round(parseFloat(totalTokens)) +
+                  user?.user_metadata?.tokens ?? 0}
               </Text>
             </HStack>
             <HStack align="center">

@@ -1,12 +1,13 @@
 import { VStack } from "@chakra-ui/react";
 import React from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import { IExperiment } from "@reputable/types";
+import { IExperiment, PopulatedExperiment } from "@reputable/types";
 import FirstStep from "./Steps/First";
 import SecondStep from "./Steps/Second";
 import StepperLayout from "./Steps/Layout";
 import { useExperiment } from "../../../_api/Experiments/mutations";
 import { useRouter } from "next/router";
+import { pick } from "lodash";
 
 export interface IStep {
   title: string;
@@ -44,19 +45,34 @@ const steps = [
   },
 ];
 
-export default function ExperimentFormView({
-  defaultValues,
-}: {
-  defaultValues?: TCreateExperiment;
+export default function ExperimentFormView(props: {
+  defaultValues?: PopulatedExperiment;
 }) {
+  console.log("props", props);
   const methods = useForm<TCreateExperiment>({
     reValidateMode: "onChange",
     criteriaMode: "all",
-    defaultValues,
+    defaultValues: pick(props.defaultValues, [
+      "description",
+      "title",
+      "experimentPeriod",
+      "markers",
+    ]),
   });
   const router = useRouter();
   const { create, update } = useExperiment({
-    community: router.query.community as string,
+    configs: {
+      create: {
+        onSuccess: () =>
+          router.push(`/${(router.query.community as string) ?? ""}`),
+      },
+      update: {
+        onSuccess: () =>
+          router.push(
+            `/${props.defaultValues.communities[0].slug}/${props.defaultValues._id}`
+          ),
+      },
+    },
   });
   const [currentStep, setCurrentStep] = React.useState<number>(0);
 
@@ -75,11 +91,13 @@ export default function ExperimentFormView({
     },
     {
       onSubmit: (data) => {
-        if (defaultValues)
+        if (props.defaultValues)
           update.mutate({ _id: router.query.id as string, data });
         else create.mutate({ ...data, communities: [router.query.community] });
       },
-      buttonText: defaultValues ? "Update Experiment" : "Create Experiment",
+      buttonText: props.defaultValues
+        ? "Update Experiment"
+        : "Create Experiment",
     },
   ];
 

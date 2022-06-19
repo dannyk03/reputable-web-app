@@ -30,6 +30,8 @@ export interface ICommunity extends BaseMongoEntity {
   order?: number;
   bgColor: string;
   textColor: string;
+  isEnabled?: boolean;
+  isPublished?: boolean;
 }
 
 export enum ExperimentStatus {
@@ -48,6 +50,7 @@ export enum MarkerValueChangeType {
 
 export interface IAppMetadata {
   isApproved?: boolean;
+  role?: "admin";
 }
 
 export interface IUser {

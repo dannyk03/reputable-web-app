@@ -18,6 +18,7 @@ const meQuery = gql`
       picture
       app_metadata {
         isApproved
+        role
       }
       user_metadata {
         tokens
@@ -41,14 +42,25 @@ interface IAPIContext {
 
 const APIContext = React.createContext<IAPIContext>({});
 
+/**
+ *
+ * Unfortunately it's not possible to retrieve custom data for a user `user_metadata`
+ * using Auth0 React framework, so we opt-in to a custom solution here.
+ * @returns
+ */
 export function APIContextProvider({ children }: React.PropsWithChildren<{}>) {
-  const { isAuthenticated, getAccessTokenSilently, user: user1 } = useAuth0();
+  const {
+    isAuthenticated,
+    getAccessTokenSilently,
+    isLoading: Auth0Loading,
+  } = useAuth0();
   const [isLoading, setIsLoading] = React.useState(true);
   const [user, setUser] = React.useState();
   const [r, setR] = React.useState(false);
   const refreshUser = () => setR((prevR) => !prevR);
   React.useEffect(() => {
-    if (isAuthenticated)
+    // isAuthenticated is retrieved from Auth0
+    if (!Auth0Loading && isAuthenticated)
       getAccessTokenSilently({ audience: "https://api.reputable.health" })
         .then((token) => {
           client.setHeader("Authorization", `Bearer ${token}`);

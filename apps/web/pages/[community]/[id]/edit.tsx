@@ -1,7 +1,6 @@
-import { pick } from "lodash";
 import { useRouter } from "next/router";
-import Authenticated from "../../../components/Authenticated";
-import Restricted from "../../../components/Restricted";
+import Authenticated from "../../../components/HOC/Authenticated";
+import Restricted from "../../../components/HOC/Restricted";
 import ExperimentForm from "../../../containers/Experiments/Form";
 import { useExperiment } from "../../../_api/Experiments/queries/single";
 
@@ -16,19 +15,15 @@ export default function EditExperimentView() {
   return (
     <Authenticated>
       <Restricted
-        bool={(user) => {
-          return user.email === data.createdBy.email;
+        condition={(user) => {
+          return (
+            user.email === data.createdBy.email ||
+            user.app_metadata.role === "admin"
+          );
         }}
         errorMessage={"Can not edit this experiment!"}
       >
-        <ExperimentForm
-          defaultValues={pick(data, [
-            "description",
-            "title",
-            "experimentPeriod",
-            "markers",
-          ])}
-        />
+        <ExperimentForm defaultValues={data} />
       </Restricted>
     </Authenticated>
   );

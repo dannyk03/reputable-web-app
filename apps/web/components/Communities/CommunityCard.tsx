@@ -20,7 +20,7 @@ export default function CommunityCard({
 
   const joinedCommunities = user?.user_metadata?.communities || [];
   const alreadyJoined = joinedCommunities.includes(community.slug);
-  const formatter = Intl.NumberFormat("en", { notation: "compact" });
+
   return (
     <Card noShadow w="100%">
       <Flex justify="center" align="center">

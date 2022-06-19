@@ -113,19 +113,24 @@ export class ExperimentsService {
 
   update(
     _id: string,
-    user: string,
+    user: User,
     updateExperimentInput: UpdateExperimentInput,
   ) {
+    const selector: Partial<Pick<Experiment, '_id' | 'createdBy'>> = { _id };
+    if (user.app_metadata.role !== 'admin') selector.createdBy === user.email;
     return this.experimentModel
-      .updateOne({ _id, user }, updateExperimentInput)
+      .updateOne(selector, updateExperimentInput)
       .orFail()
       .lean()
       .exec();
   }
 
-  remove(_id: string, userEmail: string) {
+  remove(_id: string, user: User) {
+    console.log('user', user);
+    const selector: Partial<Pick<Experiment, '_id' | 'createdBy'>> = { _id };
+    if (user.app_metadata.role !== 'admin') selector.createdBy === user.email;
     return this.experimentModel
-      .findOneAndRemove({ _id, createdBy: userEmail })
+      .findOneAndRemove(selector)
       .orFail()
       .exec()
       .then((r) => {
