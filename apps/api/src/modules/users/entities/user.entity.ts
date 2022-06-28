@@ -11,8 +11,10 @@ import { Tip } from '../../../common/entities/tip';
 export class UserMetaData implements IUserMetadata {
   @Field(() => Int)
   tokens?: number;
+
   @Field(() => [Tip], { nullable: true, defaultValue: [] })
   tips?: ITip[];
+
   @Field(() => [String], { nullable: true, defaultValue: [] })
   communities?: string[];
 }
@@ -21,6 +23,7 @@ export class UserMetaData implements IUserMetadata {
 export class AppMetaData implements IAppMetadata {
   @Field({ nullable: true })
   isApproved?: boolean;
+
   @Field({ nullable: true })
   role?: 'admin';
 }
@@ -29,22 +32,31 @@ export class AppMetaData implements IAppMetadata {
 export class User implements IUser {
   @Field(() => GraphQLISODateTime, { nullable: true })
   created_at: Date;
+
   @Field({ nullable: true })
   email: string;
+
   @Field(() => Boolean, { nullable: true })
   email_verified: boolean;
+
   @Field({ nullable: true })
   picture: string;
+
   @Field({ nullable: true })
   name: string;
+
   @Field({ nullable: true })
   user_id: string;
+
   @Field(() => UserMetaData, { nullable: true })
   user_metadata?: UserMetaData;
+
   @Field(() => AppMetaData, { nullable: true })
   app_metadata?: AppMetaData;
+
   @Field(() => Int, { nullable: true })
   experiments_count?: number;
+
   @Field({ nullable: true })
   last_login: string;
 }
