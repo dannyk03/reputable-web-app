@@ -204,13 +204,15 @@ export default function ExperimentsSingleView({
         </Show>
         <Box mt={4}>
           {Object.entries(data.description).map(([k, v]) => {
-            if (v && v.trim() !== "")
+            if (v && v.trim() !== "") {
+              console.log(v)
               return (
                 <Box key={k} py={3}>
                   <Heading size="lg">{k.toUpperCase()}</Heading>
                   <MDPreview style={{ marginTop: "12px" }} source={v} />
                 </Box>
               );
+            }
           })}
         </Box>
         <Box mt="50px">
