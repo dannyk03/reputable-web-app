@@ -13,35 +13,35 @@ import {
   Show,
   Tooltip,
   Hide,
-} from "@chakra-ui/react";
-import React from "react";
-import makeAvatar from "../../../helpers/makeAvatar";
-import NextLink from "next/link";
-import Tag from "../../Tag";
-import Card from "../../Card";
-import type { PopulatedExperiment, ICommunity } from "@reputable/types";
-import ReputableLogo from "../../Icons/ReputableLogo";
-import Image from "next/image";
-import calculateContributions from "../../../helpers/calculateContributions";
-import { useRouter } from "next/router";
-import { useExperiment } from "../../../_api/Experiments/mutations";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { useApiContext } from "../../../providers/ApiContext";
-import moment from "moment";
-import ExperimentCardContent from "./components/ExperimentCardContent";
-import { useQueryClient } from "react-query";
+} from '@chakra-ui/react';
+import React from 'react';
+import makeAvatar from '../../../helpers/makeAvatar';
+import NextLink from 'next/link';
+import Tag from '../../Tag';
+import Card from '../../Card';
+import type { PopulatedExperiment, ICommunity } from '@reputable/types';
+import ReputableLogo from '../../Icons/ReputableLogo';
+import Image from 'next/image';
+import calculateContributions from '../../../helpers/calculateContributions';
+import { useRouter } from 'next/router';
+import { useExperiment } from '../../../_api/Experiments/mutations';
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { useApiContext } from '../../../providers/ApiContext';
+import moment from 'moment';
+import ExperimentCardContent from './components/ExperimentCardContent';
+import { useQueryClient } from 'react-query';
 
 export interface ExperimentCardProps extends ChakraProps {
   experiment: Pick<
     PopulatedExperiment,
-    | "tips"
-    | "createdBy"
-    | "title"
-    | "_id"
-    | "description"
-    | "communities"
-    | "updatedAt"
-    | "createdAt"
+    | 'tips'
+    | 'createdBy'
+    | 'title'
+    | '_id'
+    | 'description'
+    | 'communities'
+    | 'updatedAt'
+    | 'createdAt'
   >;
 }
 
@@ -54,18 +54,18 @@ export default function ExperimentCard({
   const { user } = useApiContext();
   const { totalTokens } = calculateContributions(experiment.tips);
   const timeAgo = moment(
-    new Date(experiment.updatedAt || experiment.createdAt)
+    new Date(experiment.updatedAt || experiment.createdAt),
   ).fromNow();
   const k = router.query.community
-    ? ["experiments", { community: router.query.community }]
-    : ["experiments", { createdBy: router.query.email }];
+    ? ['experiments', { community: router.query.community }]
+    : ['experiments', { createdBy: router.query.email }];
   const { remove } = useExperiment({
     configs: {
       remove: {
         // When mutate is called:
         onMutate: async (newTodo) => {
           // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
-          await queryClient.cancelQueries("experiments");
+          await queryClient.cancelQueries('experiments');
 
           // Snapshot the previous value
           const previousExperiments = queryClient.getQueryData(k);
@@ -83,7 +83,7 @@ export default function ExperimentCard({
         onError: (
           err,
           newTodo,
-          context: { previousExperiments: PopulatedExperiment[] }
+          context: { previousExperiments: PopulatedExperiment[] },
         ) => {
           queryClient.setQueryData(k, context.previousExperiments);
         },
@@ -94,18 +94,21 @@ export default function ExperimentCard({
       },
     },
   });
-  console.log("user", user);
+  const canEdit =
+    user?.email === experiment.createdBy.email ||
+    user?.app_metadata?.role === 'admin';
+
   if (!experiment.createdBy) return <></>;
   return (
     <Card {...restProps} noShadow>
-      <HStack w="100%" align={"start"}>
+      <HStack w="100%" align={'start'}>
         <LinkBox flexGrow={1}>
           <HStack>
             <Avatar
-              width={"32px"}
-              height={"32px"}
+              width={'32px'}
+              height={'32px'}
               name="Profile Photo"
-              src={experiment.createdBy.picture ?? makeAvatar("Some name")}
+              src={experiment.createdBy.picture ?? makeAvatar('Some name')}
             />
             <Hide below="md">
               <Text
@@ -127,7 +130,7 @@ export default function ExperimentCard({
             </Hide>
             {/* Mobile View START */}
             <Show below="md">
-              <VStack alignItems="start" justify={"center"}>
+              <VStack alignItems="start" justify={'center'}>
                 <Text
                   color="gray.700"
                   fontWeight={600}
@@ -137,7 +140,7 @@ export default function ExperimentCard({
                   {experiment.createdBy.name}
                 </Text>
                 <Text
-                  style={{ marginTop: "-5px" }}
+                  style={{ marginTop: '-5px' }}
                   color="gray.600"
                   fontWeight={400}
                   fontSize="16px"
@@ -165,8 +168,8 @@ export default function ExperimentCard({
           >
             <LinkOverlay>
               <Text
-                fontSize={["20px", "24px"]}
-                lineHeight={["28px", "32px"]}
+                fontSize={['20px', '24px']}
+                lineHeight={['28px', '32px']}
                 fontWeight={600}
                 color="gray.800"
                 mt={2}
@@ -196,46 +199,45 @@ export default function ExperimentCard({
             ))}
           </HStack>
         </LinkBox>
-        {user?.email === experiment.createdBy.email ||
-          (user?.app_metadata?.role === "admin" && (
-            <HStack>
-              <Tooltip label="Update Experiment">
-                <NextLink
-                  href={`/${experiment.communities[0].slug}/${experiment._id}/edit`}
-                  passHref
-                >
-                  <Link>
-                    <IconButton
-                      ml={2}
-                      aria-label="Update Experiment"
-                      variant="outline"
-                      size="sm"
-                      colorScheme="yellow"
-                      icon={<EditIcon />}
-                    />
-                  </Link>
-                </NextLink>
-              </Tooltip>
-              <Tooltip label="Delete Experiment">
-                <IconButton
-                  ml={2}
-                  onClick={() => {
-                    if (
-                      window.confirm(
-                        "Are you sure about deleting this experiment? This "
-                      )
+        {canEdit && (
+          <HStack>
+            <Tooltip label="Update Experiment">
+              <NextLink
+                href={`/${experiment.communities[0].slug}/${experiment._id}/edit`}
+                passHref
+              >
+                <Link>
+                  <IconButton
+                    ml={2}
+                    aria-label="Update Experiment"
+                    variant="outline"
+                    size="sm"
+                    colorScheme="yellow"
+                    icon={<EditIcon />}
+                  />
+                </Link>
+              </NextLink>
+            </Tooltip>
+            <Tooltip label="Delete Experiment">
+              <IconButton
+                ml={2}
+                onClick={() => {
+                  if (
+                    window.confirm(
+                      'Are you sure about deleting this experiment? This ',
                     )
-                      remove.mutate({ _id: experiment._id });
-                  }}
-                  aria-label="Remove Experiment"
-                  variant="outline"
-                  size="sm"
-                  colorScheme="red"
-                  icon={<DeleteIcon />}
-                />
-              </Tooltip>
-            </HStack>
-          ))}
+                  )
+                    remove.mutate({ _id: experiment._id });
+                }}
+                aria-label="Remove Experiment"
+                variant="outline"
+                size="sm"
+                colorScheme="red"
+                icon={<DeleteIcon />}
+              />
+            </Tooltip>
+          </HStack>
+        )}
       </HStack>
     </Card>
   );

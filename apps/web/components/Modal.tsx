@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Button,
   useDisclosure,
@@ -10,17 +10,19 @@ import {
   ModalBody,
   ModalFooter,
   ChakraProps,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
 interface ModalProps extends ChakraProps {
   button: JSX.Element;
   title: string;
+  closeButtonTitle?: string;
 }
 
 export default function Modal({
   children,
   button,
   title,
+  closeButtonTitle,
 }: React.PropsWithChildren<ModalProps>) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
@@ -39,7 +41,7 @@ export default function Modal({
 
           <ModalFooter>
             <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
+              {closeButtonTitle}
             </Button>
           </ModalFooter>
         </ModalContent>
@@ -47,3 +49,7 @@ export default function Modal({
     </>
   );
 }
+
+Modal.defaultProps = {
+  closeButtonTitle: 'Close',
+};
