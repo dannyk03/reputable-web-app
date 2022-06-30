@@ -1,0 +1,37 @@
+[33m@reputable/web:build: [0mcache hit, replaying output [2mb20e842c344916f6[0m
+[33m@reputable/web:build: [0m$ next build
+[33m@reputable/web:build: [0m(node:1470402) ExperimentalWarning: The ESM module loader is experimental.
+[33m@reputable/web:build: [0minfo  - Checking validity of types...
+[33m@reputable/web:build: [0merror - ESLint: Failed to load plugin '@next/next' declared in '.eslintrc.js » eslint-config-next': Unexpected token '.' Referenced from: /home/pioneer/work/work/reputable/reputable-web-app/node_modules/eslint-config-next/index.js
+[33m@reputable/web:build: [0minfo  - Creating an optimized production build...
+[33m@reputable/web:build: [0m[BABEL] Note: The code generator has deoptimised the styling of /home/pioneer/work/work/reputable/reputable-web-app/node_modules/lodash/lodash.js as it exceeds the max of 500KB.
+[33m@reputable/web:build: [0m[BABEL] Note: The code generator has deoptimised the styling of /home/pioneer/work/work/reputable/reputable-web-app/node_modules/react-icons/md/index.esm.js as it exceeds the max of 500KB.
+[33m@reputable/web:build: [0minfo  - Compiled successfully
+[33m@reputable/web:build: [0minfo  - Collecting page data...
+[33m@reputable/web:build: [0m(node:1470646) ExperimentalWarning: The ESM module loader is experimental.
+[33m@reputable/web:build: [0m(node:1470632) ExperimentalWarning: The ESM module loader is experimental.
+[33m@reputable/web:build: [0m(node:1470639) ExperimentalWarning: The ESM module loader is experimental.
+[33m@reputable/web:build: [0minfo  - Generating static pages (0/8)
+[33m@reputable/web:build: [0minfo  - Generating static pages (2/8)
+[33m@reputable/web:build: [0minfo  - Generating static pages (4/8)
+[33m@reputable/web:build: [0minfo  - Generating static pages (6/8)
+[33m@reputable/web:build: [0minfo  - Generating static pages (8/8)
+[33m@reputable/web:build: [0minfo  - Finalizing page optimization...
+[33m@reputable/web:build: [0m
+[33m@reputable/web:build: [0mPage                                       Size     First Load JS
+[33m@reputable/web:build: [0m┌ ○ /                                      969 B           271 kB
+[33m@reputable/web:build: [0m├   /_app                                  0 B             270 kB
+[33m@reputable/web:build: [0m├ ○ /[community]                           12.2 kB         357 kB
+[33m@reputable/web:build: [0m├ ○ /[community]/[id]                      30.5 kB         370 kB
+[33m@reputable/web:build: [0m├ ○ /[community]/[id]/edit                 1.8 kB          353 kB
+[33m@reputable/web:build: [0m├ ○ /[community]/create                    653 B           352 kB
+[33m@reputable/web:build: [0m├ ○ /404                                   196 B           270 kB
+[33m@reputable/web:build: [0m└ ○ /user/[email]                          8.11 kB         342 kB
+[33m@reputable/web:build: [0m+ First Load JS shared by all              270 kB
+[33m@reputable/web:build: [0m  ├ chunks/framework-0dbd41983b1c23e8.js   45 kB
+[33m@reputable/web:build: [0m  ├ chunks/main-d6c8292f390e7189.js        28.7 kB
+[33m@reputable/web:build: [0m  ├ chunks/pages/_app-d2cd9e501e46094a.js  195 kB
+[33m@reputable/web:build: [0m  └ chunks/webpack-bd202a202ed4b4fa.js     1.83 kB
+[33m@reputable/web:build: [0m
+[33m@reputable/web:build: [0m○  (Static)  automatically rendered as static HTML (uses no initial props)
+[33m@reputable/web:build: [0m
