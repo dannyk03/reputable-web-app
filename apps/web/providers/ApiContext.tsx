@@ -38,8 +38,8 @@ interface IAPIContext {
   user?: IUser;
   refreshUser?: () => void;
   isLoading?: boolean;
-  isAdmin: boolean;
-  authorized: boolean;
+  isAdmin?: boolean;
+  authorized?: boolean;
 }
 
 const APIContext = React.createContext<IAPIContext>({});
