@@ -1,6 +1,6 @@
 // components/layout.js
 
-import { ArrowBackIcon } from "@chakra-ui/icons";
+import { ArrowBackIcon } from '@chakra-ui/icons';
 import {
   Box,
   Flex,
@@ -15,7 +15,7 @@ import {
   Link,
   Avatar,
   VStack,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 import {
   FacebookShareButton,
   FacebookIcon,
@@ -25,25 +25,25 @@ import {
   LinkedinIcon,
   RedditShareButton,
   RedditIcon,
-} from "react-share";
-import Comments from "../../Comments";
-import React from "react";
-import TextLink from "../../../components/TextLink";
-import ReputableLogo from "../../../components/Icons/ReputableLogo";
-import type { PopulatedExperiment } from "@reputable/types";
-import Image from "next/image";
-import { useAuth0 } from "@auth0/auth0-react";
-import calculateContributions from "../../../helpers/calculateContributions";
-import { useApiContext } from "../../../providers/ApiContext";
-import NextLink from "next/link";
-import "@uiw/react-markdown-preview/markdown.css";
-import dynamic from "next/dynamic";
-import makeAvatar from "../../../helpers/makeAvatar";
-import moment from "moment";
-import Tag from "../../../components/Tag";
-import ExperimentSideInformation from "./ExperimentSideInformation";
+} from 'react-share';
+import Comments from '../../Comments';
+import React from 'react';
+import TextLink from '../../../components/TextLink';
+import ReputableLogo from '../../../components/Icons/ReputableLogo';
+import type { PopulatedExperiment } from '@reputable/types';
+import Image from 'next/image';
+import { useAuth0 } from '@auth0/auth0-react';
+import calculateContributions from '../../../helpers/calculateContributions';
+import { useApiContext } from '../../../providers/ApiContext';
+import NextLink from 'next/link';
+import '@uiw/react-markdown-preview/markdown.css';
+import dynamic from 'next/dynamic';
+import makeAvatar from '../../../helpers/makeAvatar';
+import moment from 'moment';
+import Tag from '../../../components/Tag';
+import ExperimentSideInformation from './ExperimentSideInformation';
 
-const MDPreview = dynamic(() => import("@uiw/react-markdown-preview"), {
+const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
   ssr: false,
 }) as unknown as React.FC<any>;
 
@@ -57,17 +57,17 @@ export default function ExperimentsSingleView({
   experiment: data,
 }: React.PropsWithChildren<ExperimentsSingleViewProps>) {
   const { user } = useApiContext();
-  console.log("data", data);
+
   const timeAgo = moment(new Date(data.updatedAt ?? data.createdAt)).fromNow();
   const { totalTokens } = calculateContributions(data.tips);
   return (
-    <Flex align={"start"} justify="start" w="100%">
+    <Flex align={'start'} justify="start" w="100%">
       <Box flexGrow={[undefined, 1]} w="100%">
         <TextLink
-          _focus={{ outline: "none" }}
+          _focus={{ outline: 'none' }}
           label="Back to experiments"
-          color={["gray.500", "gray.700"]}
-          icon={<ArrowBackIcon color={["gray.500", "gray.700"]} />}
+          color={['gray.500', 'gray.700']}
+          icon={<ArrowBackIcon color={['gray.500', 'gray.700']} />}
           href={{
             pathname: `/${data.communities[0].slug}`,
           }}
@@ -77,8 +77,8 @@ export default function ExperimentsSingleView({
             <VStack alignItems="start" w="100%">
               <HStack w="100%">
                 <Avatar
-                  width={"28px"}
-                  height={"28px"}
+                  width={'28px'}
+                  height={'28px'}
                   name="Profile Photo"
                   src={data.createdBy.picture ?? makeAvatar(user.user_id)}
                 />
@@ -123,37 +123,32 @@ export default function ExperimentsSingleView({
         </Show>
         <Heading
           color="gray.800"
-          fontSize={["20px", "36px"]}
+          fontSize={['20px', '36px']}
           pt={[2, 4]}
-          lineHeight={["28px", "40px"]}
+          lineHeight={['28px', '40px']}
         >
           {data.title}
         </Heading>
         <Flex pt={[2, 5]}>
           <Flex gap={2} align="center" height={7}>
-            {(data.communities || []).map(
-              (comm, idx) => (
-                console.log(comm.icon),
-                (
-                  <Tag
-                    backgroundColor={comm.bgColor}
-                    color={comm.textColor}
-                    key={`${comm._id}_tag_${idx}`}
-                  >
-                    <HStack>
-                      <Image
-                        style={{ display: "inline" }}
-                        alt="Sleep Community"
-                        src={comm.icon}
-                        width="14px"
-                        height="14px"
-                      />
-                      <Text>{comm.name}</Text>
-                    </HStack>
-                  </Tag>
-                )
-              )
-            )}
+            {(data.communities || []).map((comm, idx) => (
+              <Tag
+                backgroundColor={comm.bgColor}
+                color={comm.textColor}
+                key={`${comm._id}_tag_${idx}`}
+              >
+                <HStack>
+                  <Image
+                    style={{ display: 'inline' }}
+                    alt="Sleep Community"
+                    src={comm.icon}
+                    width="14px"
+                    height="14px"
+                  />
+                  <Text>{comm.name}</Text>
+                </HStack>
+              </Tag>
+            ))}
             <Hide below="md">
               <Text fontSize="18px">by</Text>
               <NextLink
@@ -167,10 +162,10 @@ export default function ExperimentsSingleView({
                 </Link>
               </NextLink>
               <Avatar
-                width={"32px"}
-                height={"32px"}
+                width={'32px'}
+                height={'32px'}
                 name="Profile Photo"
-                src={data.createdBy.picture ?? makeAvatar("Some name")}
+                src={data.createdBy.picture ?? makeAvatar('Some name')}
               />
             </Hide>
           </Flex>
@@ -204,12 +199,11 @@ export default function ExperimentsSingleView({
         </Show>
         <Box mt={4}>
           {Object.entries(data.description).map(([k, v]) => {
-            if (v && v.trim() !== "") {
-              console.log(v)
+            if (v && v.trim() !== '') {
               return (
                 <Box key={k} py={3}>
                   <Heading size="lg">{k.toUpperCase()}</Heading>
-                  <MDPreview style={{ marginTop: "12px" }} source={v} />
+                  <MDPreview style={{ marginTop: '12px' }} source={v} />
                 </Box>
               );
             }

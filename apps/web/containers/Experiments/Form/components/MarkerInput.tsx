@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   ChakraProps,
   FormControl,
@@ -12,10 +12,10 @@ import {
   TagLabel,
   Flex,
   VStack,
-} from "@chakra-ui/react";
-import { useFormContext, useWatch } from "react-hook-form";
-import { TCreateExperiment } from "..";
-import { removeIndex } from "@chakra-ui/utils";
+} from '@chakra-ui/react';
+import { useFormContext, useWatch } from 'react-hook-form';
+import { TCreateExperiment } from '..';
+import { removeIndex } from '@chakra-ui/utils';
 
 interface MarkerInputProps extends ChakraProps {
   name: string;
@@ -28,9 +28,9 @@ const MarkerInput = ({ index, ...restProps }) => {
     control,
     name: `markers.${index}.devices`,
   });
-  const [deviceText, setDeviceText] = React.useState("");
+  const [deviceText, setDeviceText] = React.useState('');
   return (
-    <HStack justify={"start"} align={"end"} w="100%">
+    <HStack justify={'start'} align={'end'} w="100%">
       <FormControl w="fit-content" minW="fit-content">
         <FormLabel htmlFor={`markers.${index}`}>Value</FormLabel>
         <InputGroup size="md">
@@ -57,6 +57,7 @@ const MarkerInput = ({ index, ...restProps }) => {
         >
           {devices.map((device, idx) => (
             <Tag
+              key={idx}
               size="md"
               mt={2}
               mx={1}
@@ -69,21 +70,21 @@ const MarkerInput = ({ index, ...restProps }) => {
                 onClick={() =>
                   setValue(
                     `markers.${index}.devices`,
-                    removeIndex(devices, idx)
+                    removeIndex(devices, idx),
                   )
                 }
               />
             </Tag>
           ))}
           <input
-            style={{ outline: "none", flexGrow: 1, marginTop: "8px" }}
+            style={{ outline: 'none', flexGrow: 1, marginTop: '8px' }}
             placeholder="Use enter to create device tags"
             value={deviceText}
             onChange={(e) => setDeviceText(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && deviceText !== "") {
+              if (e.key === 'Enter' && deviceText !== '') {
                 setValue(`markers.${index}.devices`, [...devices, deviceText]);
-                setDeviceText("");
+                setDeviceText('');
               }
               e.stopPropagation();
             }}
@@ -94,6 +95,6 @@ const MarkerInput = ({ index, ...restProps }) => {
   );
 };
 
-MarkerInput.displayName = "MarkerInput";
+MarkerInput.displayName = 'MarkerInput';
 
 export default MarkerInput;
