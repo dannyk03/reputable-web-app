@@ -1,10 +1,10 @@
-import ExperimentSingleView from "../../../containers/Experiments/Single";
-import React from "react";
-import { NextSeo } from "next-seo";
-import { useRouter } from "next/router";
-import { useExperiment } from "../../../_api/Experiments/queries/single";
-import { truncate } from "lodash";
-import { setCookies, getCookie } from "cookies-next";
+import ExperimentSingleView from '../../../containers/Experiments/Single';
+import React from 'react';
+import { NextSeo } from 'next-seo';
+import { useRouter } from 'next/router';
+import { useExperiment } from '../../../_api/Experiments/queries/single';
+import { truncate } from 'lodash';
+import { setCookies, getCookie } from 'cookies-next';
 import {
   Modal,
   ModalBody,
@@ -18,45 +18,50 @@ import {
   VStack,
   Divider,
   Box,
-} from "@chakra-ui/react";
-import { PrimaryButton } from "../../../components/Button";
-import Image from "next/image";
+} from '@chakra-ui/react';
+import { PrimaryButton } from '../../../components/Button';
+import Image from 'next/image';
+import { getPageTitle } from '../../../utils';
+import Head from 'next/head';
 
 export default function ExperimentSingle() {
   const router = useRouter();
 
   const [noMedicalAdviceAccepted, setNoMedicalAdviceAccepted] = React.useState(
-    getCookie("no-medical-advice-accepted")
+    getCookie('no-medical-advice-accepted'),
   );
 
   const acceptNoMedicalAdvice = () => {
-    setCookies("no-medical-advice-accepted", true);
+    setCookies('no-medical-advice-accepted', true);
     setNoMedicalAdviceAccepted(true);
   };
 
   const { data, isLoading, isRefetching } = useExperiment(
-    router.query.id as string
+    router.query.id as string,
   );
   if (!router.query.id || isLoading) {
     return <></>;
   }
   return (
     <>
+      <Head>
+        <title>{getPageTitle(data?.title)}</title>
+      </Head>
       <NextSeo
         openGraph={{
           title: data.title,
           description: truncate(data.description.goal, {
             length: 150,
-            separator: "<br/>",
+            separator: '<br/>',
           }),
           url: `${window.location.origin}/experiments/${data._id}`,
-          type: "article",
+          type: 'article',
           article: {
             publishedTime: String(data.createdAt),
             modifiedTime: String(data.updatedAt),
             authors: [
               `${window.location.origin}/user/${encodeURIComponent(
-                data.createdBy.email
+                data.createdBy.email,
               )}`,
             ],
           },
@@ -65,14 +70,14 @@ export default function ExperimentSingle() {
               url: `https://drive.google.com/uc?export=view&id=1QZBZvOpf0GV2BIhHTRokd7-EYFJpv22J`,
               width: 900,
               height: 965,
-              alt: "Reputable Logo",
+              alt: 'Reputable Logo',
             },
           ],
         }}
       />
       <Modal
         closeOnOverlayClick={false}
-        size={["sm", "2xl", "4xl"]}
+        size={['sm', '2xl', '4xl']}
         isOpen={!noMedicalAdviceAccepted as boolean}
         onClose={() => setNoMedicalAdviceAccepted(true)}
         isCentered
@@ -80,13 +85,13 @@ export default function ExperimentSingle() {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader color="primary.800">
-            <VStack justify={"flex-start"} align="flex-start">
+            <VStack justify={'flex-start'} align="flex-start">
               <Text>We Do Not Provide Medical Advice</Text>
               <Divider pt={5} />
             </VStack>
           </ModalHeader>
-          <ModalBody overflowY={"auto"} maxH="320px">
-            <HStack justify={"center"} align="center">
+          <ModalBody overflowY={'auto'} maxH="320px">
+            <HStack justify={'center'} align="center">
               <VStack pr={8}>
                 <Text color="gray.700">
                   We DO NOT provide medical advice, diagnosis or treatment
