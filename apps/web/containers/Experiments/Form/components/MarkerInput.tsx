@@ -81,6 +81,12 @@ const MarkerInput = ({ index, ...restProps }) => {
             placeholder="Use enter to create device tags"
             value={deviceText}
             onChange={(e) => setDeviceText(e.target.value)}
+            onBlur={() => {
+              if (deviceText !== '') {
+                setValue(`markers.${index}.devices`, [...devices, deviceText]);
+                setDeviceText('');
+              }
+            }}
             onKeyDown={(e) => {
               if (e.key === 'Enter' && deviceText !== '') {
                 setValue(`markers.${index}.devices`, [...devices, deviceText]);
