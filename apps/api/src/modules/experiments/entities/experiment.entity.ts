@@ -134,6 +134,7 @@ export class Experiment extends BaseMongoEntity implements IExperiment {
   @Field()
   @prop({ required: true })
   public title: string;
+
   @Field(() => ExperimentStatus)
   @prop({
     required: true,
@@ -141,20 +142,25 @@ export class Experiment extends BaseMongoEntity implements IExperiment {
     enum: ExperimentStatus,
   })
   public status: ExperimentStatus;
+
   @Field(() => User, { nullable: true })
   @prop({
     required: true,
   })
   public createdBy: string;
+
   @Field(() => [Community])
   @prop({ type: () => [String], required: true })
   public communities: string[];
+
   @Field(() => ExperimentDescription)
   @prop({ required: true })
   public description: ExperimentDescription;
+
   @Field(() => [ExperimentResultMarker])
   @prop({ required: true })
   public markers: ExperimentResultMarker[];
+
   @Field(() => Int)
   @prop({ required: true })
   public experimentPeriod: number;
@@ -173,6 +179,7 @@ export class Experiment extends BaseMongoEntity implements IExperiment {
   @Field(() => [Tip], { nullable: true, defaultValue: [] })
   @prop({ type: () => Tip })
   public tips: Tip[];
+
   @prop({
     ref: () => 'Comment',
     foreignField: 'experiment',

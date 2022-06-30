@@ -19,20 +19,25 @@ export class Comment extends BaseMongoEntity implements IComment {
   @Field(() => User, { nullable: true })
   @prop({ required: true })
   author: string;
+
   @Field(() => ID, { nullable: true })
   @prop({ ref: 'Comment', type: () => mongoose.Types.ObjectId })
   @DeserializedMongoId()
   replyTo?: string;
+
   @Field({ nullable: true })
   @prop({ required: true })
   text: string;
+
   @Field(() => ID, { nullable: true })
   @prop({ ref: 'Experiment', type: () => mongoose.Types.ObjectId })
   @DeserializedMongoId()
   experiment: string;
+
   @Field(() => [Comment], { nullable: true, defaultValue: [] })
   @prop({ ref: 'Comment', localField: '_id', foreignField: 'replyTo' })
   replies?: Comment[];
+
   @Field(() => Boolean, { defaultValue: false })
   @prop({ default: false })
   isEdited?: boolean;

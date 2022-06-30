@@ -1,10 +1,12 @@
-import { useToast } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { useEffect } from "react";
-import ExperimentForm from "../../containers/Experiments/Form";
-import { useApiContext } from "../../providers/ApiContext";
+import { useToast } from '@chakra-ui/react';
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import { useEffect } from 'react';
+import ExperimentForm from '../../containers/Experiments/Form';
+import { useApiContext } from '../../providers/ApiContext';
+import { getPageTitle } from '../../utils';
 
-const id = "create-experiment-toast";
+const id = 'create-experiment-toast';
 
 export default function CraeteExperimentView() {
   const { user, isLoading } = useApiContext();
@@ -13,18 +15,25 @@ export default function CraeteExperimentView() {
   const authorized = user?.app_metadata?.isApproved || false;
   useEffect(() => {
     if (!authorized && !isLoading) {
-      router.push("/");
+      router.push('/');
       if (!toast.isActive(id))
         toast({
-          title: "Access Denied",
+          title: 'Access Denied',
           description:
-            "You have to be approved by an admin to create experiments",
-          status: "warning",
+            'You have to be approved by an admin to create experiments',
+          status: 'warning',
           isClosable: true,
-          variant: "top-accent",
+          variant: 'top-accent',
         });
     }
   }, [router, toast, user, authorized]);
   if (!authorized) return <></>;
-  return <ExperimentForm />;
+  return (
+    <>
+      <Head>
+        <title>{getPageTitle('Create Experiment')}</title>
+      </Head>
+      <ExperimentForm />
+    </>
+  );
 }

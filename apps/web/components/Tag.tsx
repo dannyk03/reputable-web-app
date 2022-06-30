@@ -1,5 +1,5 @@
-import { ChakraProps, Text, TextProps } from "@chakra-ui/react";
-import React from "react";
+import { ChakraProps, Text, TextProps } from '@chakra-ui/react';
+import React from 'react';
 
 export interface TagProps extends TextProps {}
 
@@ -15,7 +15,8 @@ export default function Tag({
       borderRadius="xl"
       py="1"
       px="3"
-      lineHeight={"20px"}
+      lineHeight={'20px'}
+      as="div"
       {...restProps}
     >
       {children}

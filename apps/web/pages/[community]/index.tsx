@@ -1,8 +1,10 @@
-import { useRouter } from "next/router";
-import React from "react";
-import ExperimentsListView from "../../containers/Experiments/List";
-import { useCommunities } from "../../_api/Communities/queries";
-import { useExperiments } from "../../_api/Experiments/queries/all";
+import Head from 'next/head';
+import { useRouter } from 'next/router';
+import React from 'react';
+import ExperimentsListView from '../../containers/Experiments/List';
+import { getPageTitle } from '../../utils';
+import { useCommunities } from '../../_api/Communities/queries';
+import { useExperiments } from '../../_api/Experiments/queries/all';
 
 export default function Experiments() {
   const router = useRouter();
@@ -14,7 +16,14 @@ export default function Experiments() {
   if (!router.query?.community || isLoading || isLoadingCommunities)
     return <></>;
   const communityData = communities.filter(
-    (c) => c.slug === router.query.community
+    (c) => c.slug === router.query.community,
   )[0];
-  return <ExperimentsListView experiments={data} community={communityData} />;
+  return (
+    <>
+      <Head>
+        <title>{getPageTitle(communityData?.name)}</title>
+      </Head>
+      <ExperimentsListView experiments={data} community={communityData} />
+    </>
+  );
 }
