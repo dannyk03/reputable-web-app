@@ -21,8 +21,6 @@ import {
 } from '@chakra-ui/react';
 import { PrimaryButton } from '../../../components/Button';
 import Image from 'next/image';
-import { getPageTitle } from '../../../utils';
-import Head from 'next/head';
 
 export default function ExperimentSingle() {
   const router = useRouter();
@@ -39,41 +37,42 @@ export default function ExperimentSingle() {
   const { data, isLoading, isRefetching } = useExperiment(
     router.query.id as string,
   );
-  if (!router.query.id || isLoading) {
+  if (!router.query.id || isLoading || !data) {
     return <></>;
   }
+
+  const openGraphSeo = {
+    title: data.title,
+    description: truncate(data.description.goal, {
+      length: 150,
+      separator: '<br/>',
+    }),
+    url: `${window.location.origin}/experiments/${data._id}`,
+    type: 'article',
+    article: {
+      publishedTime: String(data.createdAt),
+      modifiedTime: String(data.updatedAt),
+      authors: [
+        `${window.location.origin}/user/${encodeURIComponent(
+          data.createdBy.email,
+        )}`,
+      ],
+    },
+    images: [
+      {
+        url: `https://drive.google.com/uc?export=view&id=1QZBZvOpf0GV2BIhHTRokd7-EYFJpv22J`,
+        width: 900,
+        height: 965,
+        alt: 'Reputable Logo',
+      },
+    ],
+  };
   return (
     <>
-      <Head>
-        <title>{getPageTitle(data?.title)}</title>
-      </Head>
       <NextSeo
-        openGraph={{
-          title: data.title,
-          description: truncate(data.description.goal, {
-            length: 150,
-            separator: '<br/>',
-          }),
-          url: `${window.location.origin}/experiments/${data._id}`,
-          type: 'article',
-          article: {
-            publishedTime: String(data.createdAt),
-            modifiedTime: String(data.updatedAt),
-            authors: [
-              `${window.location.origin}/user/${encodeURIComponent(
-                data.createdBy.email,
-              )}`,
-            ],
-          },
-          images: [
-            {
-              url: `https://drive.google.com/uc?export=view&id=1QZBZvOpf0GV2BIhHTRokd7-EYFJpv22J`,
-              width: 900,
-              height: 965,
-              alt: 'Reputable Logo',
-            },
-          ],
-        }}
+        title={openGraphSeo.title}
+        description={openGraphSeo.description}
+        openGraph={openGraphSeo}
       />
       <Modal
         closeOnOverlayClick={false}

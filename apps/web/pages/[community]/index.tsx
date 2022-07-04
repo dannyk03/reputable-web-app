@@ -1,4 +1,4 @@
-import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import React from 'react';
 import ExperimentsListView from '../../containers/Experiments/List';
@@ -20,9 +20,7 @@ export default function Experiments() {
   )[0];
   return (
     <>
-      <Head>
-        <title>{getPageTitle(communityData?.name)}</title>
-      </Head>
+      <NextSeo title={getPageTitle(communityData?.name)} />
       <ExperimentsListView experiments={data} community={communityData} />
     </>
   );

@@ -114,6 +114,10 @@ export interface IExperimentDescription {
   summary?: string;
 }
 
+export interface IExperimentBounty {
+  amount: number;
+  description?: string;
+}
 export interface IExperiment extends BaseMongoEntity {
   title: string;
   status: ExperimentStatus;
@@ -129,6 +133,7 @@ export interface IExperiment extends BaseMongoEntity {
   experimentPeriod: number;
   comments?: IComment[];
   tips?: ITip[];
+  bounty?: IExperimentBounty;
   // prettifyResult?: (result: IExperimentResult) => IExperimentResult;
 }
 

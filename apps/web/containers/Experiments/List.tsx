@@ -56,7 +56,6 @@ export default function ExperimentsListView({
     createNewExperiementModalBody = 'Please sign up to create an experiment';
   let createNewExperiementModalButtonName = 'Ok';
 
-  console.log(isAdmin);
   return (
     <Flex direction="row" justify={['center', 'space-between']} w="100%">
       <Hide below="md">

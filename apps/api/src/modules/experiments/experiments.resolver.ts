@@ -100,7 +100,7 @@ export class ExperimentsResolver {
     return this.experimentsService
       .update(experimentId, user, updateExperimentInput)
       .then(() => ({
-        message: 'Created experiment successfully!',
+        message: 'Updated experiment successfully!',
       }));
   }
 

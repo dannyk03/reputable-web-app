@@ -7,6 +7,7 @@ export class Tip implements ITip {
   @Field()
   @prop({ required: true })
   userId: string;
+
   @Field(() => Int)
   @prop({ required: true })
   amount: number;

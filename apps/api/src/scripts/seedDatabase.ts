@@ -190,6 +190,7 @@ export const generateExperiment = async (users) => {
         results: faker.lorem.paragraph(faker.random.number({ min: 3, max: 8 })),
         summary: faker.lorem.paragraph(faker.random.number({ min: 3, max: 8 })),
       },
+      bounty: { amount: 0 },
       createdBy:
         users[faker.datatype.number({ min: 0, max: users.length - 1 })].email,
     };
