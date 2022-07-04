@@ -1,4 +1,4 @@
-import type { ITip } from "@reputable/types";
+import type { ITip } from '@reputable/types';
 
 export default function calculateContributions(tips: ITip[] = []) {
   const contributions: {
@@ -20,18 +20,20 @@ export default function calculateContributions(tips: ITip[] = []) {
     {
       tokensMatched: {},
       tokensTipped: 0,
-    }
+    },
   );
+
   const matchedAmount = Math.pow(
     Object.values(contributions.tokensMatched).reduce(
       (prev, curr) => (prev += Math.sqrt(curr)),
-      0
+      0,
     ),
-    2
+    2,
   ).toFixed(2);
   const totalTokens = (
     parseFloat(matchedAmount) + contributions.tokensTipped
   ).toFixed(0);
+
   return {
     totalTokens,
     matchedAmount,
