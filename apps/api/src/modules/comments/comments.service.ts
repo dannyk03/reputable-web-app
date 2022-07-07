@@ -1,4 +1,9 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  forwardRef,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { CreateCommentInput } from './dto/create-comment.input';
@@ -11,6 +16,7 @@ import { User } from '../users/entities/user.entity';
 import type { PopulatedComment } from '@reputable/types';
 import * as DataLoader from 'dataloader';
 import { makeArray, mapFromArray } from '../../common/helpers';
+import { UserRoleEnum } from '@reputable/types';
 
 @Injectable()
 export class CommentsService {
@@ -123,6 +129,21 @@ export class CommentsService {
   remove(_id: string) {
     return this.commentsModel
       .findByIdAndRemove(_id)
+      .orFail()
+      .exec()
+      .then(() => {
+        this.loaderForExperiments.clearAll();
+      });
+  }
+
+  approveComment(_id: string, user: User) {
+    if (user.app_metadata.role !== UserRoleEnum.ADMIN) {
+      throw new UnauthorizedException(
+        'You have to be an a moderator to approve the comment.',
+      );
+    }
+    return this.commentsModel
+      .updateOne({ _id }, { approvedBy: user.email, isApproved: true })
       .orFail()
       .exec()
       .then(() => {

@@ -58,9 +58,9 @@ export class ExperimentBounty implements IExperimentBounty {
   @prop({ default: 0 })
   amount: number;
 
-  @Field({ nullable: true, defaultValue: '' })
-  @prop({ default: '' })
-  description?: string;
+  @Field(() => [String], { nullable: true, defaultValue: [] })
+  @prop({ default: [] })
+  description?: string[];
 }
 /*
 registerEnumType(MarkerValueChangeType, {

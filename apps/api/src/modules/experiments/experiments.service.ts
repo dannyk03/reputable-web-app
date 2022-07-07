@@ -10,6 +10,7 @@ import { UsersService } from '../users/users.service';
 import { pickBy } from 'lodash';
 import * as DataLoader from 'dataloader';
 import { mapFromArray } from 'src/common/helpers';
+import { UserRoleEnum } from '@reputable/types';
 
 @Injectable()
 export class ExperimentsService {
@@ -117,7 +118,9 @@ export class ExperimentsService {
     updateExperimentInput: UpdateExperimentInput,
   ) {
     const selector: Partial<Pick<Experiment, '_id' | 'createdBy'>> = { _id };
-    if (user.app_metadata.role !== 'admin') selector.createdBy === user.email;
+    if (user.app_metadata.role !== UserRoleEnum.ADMIN) {
+      selector.createdBy = user.email;
+    }
     return this.experimentModel
       .updateOne(selector, updateExperimentInput)
       .orFail()
@@ -128,7 +131,9 @@ export class ExperimentsService {
   remove(_id: string, user: User) {
     console.log('user', user);
     const selector: Partial<Pick<Experiment, '_id' | 'createdBy'>> = { _id };
-    if (user.app_metadata.role !== 'admin') selector.createdBy === user.email;
+    if (user.app_metadata.role !== UserRoleEnum.ADMIN) {
+      selector.createdBy = user.email;
+    }
     return this.experimentModel
       .findOneAndRemove(selector)
       .orFail()

@@ -17,6 +17,9 @@ export class UserMetaData implements IUserMetadata {
 
   @Field(() => [String], { nullable: true, defaultValue: [] })
   communities?: string[];
+
+  @Field(() => String, { nullable: true, defaultValue: null })
+  address?: string;
 }
 
 @ObjectType()

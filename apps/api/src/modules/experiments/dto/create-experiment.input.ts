@@ -33,8 +33,8 @@ class ExperimentBountyInput {
   @Field()
   amount?: number;
 
-  @Field({ nullable: true })
-  description?: string;
+  @Field(() => [String], { nullable: true })
+  description?: string[];
 }
 
 @InputType()
