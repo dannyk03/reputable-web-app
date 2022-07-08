@@ -1,13 +1,13 @@
-import { VStack } from "@chakra-ui/react";
-import React from "react";
-import { useForm, FormProvider } from "react-hook-form";
-import { IExperiment, PopulatedExperiment } from "@reputable/types";
-import FirstStep from "./Steps/First";
-import SecondStep from "./Steps/Second";
-import StepperLayout from "./Steps/Layout";
-import { useExperiment } from "../../../_api/Experiments/mutations";
-import { useRouter } from "next/router";
-import { pick } from "lodash";
+import { VStack } from '@chakra-ui/react';
+import React from 'react';
+import { useForm, FormProvider } from 'react-hook-form';
+import { IExperiment, PopulatedExperiment } from '@reputable/types';
+import FirstStep from './Steps/First';
+import SecondStep from './Steps/Second';
+import StepperLayout from './Steps/Layout';
+import { useExperiment } from '../../../_api/Experiments/mutations';
+import { useRouter } from 'next/router';
+import { pick } from 'lodash';
 
 export interface IStep {
   title: string;
@@ -27,20 +27,20 @@ export interface StepProps {
 
 export type TCreateExperiment = Pick<
   IExperiment,
-  "description" | "title" | "experimentPeriod" | "markers"
+  'description' | 'title' | 'experimentPeriod' | 'markers' | 'bounty'
 >;
 
 const steps = [
   {
-    title: "Experiment Title and Description",
-    description: "Please provide an in-depth explanation for your experiment",
+    title: 'Experiment Title and Description',
+    description: 'Please provide an in-depth explanation for your experiment',
     container: <FirstStep />,
-    buttonText: "Next",
+    buttonText: 'Next',
   },
   {
-    title: "Experiment Details",
+    title: 'Experiment Details',
     description:
-      "Now, choose which markers you want to track in this experiment.",
+      'Enter the experiment period, bounty details and add the health markers you will track.',
     container: <SecondStep />,
   },
 ];
@@ -48,15 +48,15 @@ const steps = [
 export default function ExperimentFormView(props: {
   defaultValues?: PopulatedExperiment;
 }) {
-  console.log("props", props);
   const methods = useForm<TCreateExperiment>({
-    reValidateMode: "onChange",
-    criteriaMode: "all",
+    reValidateMode: 'onChange',
+    criteriaMode: 'all',
     defaultValues: pick(props.defaultValues, [
-      "description",
-      "title",
-      "experimentPeriod",
-      "markers",
+      'description',
+      'title',
+      'experimentPeriod',
+      'markers',
+      'bounty',
     ]),
   });
   const router = useRouter();
@@ -64,12 +64,12 @@ export default function ExperimentFormView(props: {
     configs: {
       create: {
         onSuccess: () =>
-          router.push(`/${(router.query.community as string) ?? ""}`),
+          router.push(`/${(router.query.community as string) ?? ''}`),
       },
       update: {
         onSuccess: () =>
           router.push(
-            `/${props.defaultValues.communities[0].slug}/${props.defaultValues._id}`
+            `/${props.defaultValues.communities[0].slug}/${props.defaultValues._id}`,
           ),
       },
     },
@@ -96,8 +96,8 @@ export default function ExperimentFormView(props: {
         else create.mutate({ ...data, communities: [router.query.community] });
       },
       buttonText: props.defaultValues
-        ? "Update Experiment"
-        : "Create Experiment",
+        ? 'Update Experiment'
+        : 'Create Experiment',
     },
   ];
 

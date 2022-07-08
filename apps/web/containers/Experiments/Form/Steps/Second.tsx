@@ -8,17 +8,67 @@ import {
   HStack,
   InputGroup,
   InputRightAddon,
+  InputLeftAddon,
   IconButton,
   Box,
   Icon,
-} from "@chakra-ui/react";
-import { TCreateExperiment, StepProps } from "..";
-import { useFieldArray, useFormContext } from "react-hook-form";
-import Card from "../../../../components/Card";
-import { AddIcon, ArrowBackIcon, DeleteIcon } from "@chakra-ui/icons";
-import MarkerInput from "../components/MarkerInput";
-import { PrimaryButton } from "../../../../components/Button";
+  Image,
+} from '@chakra-ui/react';
+import { TCreateExperiment, StepProps } from '..';
+import {
+  useFieldArray,
+  useFormContext,
+  Controller,
+  FieldPath,
+  UseControllerProps,
+} from 'react-hook-form';
+import Card from '../../../../components/Card';
+import { AddIcon, ArrowBackIcon, DeleteIcon } from '@chakra-ui/icons';
+import MarkerInput from '../components/MarkerInput';
+import dynamic from 'next/dynamic';
+import { PrimaryButton } from '../../../../components/Button';
+import '@uiw/react-md-editor/markdown-editor.css';
+import '@uiw/react-markdown-preview/markdown.css';
 
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
+  ssr: false,
+}) as unknown as React.FC<any>;
+
+const ControlledEditor = ({
+  name,
+  style,
+  control,
+  ...restProps
+}: {
+  name: FieldPath<TCreateExperiment>;
+  style?: React.CSSProperties;
+} & UseControllerProps<TCreateExperiment, FieldPath<TCreateExperiment>>) => (
+  <Controller
+    control={control}
+    name={name}
+    render={({
+      field: { onChange, onBlur, value, name, ref },
+      fieldState: { error },
+    }) => (
+      <>
+        <MDEditor
+          preview="edit"
+          style={{
+            border: error && '1px solid red',
+            width: '100%',
+            ...style,
+          }}
+          onBlur={onBlur}
+          ref={ref}
+          value={value}
+          onChange={onChange}
+        />
+        <p style={{ color: 'red' }}>{error?.message}</p>
+      </>
+    )}
+    {...restProps}
+  />
+);
 export default function SecondStep({
   onSubmit,
   prev,
@@ -28,20 +78,20 @@ export default function SecondStep({
     useFormContext<TCreateExperiment>();
 
   const { fields, append, remove, move } = useFieldArray({
-    control,
-    name: "markers",
+    name: 'markers',
   });
 
   return (
     <form
       onKeyPress={(e) => {
-        if (e.key === "Enter") e.preventDefault();
+        if (e.key === 'Enter' && e.target.nodeName !== 'TEXTAREA')
+          e.preventDefault();
       }}
       onSubmit={handleSubmit((data) => onSubmit(data))}
     >
       <VStack align="start" gap={6} width="100%">
         <HStack
-          _hover={{ cursor: "pointer", textDecoration: "underline" }}
+          _hover={{ cursor: 'pointer', textDecoration: 'underline' }}
           onClick={() => prev()}
         >
           <Icon as={ArrowBackIcon} size="sm" />
@@ -67,7 +117,7 @@ export default function SecondStep({
                 type="number"
                 min={0}
                 placeholder="Experiment Period"
-                {...register("experimentPeriod", {
+                {...register('experimentPeriod', {
                   valueAsNumber: true,
                   required: true,
                 })}
@@ -75,42 +125,67 @@ export default function SecondStep({
               <InputRightAddon>days</InputRightAddon>
             </InputGroup>
           </FormControl>
-          {/* 
-        <FormControl>
-          <FormLabel htmlFor="healthMarker">
-            Add Health Marker Results
-          </FormLabel>
-          <Select
-            id="healthMarker"
-            placeholder="Select a health marker"
-            onChange={(e) => {
-              append(JSON.parse(e.target.value));
-            }}
+        </Card>
+        <Card w="100%">
+          <Text
+            fontSize="20px"
+            fontWeight={600}
+            lineHeight="28px"
+            color="primary.800"
           >
-            {resultMarkers.map((resultMarker, index) => (
-              <option
-                key={`resultMarker_${index}`}
-                value={JSON.stringify(resultMarker)}
-              >
-                {resultMarker.name}
-              </option>
-            ))}
-          </Select>
-        </FormControl>
-        {getValues("results").map((result, idx) => (
-          <FormControl key={`resultMakerVal_${idx}`} w="100%">
-            <FormLabel htmlFor="startDate">{result.marker.name}</FormLabel>
-            <Input
-              type="date"
-              placeholder="Select a health marker"
-              {...register("results", {
-                required: true,
-                valueAsDate: true,
-              })}
-            ></Input>
+            Bounty
+          </Text>
+          <Text color="gray.700" fontSize="18px" lineHeight="28px" mt={2}>
+            Determine a bounty for people to claim when they try your experiment
+            and share their results (You also get the bounty for each person who
+            shares their results and gets approved!)
+          </Text>
+          <Divider my={4} />
+
+          <FormControl w="fit-content">
+            <FormLabel htmlFor="bounty">Bounty amount</FormLabel>
+            <InputGroup size="md">
+              <InputLeftAddon>
+                <Image
+                  width={'16px'}
+                  height={'16px'}
+                  alt="User Tokens"
+                  src="/LogoVector.svg"
+                />
+              </InputLeftAddon>
+              <Input
+                type="number"
+                min={0}
+                placeholder="Bounty amount"
+                {...register('bounty.amount', {
+                  valueAsNumber: true,
+                  required: true,
+                })}
+              />
+            </InputGroup>
           </FormControl>
-        ))}
-      */}
+          <FormLabel htmlFor="bounty">Bounty guidelines</FormLabel>
+
+          {/* <FormControl style={{ marginTop: 10 }}>
+            <InputGroup size="lg">
+              <Input
+                type="text"
+                placeholder="Enter a requirement (e.g.: Follow @ReputableDAO on Twitter)"
+                {...register('bounty.description', {})}
+              />
+            </InputGroup>
+          </FormControl> */}
+          <ControlledEditor
+            control={control}
+            name="bounty.description"
+            rules={{
+              required: true,
+              minLength: {
+                value: 10,
+                message: 'This field should be at least 10 chars long.',
+              },
+            }}
+          />
         </Card>
         <Card w="100%">
           <Text
@@ -125,7 +200,15 @@ export default function SecondStep({
             What health markers are you tracking in this experiment?
           </Text>
           <Divider my={4} />
-          <VStack align={"start"}>
+          <Text
+            fontSize="16px"
+            fontWeight={500}
+            lineHeight="28px"
+            color="gray.700"
+          >
+            Add a health marker
+          </Text>
+          <VStack align={'start'}>
             {fields.map((field, index) => {
               return (
                 <HStack align="end">
@@ -144,7 +227,7 @@ export default function SecondStep({
               );
             })}
             <IconButton
-              onClick={() => append({ name: "", devices: [] })}
+              onClick={() => append({ name: '', devices: [] })}
               aria-label="Add Health Marker"
               variant="outline"
               size="sm"
