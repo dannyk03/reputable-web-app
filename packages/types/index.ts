@@ -116,7 +116,7 @@ export interface IExperimentDescription {
 
 export interface IExperimentBounty {
   amount: number;
-  description?: string;
+  description?: string[];
 }
 export interface IExperiment extends BaseMongoEntity {
   title: string;
@@ -153,3 +153,7 @@ export interface IMessageResponse {
 }
 
 export type ITipDTO = Pick<ITip, "amount">;
+
+export enum UserRoleEnum {
+  ADMIN = "admin",
+}

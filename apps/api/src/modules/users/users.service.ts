@@ -189,4 +189,21 @@ export class UsersService {
       });
     });
   }
+
+  async updateAddress(email: string, address: string) {
+    return this.findOne(email).then((user) => {
+      return Promise.all([
+        this.client.patch<User>(`/users/${user.user_id}`, {
+          user_metadata: {
+            address,
+          },
+        }),
+      ]).then((response) => {
+        this.loaderForExperiments.clear(email);
+        return {
+          message: 'Updated address!',
+        };
+      });
+    });
+  }
 }

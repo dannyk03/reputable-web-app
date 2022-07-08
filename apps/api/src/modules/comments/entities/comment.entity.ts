@@ -41,6 +41,16 @@ export class Comment extends BaseMongoEntity implements IComment {
   @Field(() => Boolean, { defaultValue: false })
   @prop({ default: false })
   isEdited?: boolean;
+
+  @Field(() => Boolean, { defaultValue: false })
+  @prop({ default: false })
+  isApproved?: boolean;
+
+  @Field(() => User, { nullable: true })
+  @prop({
+    required: true,
+  })
+  public approvedBy?: string;
 }
 
 export type CommentDocument = DocumentType<Comment>;
