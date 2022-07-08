@@ -116,7 +116,7 @@ export interface IExperimentDescription {
 
 export interface IExperimentBounty {
   amount: number;
-  description?: string[];
+  description?: string[] | null;
 }
 export interface IExperiment extends BaseMongoEntity {
   title: string;
