@@ -77,8 +77,22 @@ export default function SecondStep({
   const { register, control, handleSubmit } =
     useFormContext<TCreateExperiment>();
 
-  const { fields, append, remove, move } = useFieldArray({
+  const {
+    fields: markersFields,
+    append: markersAppend,
+    remove: markersRemove,
+    move: markersMove,
+  } = useFieldArray({
     name: 'markers',
+  });
+
+  const {
+    fields: bountyDescFields,
+    append: bountyDescAppend,
+    remove: bountyDescRemove,
+    move: bountyDescMove,
+  } = useFieldArray({
+    name: 'bounty.description',
   });
 
   return (
@@ -164,27 +178,45 @@ export default function SecondStep({
               />
             </InputGroup>
           </FormControl>
-          <FormLabel htmlFor="bounty">Bounty guidelines</FormLabel>
+          <FormLabel htmlFor="bounty" marginTop={5}>
+            Bounty guidelines
+          </FormLabel>
 
-          {/* <FormControl style={{ marginTop: 10 }}>
-            <InputGroup size="lg">
-              <Input
-                type="text"
-                placeholder="Enter a requirement (e.g.: Follow @ReputableDAO on Twitter)"
-                {...register('bounty.description', {})}
-              />
-            </InputGroup>
-          </FormControl> */}
-          <ControlledEditor
-            control={control}
-            name="bounty.description"
-            rules={{
-              required: true,
-              minLength: {
-                value: 10,
-                message: 'This field should be at least 10 chars long.',
-              },
-            }}
+          {bountyDescFields.map((field, index) => {
+            return (
+              <HStack align="end" style={{ marginTop: 10 }}>
+                <ControlledEditor
+                  control={control}
+                  name={`bounty.description.${index}`}
+                  rules={{
+                    required: true,
+                    minLength: {
+                      value: 10,
+                      message: 'This field should be at least 10 chars long.',
+                    },
+                  }}
+                />
+                <Box pb={1}>
+                  <IconButton
+                    onClick={() => bountyDescRemove(index)}
+                    aria-label="Remove Bounty Description"
+                    variant="outline"
+                    size="sm"
+                    colorScheme="red"
+                    icon={<DeleteIcon />}
+                  />
+                </Box>
+              </HStack>
+            );
+          })}
+          <IconButton
+            onClick={() => bountyDescAppend('')}
+            aria-label="Add Bounty Description"
+            variant="outline"
+            marginTop={3}
+            size="sm"
+            colorScheme="primary"
+            icon={<AddIcon />}
           />
         </Card>
         <Card w="100%">
@@ -209,13 +241,13 @@ export default function SecondStep({
             Add a health marker
           </Text>
           <VStack align={'start'}>
-            {fields.map((field, index) => {
+            {markersFields.map((field, index) => {
               return (
                 <HStack align="end">
                   <MarkerInput index={index} />
                   <Box pb={1}>
                     <IconButton
-                      onClick={() => remove(index)}
+                      onClick={() => markersRemove(index)}
                       aria-label="Remove Marker"
                       variant="outline"
                       size="sm"
@@ -227,7 +259,7 @@ export default function SecondStep({
               );
             })}
             <IconButton
-              onClick={() => append({ name: '', devices: [] })}
+              onClick={() => markersAppend({ name: '', devices: [] })}
               aria-label="Add Health Marker"
               variant="outline"
               size="sm"

@@ -1,10 +1,10 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { ChakraProps, Flex, HStack, Textarea, Avatar } from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import makeAvatar from "../../helpers/makeAvatar";
-import { useApiContext } from "../../providers/ApiContext";
-import { PrimaryButton } from "../Button";
-import Modal from "../Modal";
+import { useAuth0 } from '@auth0/auth0-react';
+import { ChakraProps, Flex, HStack, Textarea, Avatar } from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
+import makeAvatar from '../../helpers/makeAvatar';
+import { useApiContext } from '../../providers/ApiContext';
+import { PrimaryButton } from '../Button';
+import Modal from '../Modal';
 
 interface Props extends ChakraProps {
   onSubmit: (data: any) => void;
@@ -21,13 +21,13 @@ export default function CommentForm({ onSubmit, ...restProps }: Props) {
   return (
     <Flex w="100%">
       <Avatar
-        width={"40px"}
-        height={"40px"}
+        width={'40px'}
+        height={'40px'}
         name="Profile Photo"
-        src={user?.picture ?? makeAvatar(user?.name ?? "User")}
+        src={user?.picture ?? makeAvatar(user?.name ?? 'User')}
       />
       <form
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
         onSubmit={handleSubmit((values) => {
           onSubmit(values);
           reset();
@@ -37,10 +37,10 @@ export default function CommentForm({ onSubmit, ...restProps }: Props) {
           <Textarea
             ml={3}
             required
-            {...register("text", {
+            {...register('text', {
               minLength: {
                 value: 10,
-                message: "Your comment should be at least 20 chars long.",
+                message: 'Your comment should be at least 20 chars long.',
               },
             })}
             {...restProps}

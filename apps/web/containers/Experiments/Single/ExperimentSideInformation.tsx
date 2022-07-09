@@ -7,6 +7,7 @@ import {
   Text,
   Box,
   ChakraProps,
+  Button,
 } from '@chakra-ui/react';
 import { PopulatedExperiment } from '@reputable/types';
 import PrimaryButton from '../../../components/Button/Primary';
@@ -101,10 +102,35 @@ export default function ExperimentSideInformation({
         </HStack>
       </VStack>
       <Box>
-        <BountyExperiment
-          bountyAmount={data.bounty.amount}
-          bountyDescription={data.bounty.description}
-        />
+        <Modal
+          title="How does bounty work?"
+          button={
+            <Button
+              style={{
+                boxShadow: 'none',
+              }}
+              className="outline-none focus:outline-none"
+              borderRadius={15}
+              padding={0}
+              outline="none"
+              height="100%"
+              width="100%"
+              textAlign="left"
+              border="none"
+              disabled={!isAuthenticated}
+            >
+              <BountyExperiment
+                bountyAmount={data.bounty.amount}
+                bountyDescription={data.bounty.description}
+              />
+            </Button>
+          }
+        >
+          Our validation team will look at each result to ensure that it meets
+          the standards set in the bounty before approving it. Once approved,
+          the bounty value is automatically tipped to the experimenter and the
+          creator.
+        </Modal>
       </Box>
       <Box>
         <AboutExperiment

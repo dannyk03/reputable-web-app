@@ -215,7 +215,7 @@ export default function ExperimentsSingleView({
       </Box>
       {/* Desktop View */}
       <Hide below="md">
-        <ExperimentSideInformation minW="400px" data={data} />
+        <ExperimentSideInformation minW="400px" marginLeft={8} data={data} />
       </Hide>
     </Flex>
   );

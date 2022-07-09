@@ -4,7 +4,7 @@ import ExperimentCardContent from './ExperimentCard/components/ExperimentCardCon
 
 export interface BountyExperimentProps {
   bountyAmount: number;
-  bountyDescription: string;
+  bountyDescription: string[];
 }
 
 export default function BountyExperiment({
@@ -17,6 +17,7 @@ export default function BountyExperiment({
       borderRadius={16}
       padding={6}
       color={'white'}
+      width={'100%'}
       className="bountView"
     >
       <Box display="flex">
@@ -37,8 +38,9 @@ export default function BountyExperiment({
         </Box>
       </Box>
       <Divider />
-
-      <ExperimentCardContent content={bountyDescription} color={'white'} />
+      {bountyDescription.map((desc, index) => (
+        <ExperimentCardContent content={desc} color={'white'} />
+      ))}
     </Box>
   );
 }
