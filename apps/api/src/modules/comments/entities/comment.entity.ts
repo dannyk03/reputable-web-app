@@ -48,7 +48,7 @@ export class Comment extends BaseMongoEntity implements IComment {
 
   @Field(() => User, { nullable: true })
   @prop({
-    required: true,
+    default: null,
   })
   public approvedBy?: string;
 }

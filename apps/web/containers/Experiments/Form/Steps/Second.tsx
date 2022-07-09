@@ -195,6 +195,9 @@ export default function SecondStep({
                       message: 'This field should be at least 10 chars long.',
                     },
                   }}
+                  style={{
+                    maxHeight: '80px',
+                  }}
                 />
                 <Box pb={1}>
                   <IconButton
