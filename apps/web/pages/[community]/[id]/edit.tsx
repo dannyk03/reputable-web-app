@@ -19,7 +19,7 @@ export default function EditExperimentView() {
       <Restricted
         condition={(user) => {
           return (
-            user?.email === data.createdBy.email ||
+            user?.email === data?.createdBy.email ||
             user?.app_metadata.role === 'admin'
           );
         }}

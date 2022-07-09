@@ -32,7 +32,7 @@ const MarkerInput = ({ index, ...restProps }) => {
   return (
     <HStack justify={'start'} align={'end'} w="100%">
       <FormControl w="fit-content" minW="fit-content">
-        <FormLabel htmlFor={`markers.${index}`}>Value</FormLabel>
+        {/* <FormLabel htmlFor={`markers.${index}`}>Value</FormLabel> */}
         <InputGroup size="md">
           <Input
             {...register(`markers.${index}.name`)}
@@ -41,9 +41,9 @@ const MarkerInput = ({ index, ...restProps }) => {
         </InputGroup>
       </FormControl>
       <VStack align="start">
-        <Text fontWeight="medium" fontSize="medium">
+        {/* <Text fontWeight="medium" fontSize="medium">
           Devices (Optional)
-        </Text>
+        </Text> */}
         <Flex
           align="bottom"
           flexWrap="wrap"
@@ -78,7 +78,7 @@ const MarkerInput = ({ index, ...restProps }) => {
           ))}
           <input
             style={{ outline: 'none', flexGrow: 1, marginTop: '8px' }}
-            placeholder="Use enter to create device tags"
+            placeholder="How will you track this health marker?"
             value={deviceText}
             onChange={(e) => setDeviceText(e.target.value)}
             onBlur={() => {

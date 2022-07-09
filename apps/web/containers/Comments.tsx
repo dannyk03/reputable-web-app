@@ -9,19 +9,19 @@ import {
   Progress,
   Text,
   useTheme,
-} from "@chakra-ui/react";
-import React from "react";
-import Comment from "../components/Comment";
-import Xarrow, { Xwrapper } from "react-xarrows";
-import makeAvatar from "../helpers/makeAvatar";
-import { ArrowDownIcon } from "@chakra-ui/icons";
-import type { PopulatedComment } from "@reputable/types";
-import Card from "../components/Card";
-import { useAuth0 } from "@auth0/auth0-react";
-import { useForm } from "react-hook-form";
-import { useComment } from "../_api/Comments/mutations";
-import { useRouter } from "next/router";
-import CommentForm from "../components/Comment/Form";
+} from '@chakra-ui/react';
+import React from 'react';
+import Comment from '../components/Comment';
+import Xarrow, { Xwrapper } from 'react-xarrows';
+import makeAvatar from '../helpers/makeAvatar';
+import { ArrowDownIcon } from '@chakra-ui/icons';
+import type { PopulatedComment } from '@reputable/types';
+import Card from '../components/Card';
+import { useAuth0 } from '@auth0/auth0-react';
+import { useForm } from 'react-hook-form';
+import { useComment } from '../_api/Comments/mutations';
+import { useRouter } from 'next/router';
+import CommentForm from '../components/Comment/Form';
 
 // React-XArrows will throw a warning if this is removed.
 React.useLayoutEffect = React.useEffect;
@@ -38,7 +38,7 @@ export default function Comments({
   const theme = useTheme();
   const { user = {} } = useAuth0();
   const { register, handleSubmit, reset } =
-    useForm<Pick<PopulatedComment, "text" | "experiment" | "replyTo">>();
+    useForm<Pick<PopulatedComment, 'text' | 'experiment' | 'replyTo'>>();
   const router = useRouter();
   const { create, remove } = useComment(router.query.id as string);
   const [batchSize, setBatchSize] = React.useState(5);
@@ -52,8 +52,8 @@ export default function Comments({
       {isLoading && <Progress isIndeterminate />}
       <Box p={6}>
         <Heading fontSize="20px" fontWeight={600} color="gray.700">
-          {" "}
-          The Conversation ({comments.length})
+          {' '}
+          Results ({comments.length})
         </Heading>
         <Text
           py={1}
@@ -62,7 +62,7 @@ export default function Comments({
           fontWeight={400}
           lineHeight="28px"
         >
-          Start a discussion, not a fire. Post with kindness.
+          Share your results with the community
         </Text>
         <Divider my={5} />
         {/*
