@@ -185,37 +185,45 @@ export default function SecondStep({
           {bountyDescFields.map((field, index) => {
             return (
               <HStack align="end" style={{ marginTop: 10 }}>
-                <ControlledEditor
-                  control={control}
-                  name={`bounty.description.${index}`}
-                  rules={{
-                    required: true,
-                    minLength: {
-                      value: 10,
-                      message: 'This field should be at least 10 chars long.',
-                    },
-                  }}
-                  style={{
-                    maxHeight: '80px',
-                  }}
-                />
-                <Box pb={1}>
-                  <IconButton
-                    onClick={() => bountyDescRemove(index)}
-                    aria-label="Remove Bounty Description"
-                    variant="outline"
-                    size="sm"
-                    colorScheme="red"
-                    icon={<DeleteIcon />}
+                <VStack
+                  align="start"
+                  style={{ width: '100%', marginRight: 20 }}
+                >
+                  <ControlledEditor
+                    control={control}
+                    name={`bounty.description.${index}`}
+                    rules={{
+                      required: true,
+                      // minLength: {
+                      //   value: 10,
+                      //   message: 'This field should be at least 10 chars long.',
+                      // },
+                    }}
                   />
-                </Box>
+                </VStack>
+                <VStack style={{ marginLeft: 'auto' }}>
+                  <Box pb={1}>
+                    <IconButton
+                      onClick={() => bountyDescRemove(index)}
+                      aria-label="Remove Bounty Description"
+                      variant="outline"
+                      size="sm"
+                      colorScheme="red"
+                      icon={<DeleteIcon />}
+                    />
+                  </Box>
+                </VStack>
               </HStack>
+
+              // </HStack>
             );
           })}
           <IconButton
             onClick={() => bountyDescAppend('')}
             aria-label="Add Bounty Description"
-            variant="outline"
+            variant="none"
+            background="gray.100"
+            borderRadius={20}
             marginTop={3}
             size="sm"
             colorScheme="primary"
@@ -264,7 +272,9 @@ export default function SecondStep({
             <IconButton
               onClick={() => markersAppend({ name: '', devices: [] })}
               aria-label="Add Health Marker"
-              variant="outline"
+              variant="none"
+              background="gray.100"
+              borderRadius={20}
               size="sm"
               colorScheme="primary"
               icon={<AddIcon />}

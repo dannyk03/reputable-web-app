@@ -39,11 +39,13 @@ export default function Modal({
           <ModalCloseButton />
           <ModalBody>{children}</ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              {closeButtonTitle}
-            </Button>
-          </ModalFooter>
+          {closeButtonTitle && closeButtonTitle !== 'hidden' && (
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
+                {closeButtonTitle}
+              </Button>
+            </ModalFooter>
+          )}
         </ModalContent>
       </ChakraModal>
     </>

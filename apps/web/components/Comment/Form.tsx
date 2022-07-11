@@ -1,18 +1,68 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { ChakraProps, Flex, HStack, Textarea, Avatar } from '@chakra-ui/react';
+import { ChakraProps, Flex, VStack, Textarea, Avatar } from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import makeAvatar from '../../helpers/makeAvatar';
 import { useApiContext } from '../../providers/ApiContext';
 import { PrimaryButton } from '../Button';
 import Modal from '../Modal';
+import {
+  useFieldArray,
+  useFormContext,
+  Controller,
+  FieldPath,
+  UseControllerProps,
+} from 'react-hook-form';
+import dynamic from 'next/dynamic';
 
+import '@uiw/react-md-editor/markdown-editor.css';
+import '@uiw/react-markdown-preview/markdown.css';
+
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
+  ssr: false,
+}) as unknown as React.FC<any>;
+
+const ControlledEditor = ({
+  name,
+  style,
+  control,
+  ...restProps
+}: {
+  name: FieldPath<any>;
+  style?: React.CSSProperties;
+} & UseControllerProps<any, FieldPath<any>>) => (
+  <Controller
+    control={control}
+    name={name}
+    render={({
+      field: { onChange, onBlur, value, name, ref },
+      fieldState: { error },
+    }) => (
+      <>
+        <MDEditor
+          preview="edit"
+          style={{
+            border: error && '1px solid red',
+            width: '100%',
+            ...style,
+          }}
+          onBlur={onBlur}
+          ref={ref}
+          value={value}
+          onChange={onChange}
+        />
+        <p style={{ color: 'red' }}>{error?.message}</p>
+      </>
+    )}
+    {...restProps}
+  />
+);
 interface Props extends ChakraProps {
   onSubmit: (data: any) => void;
   placeholder?: string;
 }
 
 export default function CommentForm({ onSubmit, ...restProps }: Props) {
-  const { register, handleSubmit, reset } = useForm<any>();
+  const { register, handleSubmit, reset, control } = useForm<any>();
   const { isAuthenticated } = useAuth0();
   const { user } = useApiContext();
   if (!isAuthenticated) {
@@ -33,8 +83,8 @@ export default function CommentForm({ onSubmit, ...restProps }: Props) {
           reset();
         })}
       >
-        <HStack align="end">
-          <Textarea
+        <VStack align="start">
+          {/* <Textarea
             ml={3}
             required
             {...register('text', {
@@ -44,6 +94,17 @@ export default function CommentForm({ onSubmit, ...restProps }: Props) {
               },
             })}
             {...restProps}
+          /> */}
+          <ControlledEditor
+            control={control}
+            name={`text`}
+            rules={{
+              required: true,
+              minLength: {
+                value: 10,
+                message: 'Your comment should be at least 10 chars long.',
+              },
+            }}
           />
           {!user?.app_metadata?.isApproved ? (
             <Modal
@@ -56,7 +117,7 @@ export default function CommentForm({ onSubmit, ...restProps }: Props) {
           ) : (
             <PrimaryButton fontSize="14px" h={8} type="submit" text="Submit" />
           )}
-        </HStack>
+        </VStack>
       </form>
     </Flex>
   );

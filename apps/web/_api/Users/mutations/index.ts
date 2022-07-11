@@ -1,8 +1,8 @@
-import { useToast } from "@chakra-ui/react";
-import { IMessageResponse } from "@reputable/types";
-import { gql } from "graphql-request";
-import { useMutation, useQueryClient } from "react-query";
-import { useApiContext } from "../../../providers/ApiContext";
+import { useToast } from '@chakra-ui/react';
+import { IMessageResponse } from '@reputable/types';
+import { gql } from 'graphql-request';
+import { useMutation, useQueryClient } from 'react-query';
+import { useApiContext } from '../../../providers/ApiContext';
 
 const joinCommunityMutation = gql`
   mutation ($community: String!) {
@@ -11,7 +11,13 @@ const joinCommunityMutation = gql`
     }
   }
 `;
-
+const updateAddressMutation = gql`
+  mutation ($address: String!) {
+    updateAddres(address: $address) {
+      message
+    }
+  }
+`;
 const tipUserMutation = gql`
   mutation ($userId: String!, $tip: Int!) {
     tipUser(userId: $userId, tip: $tip) {
@@ -25,7 +31,7 @@ export const useTipUser = (userId?: string, experimentId?: string) => {
   const queryClient = useQueryClient();
   const toast = useToast();
   return useMutation<IMessageResponse, Error, { userId: string; tip: number }>(
-    "tipUser",
+    'tipUser',
     (params) => {
       return client
         .request<{ tipUser: IMessageResponse }>(tipUserMutation, {
@@ -36,17 +42,17 @@ export const useTipUser = (userId?: string, experimentId?: string) => {
     },
     {
       onSuccess: (data: IMessageResponse) => {
-        queryClient.invalidateQueries(["experiments", { _id: experimentId }]);
+        queryClient.invalidateQueries(['experiments', { _id: experimentId }]);
         refreshUser();
         toast({
-          title: "Success!",
+          title: 'Success!',
           description: data.message,
-          status: "success",
+          status: 'success',
           isClosable: true,
-          variant: "top-accent",
+          variant: 'top-accent',
         });
       },
-    }
+    },
   );
 };
 
@@ -55,13 +61,47 @@ export const useJoinCommunity = (community: string) => {
   const client = useQueryClient();
 
   return useMutation<IMessageResponse, Error>(
-    "joinCommunity",
+    'joinCommunity',
     () => APIClient.request(joinCommunityMutation, { community }),
     {
       onSuccess: () => {
         refreshUser();
-        client.invalidateQueries(["experiments", { community }]);
+        client.invalidateQueries(['experiments', { community }]);
       },
-    }
+    },
   );
+};
+
+export const useUpdateAddress = (address: string) => {
+  const { client: APIClient, refreshUser } = useApiContext();
+  const queryClient = useQueryClient();
+  const client = useQueryClient();
+  const toast = useToast();
+
+  const config = {
+    onSuccess: (data: IMessageResponse) => {
+      toast({
+        title: 'Success!',
+        description: data.message,
+        status: 'success',
+        isClosable: true,
+        variant: 'top-accent',
+      });
+    },
+  };
+  const updateAddress = useMutation<
+    IMessageResponse,
+    Error,
+    { address: string }
+  >(
+    'updateAddres',
+    async (params) => {
+      await APIClient.request(updateAddressMutation, params);
+      return refreshUser();
+    },
+    config,
+  );
+  return {
+    updateAddres: updateAddress,
+  };
 };

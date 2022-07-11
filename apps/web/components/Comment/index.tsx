@@ -8,27 +8,27 @@ import {
   Icon,
   Text,
   VStack,
-} from "@chakra-ui/react";
-import moment from "moment";
-import NextLink from "next/link";
-import makeAvatar from "../../helpers/makeAvatar";
-import Image from "next/image";
-import React from "react";
-import type { PopulatedComment } from "@reputable/types";
-import { DeleteIcon } from "@chakra-ui/icons";
-import { useComment } from "../../_api/Comments/mutations";
-import { useRouter } from "next/router";
-import { useApiContext } from "../../providers/ApiContext";
-import Card from "../Card";
-import { ClickOutside } from "../../hooks/useClickOutside";
-import ReputableLogo from "../Icons/ReputableLogo";
-import { PrimaryButton } from "../Button";
-import TipModal from "../TipModal";
-import TipsIcon from "../Icons/TipsIcon";
-import ExperimentsIcon from "../Icons/ExperimentsIcon";
-import CommentForm from "./Form";
-import Modal from "../Modal";
-import calculateContributions from "../../helpers/calculateContributions";
+} from '@chakra-ui/react';
+import moment from 'moment';
+import NextLink from 'next/link';
+import makeAvatar from '../../helpers/makeAvatar';
+import Image from 'next/image';
+import React from 'react';
+import type { PopulatedComment } from '@reputable/types';
+import { DeleteIcon } from '@chakra-ui/icons';
+import { useComment } from '../../_api/Comments/mutations';
+import { useRouter } from 'next/router';
+import { useApiContext } from '../../providers/ApiContext';
+import Card from '../Card';
+import { ClickOutside } from '../../hooks/useClickOutside';
+import ReputableLogo from '../Icons/ReputableLogo';
+import { PrimaryButton } from '../Button';
+import TipModal from '../TipModal';
+import TipsIcon from '../Icons/TipsIcon';
+import ExperimentsIcon from '../Icons/ExperimentsIcon';
+import CommentForm from './Form';
+import Modal from '../Modal';
+import calculateContributions from '../../helpers/calculateContributions';
 
 interface CommentProps {
   data: Partial<PopulatedComment>;
@@ -47,6 +47,7 @@ export default function Comment({
     _id,
     author,
     text,
+    isApproved,
     replies = [],
   } = data;
   const [isUserCardOpen, setUserCardOpen] = React.useState(false);
@@ -55,22 +56,23 @@ export default function Comment({
   const { user } = useApiContext();
   const [showReplies, setShowReplies] = React.useState(false);
   const [showReplyForm, setShowReplyForm] = React.useState(false);
-  const { create, remove } = useComment(router.query.id as string);
+  const { create, remove, approve } = useComment(router.query.id as string);
   const { totalTokens } = calculateContributions(
-    author?.user_metadata?.tips || []
+    author?.user_metadata?.tips || [],
   );
+  const isAdmin = user && user?.app_metadata?.role === 'admin';
   if (!author) return null;
   return (
     <>
       <Box {...restProps} pl={replyTo !== null ? 12 : 0} pt={5}>
-        <Flex justify={"start"} align="center" position="relative">
-          <Flex align={"center"} cursor="pointer">
+        <Flex justify={'start'} align="center" position="relative">
+          <Flex align={'center'} cursor="pointer">
             <Avatar
               id={id}
-              width={"40px"}
-              height={"40px"}
+              width={'40px'}
+              height={'40px'}
               name="Profile Photo"
-              src={author.picture ?? makeAvatar("User")}
+              src={author.picture ?? makeAvatar('User')}
               onClick={() => setUserCardOpen(true)}
             />
             <Text
@@ -104,10 +106,10 @@ export default function Comment({
                 <VStack>
                   <Avatar
                     id={id}
-                    width={"64px"}
-                    height={"64px"}
+                    width={'64px'}
+                    height={'64px'}
                     name="User Card Profile Photo"
-                    src={author.picture ?? makeAvatar("User")}
+                    src={author.picture ?? makeAvatar('User')}
                   />
                   <Text
                     pl="2"
@@ -156,11 +158,41 @@ export default function Comment({
               </Card>
             </ClickOutside>
           )}
+          {isAdmin && !isApproved && (
+            <Button
+              colorScheme="green.200"
+              color="green.200"
+              variant="ghost"
+              style={{ marginLeft: 'auto' }}
+              height={6}
+              ml={1}
+              onClick={() => approve.mutate({ _id })}
+            >
+              <Image
+                src="/icons/approveBadge.png"
+                width={14}
+                height={14}
+                alt="Reply"
+              />
+              <Text pl="6px">Approve</Text>
+            </Button>
+          )}
+          {isApproved && (
+            <HStack style={{ marginLeft: 'auto' }}>
+              <Image
+                src="/icons/approveBadge.png"
+                width={14}
+                height={14}
+                alt="Reply"
+              />
+              <Text color="green.400">Approved</Text>
+            </HStack>
+          )}
         </Flex>
         <Flex pl={12}>
           <Text w="100%">{text}</Text>
         </Flex>
-        <Flex flexWrap={"wrap"} pl={12} pt="12px" align="center">
+        <Flex flexWrap={'wrap'} pl={12} pt="12px" align="center">
           {/*
           <Voting
             upvotes={upvotes}
@@ -245,7 +277,7 @@ export default function Comment({
               height={6}
               ml={1}
               onClick={() => {
-                if (window.confirm("Are you sure to delete this comment?"))
+                if (window.confirm('Are you sure to delete this comment?'))
                   remove.mutate({ _id });
               }}
             >
@@ -257,14 +289,14 @@ export default function Comment({
             <Text
               pt={[2, 0]}
               color="primary.600"
-              _hover={{ textDecor: "underline", cursor: "pointer" }}
+              _hover={{ textDecor: 'underline', cursor: 'pointer' }}
               onClick={() =>
                 setShowReplies((prevShowReplies) => !prevShowReplies)
               }
             >
               {!showReplies
                 ? `Show replies (${replies.length})`
-                : "Hide replies"}
+                : 'Hide replies'}
             </Text>
           )}
         </Flex>

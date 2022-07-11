@@ -1,9 +1,9 @@
-import { useToast } from "@chakra-ui/react";
-import type { IComment } from "@reputable/types";
-import type { IMessageResponse } from "@reputable/types";
-import { gql } from "graphql-request";
-import { useMutation, useQueryClient } from "react-query";
-import { useApiContext } from "../../../providers/ApiContext";
+import { useToast } from '@chakra-ui/react';
+import type { IComment } from '@reputable/types';
+import type { IMessageResponse } from '@reputable/types';
+import { gql } from 'graphql-request';
+import { useMutation, useQueryClient } from 'react-query';
+import { useApiContext } from '../../../providers/ApiContext';
 
 const createCommentQuery = gql`
   mutation ($createCommentInput: CreateCommentInput!) {
@@ -21,19 +21,27 @@ const removeCommentQuery = gql`
   }
 `;
 
+const approveCommentQuery = gql`
+  mutation ($_id: String!) {
+    approveComment(_id: $_id) {
+      message
+    }
+  }
+`;
+
 export const useComment = (experimentId: string) => {
   const { client } = useApiContext();
   const queryClient = useQueryClient();
   const toast = useToast();
   const config = {
     onSuccess: (data: IMessageResponse) => {
-      queryClient.invalidateQueries(["experiments", { _id: experimentId }]);
+      queryClient.invalidateQueries(['experiments', { _id: experimentId }]);
       toast({
-        title: "Success!",
+        title: 'Success!',
         description: data.message,
-        status: "success",
+        status: 'success',
         isClosable: true,
-        variant: "top-accent",
+        variant: 'top-accent',
       });
     },
   };
@@ -41,9 +49,9 @@ export const useComment = (experimentId: string) => {
   const createComment = useMutation<
     IMessageResponse,
     Error,
-    Pick<IComment, "text" | "experiment" | "replyTo">
+    Pick<IComment, 'text' | 'experiment' | 'replyTo'>
   >(
-    "createComment",
+    'createComment',
     (params) =>
       client
         .request(createCommentQuery, {
@@ -52,18 +60,32 @@ export const useComment = (experimentId: string) => {
         .then((r) => r.createComment),
     {
       ...config,
-    }
+    },
   );
 
   const removeComment = useMutation<IMessageResponse, Error, { _id: string }>(
-    "removeComment",
+    'removeComment',
     (params) => {
       return client
         .request(removeCommentQuery, params)
         .then((r) => r.removeComment);
     },
-    config
+    config,
   );
 
-  return { create: createComment, remove: removeComment };
+  const approveComment = useMutation<IMessageResponse, Error, { _id: string }>(
+    'approveComment',
+    (params) => {
+      return client
+        .request(approveCommentQuery, params)
+        .then((r) => r.approveComment);
+    },
+    config,
+  );
+
+  return {
+    create: createComment,
+    remove: removeComment,
+    approve: approveComment,
+  };
 };
