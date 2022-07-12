@@ -16,7 +16,6 @@ const meQuery = gql`
       email
       email_verified
       picture
-      address
       app_metadata {
         isApproved
         role
@@ -28,6 +27,7 @@ const meQuery = gql`
           amount
         }
         communities
+        address
       }
       user_id
     }

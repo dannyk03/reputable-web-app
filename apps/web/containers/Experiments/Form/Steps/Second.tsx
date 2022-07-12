@@ -56,6 +56,7 @@ const ControlledEditor = ({
           style={{
             border: error && '1px solid red',
             width: '100%',
+            maxHeight: '80px',
             ...style,
           }}
           onBlur={onBlur}

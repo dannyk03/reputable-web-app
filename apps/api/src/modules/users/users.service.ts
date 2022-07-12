@@ -110,7 +110,9 @@ export class UsersService {
   }
 
   async findById(id: string) {
-    return this.client.get<User>(`/users/${id}`).then((r) => r.data);
+    return this.client.get<User>(`/users/${id}`).then((r) => {
+      return r.data;
+    });
   }
 
   async updateOne(id: string, userData: Partial<User>) {
@@ -129,6 +131,31 @@ export class UsersService {
       .then((r) => {
         return plainToClass(User, r.data[0]);
       });
+  }
+
+  async addBalanceForApprovedComment(
+    amount: number,
+    userId: string,
+    commentId: string,
+  ) {
+    const toUser = await this.client
+      .get<User>(`users/${userId}`)
+      .then((r) => r.data);
+
+    await this.client.patch<User>(`/users/${userId}`, {
+      user_metadata: {
+        tokens: toUser.user_metadata.tokens + amount,
+        approvals: [
+          ...(toUser.user_metadata.approvals || []),
+          { commentId, amount },
+        ],
+      },
+    });
+    this.loaderForExperiments.clearAll();
+    this.commentsService.loaderForExperiments.clearAll();
+    return {
+      message: 'Transaction successful!',
+    };
   }
 
   async tipUser(from: string, to: string, amount: number) {

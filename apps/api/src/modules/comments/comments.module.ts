@@ -4,6 +4,7 @@ import { CommentsResolver } from './comments.resolver';
 import { MongooseModule } from '@nestjs/mongoose';
 import { CommentSchema, Comment } from './entities/comment.entity';
 import { UsersModule } from '../users/users.module';
+import { ExperimentsModule } from '../experiments/experiments.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { UsersModule } from '../users/users.module';
         schema: CommentSchema,
       },
     ]),
+    forwardRef(() => ExperimentsModule),
     forwardRef(() => UsersModule),
   ],
   providers: [CommentsResolver, CommentsService],

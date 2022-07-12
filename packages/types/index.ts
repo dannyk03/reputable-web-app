@@ -16,6 +16,10 @@ export interface ITip {
   amount: number;
 }
 
+export interface IApproval {
+  commentId: string;
+  amount: number;
+}
 export interface ITransaction {
   amount: number;
   from: string;

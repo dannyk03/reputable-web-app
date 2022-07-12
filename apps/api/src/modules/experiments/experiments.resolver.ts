@@ -60,7 +60,7 @@ export class ExperimentsResolver {
 
   @Public()
   @Query(() => Experiment, { name: 'experiment' })
-  findOne(@Args('_id', { type: () => String }) _id: string) {
+  async findOne(@Args('_id', { type: () => String }) _id: string) {
     return this.experimentsService.findOne(_id);
   }
 
