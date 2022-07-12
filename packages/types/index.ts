@@ -9,6 +9,7 @@ export interface IUserMetadata {
   transactions?: ITransaction[];
   communities?: string[];
   tips?: ITip[];
+  address?: string;
 }
 
 export interface ITip {

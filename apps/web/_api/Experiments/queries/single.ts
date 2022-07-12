@@ -56,6 +56,7 @@ const query = gql`
           email
           user_metadata {
             tokens
+            address
             tips {
               userId
               amount
@@ -73,6 +74,7 @@ const query = gql`
             experiments_count
             user_metadata {
               tokens
+              address
               tips {
                 userId
                 amount

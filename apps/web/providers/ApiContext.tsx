@@ -22,6 +22,7 @@ const meQuery = gql`
       }
       user_metadata {
         tokens
+        address
         tips {
           userId
           amount

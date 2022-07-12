@@ -193,13 +193,6 @@ export default function SecondStep({
                   <ControlledEditor
                     control={control}
                     name={`bounty.description.${index}`}
-                    rules={{
-                      required: true,
-                      // minLength: {
-                      //   value: 10,
-                      //   message: 'This field should be at least 10 chars long.',
-                      // },
-                    }}
                   />
                 </VStack>
                 <VStack style={{ marginLeft: 'auto' }}>

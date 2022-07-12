@@ -12,7 +12,7 @@ import {
   Button,
   VStack,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import Logo from '../components/Icons/Logo';
 import Image from 'next/image';
@@ -28,9 +28,23 @@ import { useUpdateAddress } from '../_api/Users/mutations';
 export default function Navbar() {
   const theme = useTheme();
   const [address, setAddress] = React.useState('');
+  const [closeUpdateAddressModal, setCloseUpdateAddressModal] =
+    React.useState(false);
+
   const { loginWithRedirect, user } = useAuth0();
   const { user: APIUser } = useApiContext();
   const { updateAddres } = useUpdateAddress(address as string);
+
+  const handleUpdateAddress = () => {
+    updateAddres.mutate({ address });
+    setCloseUpdateAddressModal(true);
+    setTimeout(() => {
+      setCloseUpdateAddressModal(false);
+    }, 10);
+  };
+  useEffect(() => {
+    setAddress(APIUser?.user_metadata?.address);
+  }, [APIUser]);
 
   return (
     <Flex flexDirection="column">
@@ -88,11 +102,15 @@ export default function Navbar() {
             <HStack>
               <Modal
                 title=""
+                isClose={closeUpdateAddressModal}
                 closeButtonTitle="hidden"
                 button={
                   <Button
                     style={{
                       boxShadow: 'none',
+                    }}
+                    onClick={() => {
+                      setCloseUpdateAddressModal(false);
                     }}
                     className="outline-none focus:outline-none"
                     borderRadius={15}
@@ -183,13 +201,26 @@ export default function Navbar() {
                     bgColor="gray.50"
                     borderColor="gray.200"
                     border="1px solid"
-                    borderRadius={24}
-                    onChange={(e) => setAddress(e.target.value)}
+                    borderRadius={4}
+                    onChange={(e) => {
+                      setAddress(e.target.value);
+                    }}
                     placeholder="000000"
+                    width={'120px'}
                   />
                   <Button
-                    colorScheme="blue"
-                    onClick={() => updateAddres.mutate({ address })}
+                    colorScheme="primary"
+                    className="ms-auto"
+                    disabled={
+                      address === APIUser?.user_metadata?.address ||
+                      address === ''
+                    }
+                    borderRadius={20}
+                    width="80px"
+                    style={{ marginLeft: 'auto' }}
+                    onClick={() => {
+                      handleUpdateAddress();
+                    }}
                   >
                     Save
                   </Button>

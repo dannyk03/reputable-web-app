@@ -1,7 +1,7 @@
-import { gql } from "graphql-request";
-import { useQuery } from "react-query";
-import { useApiContext } from "../../../providers/ApiContext";
-import type { IUser } from "@reputable/types";
+import { gql } from 'graphql-request';
+import { useQuery } from 'react-query';
+import { useApiContext } from '../../../providers/ApiContext';
+import type { IUser } from '@reputable/types';
 
 const userByEmailQuery = gql`
   query ($email: String!) {
@@ -11,6 +11,7 @@ const userByEmailQuery = gql`
       user_metadata {
         tokens
         communities
+        address
         tips {
           userId
           amount
@@ -26,9 +27,9 @@ const userByEmailQuery = gql`
 export const useUserByEmail = (email: string) => {
   const { client } = useApiContext();
 
-  return useQuery<IUser>(["userByEmail", { email }], () =>
+  return useQuery<IUser>(['userByEmail', { email }], () =>
     client.request(userByEmailQuery, { email }).then((r) => {
       return r.userByEmail;
-    })
+    }),
   );
 };

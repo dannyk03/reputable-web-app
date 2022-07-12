@@ -202,7 +202,9 @@ export default function ExperimentsSingleView({
             if (v && v.trim() !== '') {
               return (
                 <Box key={k} py={3}>
-                  <Heading size="lg">{k.toUpperCase()}</Heading>
+                  <Heading fontSize="24" fontWeight="600">
+                    {k.toUpperCase()}
+                  </Heading>
                   <MDPreview style={{ marginTop: '12px' }} source={v} />
                 </Box>
               );

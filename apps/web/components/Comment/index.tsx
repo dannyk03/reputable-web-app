@@ -29,6 +29,7 @@ import ExperimentsIcon from '../Icons/ExperimentsIcon';
 import CommentForm from './Form';
 import Modal from '../Modal';
 import calculateContributions from '../../helpers/calculateContributions';
+import { useMediaQuery } from '@chakra-ui/react';
 
 interface CommentProps {
   data: Partial<PopulatedComment>;
@@ -53,6 +54,8 @@ export default function Comment({
   const [isUserCardOpen, setUserCardOpen] = React.useState(false);
   const timeAgo = moment(new Date(updatedAt)).fromNow();
   const router = useRouter();
+  const [isMobile] = useMediaQuery('(max-width: 30em');
+
   const { user } = useApiContext();
   const [showReplies, setShowReplies] = React.useState(false);
   const [showReplyForm, setShowReplyForm] = React.useState(false);
@@ -64,12 +67,20 @@ export default function Comment({
   if (!author) return null;
   return (
     <>
-      <Box {...restProps} pl={replyTo !== null ? 12 : 0} pt={5}>
+      <Box
+        {...restProps}
+        // style={{ borderRight: '1px solid gray' }}
+        borderRight={'4px solid #48BB78'}
+        pl={replyTo !== null ? 12 : 2}
+        pr={2}
+        pt={5}
+      >
         <Flex justify={'start'} align="center" position="relative">
           <Flex align={'center'} cursor="pointer">
             <Avatar
               id={id}
               width={'40px'}
+              marginBottom={'2px'}
               height={'40px'}
               name="Profile Photo"
               src={author.picture ?? makeAvatar('User')}
@@ -163,29 +174,32 @@ export default function Comment({
               colorScheme="green.200"
               color="green.200"
               variant="ghost"
-              style={{ marginLeft: 'auto' }}
+              style={{ marginLeft: 'auto', padding: 0 }}
               height={6}
               ml={1}
-              onClick={() => approve.mutate({ _id })}
+              onClick={() => {
+                if (window.confirm('Are you sure to approve this comment?'))
+                  approve.mutate({ _id });
+              }}
             >
               <Image
                 src="/icons/approveBadge.png"
-                width={14}
-                height={14}
+                width={'16px'}
+                height={'16px'}
                 alt="Reply"
               />
-              <Text pl="6px">Approve</Text>
+              {!isMobile && <Text pl="6px">Approve</Text>}
             </Button>
           )}
           {isApproved && (
             <HStack style={{ marginLeft: 'auto' }}>
               <Image
                 src="/icons/approveBadge.png"
-                width={14}
-                height={14}
+                width={'16px'}
+                height={'16px'}
                 alt="Reply"
               />
-              <Text color="green.400">Approved</Text>
+              {!isMobile && <Text color="green.400">Approved</Text>}
             </HStack>
           )}
         </Flex>
