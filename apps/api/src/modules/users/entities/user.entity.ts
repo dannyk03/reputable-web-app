@@ -62,4 +62,7 @@ export class User implements IUser {
 
   @Field({ nullable: true })
   last_login: string;
+
+  @Field({ nullable: true })
+  address: string;
 }

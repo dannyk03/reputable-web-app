@@ -16,6 +16,7 @@ const meQuery = gql`
       email
       email_verified
       picture
+      address
       app_metadata {
         isApproved
         role

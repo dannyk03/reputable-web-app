@@ -47,6 +47,7 @@ const query = gql`
         replyTo
         createdAt
         updatedAt
+        isApproved
         text
         author {
           name
@@ -66,6 +67,7 @@ const query = gql`
           _id
           createdAt
           updatedAt
+          isApproved
           author {
             name
             experiments_count

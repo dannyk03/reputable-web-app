@@ -54,7 +54,7 @@ export class UsersResolver {
   }
 
   @Mutation(() => MessageResponse)
-  updateAddres(@CurrentUser() user: User, @Args('address') address: string) {
+  updateAddres(@Args('address') address: string, @CurrentUser() user: User) {
     return this.usersService.updateAddress(user.email, address);
   }
 
