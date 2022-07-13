@@ -119,10 +119,12 @@ export default function ExperimentSideInformation({
               border="none"
               disabled={!isAuthenticated}
             >
-              <BountyExperiment
-                bountyAmount={data.bounty.amount}
-                bountyDescription={data.bounty.description}
-              />
+              {!!data.bounty?.amount && (
+                <BountyExperiment
+                  bountyAmount={data.bounty.amount}
+                  bountyDescription={data.bounty.description}
+                />
+              )}
             </Button>
           }
         >
