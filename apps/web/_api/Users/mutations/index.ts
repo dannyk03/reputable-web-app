@@ -84,21 +84,24 @@ export const useUpdateAddress = (address: string) => {
     { address: string }
   >(
     'updateAddres',
-    async (params) => {
-      const result = await APIClient.request(updateAddressMutation, params);
-      if (result && result?.updateAddres?.message === 'Updated address!') {
+    (params) => {
+      return APIClient.request<{ updateAddres: IMessageResponse }>(
+        updateAddressMutation,
+        params,
+      ).then((r) => r.updateAddres);
+    },
+    {
+      onSuccess: (data: IMessageResponse) => {
+        // queryClient.invalidateQueries(['me']);
+        refreshUser();
         toast({
           title: 'Success!',
-          description: 'Updated address!',
+          description: data.message,
           status: 'success',
           isClosable: true,
           variant: 'top-accent',
         });
-      }
-      return refreshUser();
-    },
-    {
-      onSuccess: (data: any) => {},
+      },
     },
   );
   return {
