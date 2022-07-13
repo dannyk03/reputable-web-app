@@ -99,7 +99,7 @@ export default function SecondStep({
   return (
     <form
       onKeyPress={(e) => {
-        if (e.key === 'Enter' && e.target.nodeName !== 'TEXTAREA')
+        if (e.key === 'Enter' && (e.target as any).nodeName !== 'TEXTAREA')
           e.preventDefault();
       }}
       onSubmit={handleSubmit((data) => onSubmit(data))}
