@@ -77,6 +77,9 @@ export interface IComment extends BaseMongoEntity {
   replyTo?: string;
   text: string;
   experiment: string;
+  isApproved?: boolean;
+  // TODO approvedBy definition
+  // approvedBy: IUsers
   replies?: IComment[];
 }
 

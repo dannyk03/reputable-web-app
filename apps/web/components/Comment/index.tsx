@@ -284,7 +284,7 @@ export default function Comment({
               </TipModal>
             )
           )}
-          {user && user.email === author.email && (
+          {user && user.email === author.email && !isApproved && (
             <Button
               colorScheme="red"
               variant="ghost"
