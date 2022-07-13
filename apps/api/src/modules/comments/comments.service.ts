@@ -1,4 +1,10 @@
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  forwardRef,
+  Inject,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ReturnModelType } from '@typegoose/typegoose';
 import { CreateCommentInput } from './dto/create-comment.input';
@@ -11,6 +17,8 @@ import { User } from '../users/entities/user.entity';
 import type { PopulatedComment } from '@reputable/types';
 import * as DataLoader from 'dataloader';
 import { makeArray, mapFromArray } from '../../common/helpers';
+import { UserRoleEnum } from '@reputable/types';
+import { ExperimentsService } from '../experiments/experiments.service';
 
 @Injectable()
 export class CommentsService {
@@ -35,6 +43,8 @@ export class CommentsService {
     private commentsModel: ReturnModelType<typeof Comment>,
     @Inject(forwardRef(() => UsersService))
     private usersService: UsersService,
+    @Inject(forwardRef(() => ExperimentsService))
+    private experimentsService: ExperimentsService,
   ) {}
 
   async create(commentData: CreateCommentInput) {
@@ -123,6 +133,42 @@ export class CommentsService {
   remove(_id: string) {
     return this.commentsModel
       .findByIdAndRemove(_id)
+      .orFail()
+      .exec()
+      .then(() => {
+        this.loaderForExperiments.clearAll();
+      });
+  }
+
+  async approveComment(_id: string, user: User) {
+    if (user.app_metadata.role !== UserRoleEnum.ADMIN) {
+      throw new UnauthorizedException(
+        'You have to be an a moderator to approve the comment.',
+      );
+    }
+
+    const comment = await this.commentsModel
+      .findById(_id)
+      .orFail()
+      .lean()
+      .exec();
+    const experiment = await this.experimentsService.findOne(
+      comment.experiment,
+    );
+
+    if (!experiment || !experiment.bounty?.amount) {
+      throw new BadRequestException(
+        'Experiement does not exist or doe not have bounty amount configured.',
+      );
+    }
+    await this.usersService.addBalanceForApprovedComment(
+      experiment.bounty?.amount,
+      user.user_id,
+      comment._id,
+    );
+
+    return this.commentsModel
+      .updateOne({ _id }, { approvedBy: user.email, isApproved: true })
       .orFail()
       .exec()
       .then(() => {

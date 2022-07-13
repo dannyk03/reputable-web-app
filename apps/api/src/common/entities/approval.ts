@@ -1,12 +1,12 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import type { ITip } from '@reputable/types';
+import { IApproval } from '@reputable/types';
 import { prop } from '@typegoose/typegoose';
 
 @ObjectType()
-export class Tip implements ITip {
+export class Approval implements IApproval {
   @Field()
   @prop({ required: true })
-  userId: string;
+  commentId: string;
 
   @Field(() => Int)
   @prop({ required: true })

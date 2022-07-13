@@ -53,6 +53,11 @@ export class UsersResolver {
     return this.usersService.joinCommunity(user.email, community);
   }
 
+  @Mutation(() => MessageResponse)
+  updateAddres(@Args('address') address: string, @CurrentUser() user: User) {
+    return this.usersService.updateAddress(user.email, address);
+  }
+
   @ResolveField('experiments_count', (returns) => Int)
   async getExperiments(@Parent() user: User) {
     const usersLoader = this.experimentsService.loaderForUsers;

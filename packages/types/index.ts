@@ -9,6 +9,7 @@ export interface IUserMetadata {
   transactions?: ITransaction[];
   communities?: string[];
   tips?: ITip[];
+  address?: string;
 }
 
 export interface ITip {
@@ -16,6 +17,10 @@ export interface ITip {
   amount: number;
 }
 
+export interface IApproval {
+  commentId: string;
+  amount: number;
+}
 export interface ITransaction {
   amount: number;
   from: string;
@@ -72,6 +77,9 @@ export interface IComment extends BaseMongoEntity {
   replyTo?: string;
   text: string;
   experiment: string;
+  isApproved?: boolean;
+  // TODO approvedBy definition
+  // approvedBy: IUsers
   replies?: IComment[];
 }
 
@@ -114,6 +122,10 @@ export interface IExperimentDescription {
   summary?: string;
 }
 
+export interface IExperimentBounty {
+  amount: number;
+  description?: string[] | null;
+}
 export interface IExperiment extends BaseMongoEntity {
   title: string;
   status: ExperimentStatus;
@@ -129,6 +141,7 @@ export interface IExperiment extends BaseMongoEntity {
   experimentPeriod: number;
   comments?: IComment[];
   tips?: ITip[];
+  bounty?: IExperimentBounty;
   // prettifyResult?: (result: IExperimentResult) => IExperimentResult;
 }
 
@@ -148,3 +161,7 @@ export interface IMessageResponse {
 }
 
 export type ITipDTO = Pick<ITip, "amount">;
+
+export enum UserRoleEnum {
+  ADMIN = "admin",
+}

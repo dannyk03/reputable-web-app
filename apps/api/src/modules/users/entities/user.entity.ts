@@ -4,7 +4,9 @@ import type {
   IAppMetadata,
   ITip,
   IUser,
+  IApproval,
 } from '@reputable/types';
+import { Approval } from 'src/common/entities/approval';
 import { Tip } from '../../../common/entities/tip';
 
 @ObjectType()
@@ -15,8 +17,14 @@ export class UserMetaData implements IUserMetadata {
   @Field(() => [Tip], { nullable: true, defaultValue: [] })
   tips?: ITip[];
 
+  @Field(() => [Approval], { nullable: true, defaultValue: [] })
+  approvals?: IApproval[];
+
   @Field(() => [String], { nullable: true, defaultValue: [] })
   communities?: string[];
+
+  @Field(() => String, { nullable: true, defaultValue: null })
+  address?: string;
 }
 
 @ObjectType()
@@ -59,4 +67,7 @@ export class User implements IUser {
 
   @Field({ nullable: true })
   last_login: string;
+
+  @Field({ nullable: true })
+  address: string;
 }

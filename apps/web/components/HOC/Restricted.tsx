@@ -1,10 +1,10 @@
-import React, { useEffect } from "react";
-import { useToast } from "@chakra-ui/react";
-import Redirect from "./Redirect";
-import { useApiContext } from "../../providers/ApiContext";
-import { IUser } from "@reputable/types";
+import React, { useEffect } from 'react';
+import { useToast } from '@chakra-ui/react';
+import Redirect from './Redirect';
+import { useApiContext } from '../../providers/ApiContext';
+import { IUser } from '@reputable/types';
 
-const id = "restricted-view-toast";
+const id = 'restricted-view-toast';
 
 interface RestrictedViewProps {
   /**
@@ -23,8 +23,8 @@ interface RestrictedViewProps {
  */
 export default function Restricted({
   condition,
-  errorMessage = "Can not view this page.",
-  redirectTo = "/",
+  errorMessage = 'Can not view this page.',
+  redirectTo = '/',
   children,
 }: React.PropsWithChildren<RestrictedViewProps>) {
   const toast = useToast();
@@ -34,11 +34,11 @@ export default function Restricted({
     if (!isAuthorized) {
       if (!toast.isActive(id))
         toast({
-          title: "Access Denied",
+          title: 'Access Denied',
           description: errorMessage,
-          status: "error",
+          status: 'error',
           isClosable: true,
-          variant: "top-accent",
+          variant: 'top-accent',
         });
     }
     () => {

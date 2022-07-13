@@ -1,5 +1,5 @@
 import { useToast } from '@chakra-ui/react';
-import Head from 'next/head';
+import { NextSeo } from 'next-seo';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import ExperimentForm from '../../containers/Experiments/Form';
@@ -30,9 +30,7 @@ export default function CraeteExperimentView() {
   if (!authorized) return <></>;
   return (
     <>
-      <Head>
-        <title>{getPageTitle('Create Experiment')}</title>
-      </Head>
+      <NextSeo title={getPageTitle('Create Experiment')} />
       <ExperimentForm />
     </>
   );

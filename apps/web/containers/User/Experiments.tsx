@@ -10,19 +10,19 @@ import {
   Tab,
   TabPanels,
   TabPanel,
-} from "@chakra-ui/react";
-import type { IUser } from "@reputable/types";
-import { useRouter } from "next/router";
-import React from "react";
-import ExperimentsIcon from "../../components/Icons/ExperimentsIcon";
-import ReputableLogo from "../../components/Icons/ReputableLogo";
-import makeAvatar from "../../helpers/makeAvatar";
-import moment from "moment";
-import { useApiContext } from "../../providers/ApiContext";
-import { ExperimentCard } from "../../components/Experiments";
-import { useExperiments } from "../../_api/Experiments/queries/all";
-import calculateContributions from "../../helpers/calculateContributions";
-import { useUserByEmail } from "../../_api/Users/queries";
+} from '@chakra-ui/react';
+import type { IUser } from '@reputable/types';
+import { useRouter } from 'next/router';
+import React from 'react';
+import ExperimentsIcon from '../../components/Icons/ExperimentsIcon';
+import ReputableLogo from '../../components/Icons/ReputableLogo';
+import makeAvatar from '../../helpers/makeAvatar';
+import moment from 'moment';
+import { useApiContext } from '../../providers/ApiContext';
+import { ExperimentCard } from '../../components/Experiments';
+import { useExperiments } from '../../_api/Experiments/queries/all';
+import calculateContributions from '../../helpers/calculateContributions';
+import { useUserByEmail } from '../../_api/Users/queries';
 
 interface UserExperimentsProps {
   data?: IUser;
@@ -39,7 +39,7 @@ export default function UserExperiments({
   const { data: user } = useUserByEmail(router.query.email as string);
 
   const { totalTokens, matchedAmount, tokensTipped } = calculateContributions(
-    user?.user_metadata?.tips || []
+    user?.user_metadata?.tips || [],
   );
 
   const lastLogin = moment(user?.last_login ?? Date.now()).fromNow();
@@ -47,14 +47,14 @@ export default function UserExperiments({
     <VStack textAlign="left" w="100%" justify="start" gap={10}>
       <HStack
         py={10}
-        px={[4, "75px"]}
+        px={[4, '75px']}
         backgroundColor="primary.100"
         w="100vw"
         align="center"
       >
         <Avatar
-          width={"64px"}
-          height={"64px"}
+          width={'64px'}
+          height={'64px'}
           name="Profile Photo"
           src={data?.picture ?? makeAvatar(data?.user_id)}
         />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   useDisclosure,
@@ -16,6 +16,7 @@ interface ModalProps extends ChakraProps {
   button: JSX.Element;
   title: string;
   closeButtonTitle?: string;
+  isClose?: boolean;
 }
 
 export default function Modal({
@@ -23,8 +24,13 @@ export default function Modal({
   button,
   title,
   closeButtonTitle,
+  isClose,
 }: React.PropsWithChildren<ModalProps>) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  useEffect(() => {
+    console.log('isClose--------', isClose);
+    if (isClose) onClose();
+  }, [isClose, onClose]);
   return (
     <>
       {React.cloneElement(button, {
@@ -39,11 +45,13 @@ export default function Modal({
           <ModalCloseButton />
           <ModalBody>{children}</ModalBody>
 
-          <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              {closeButtonTitle}
-            </Button>
-          </ModalFooter>
+          {closeButtonTitle && closeButtonTitle !== 'hidden' && (
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onClose}>
+                {closeButtonTitle}
+              </Button>
+            </ModalFooter>
+          )}
         </ModalContent>
       </ChakraModal>
     </>

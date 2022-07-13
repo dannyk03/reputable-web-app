@@ -202,7 +202,9 @@ export default function ExperimentsSingleView({
             if (v && v.trim() !== '') {
               return (
                 <Box key={k} py={3}>
-                  <Heading size="lg">{k.toUpperCase()}</Heading>
+                  <Heading fontSize="24" fontWeight="600">
+                    {k.toUpperCase()}
+                  </Heading>
                   <MDPreview style={{ marginTop: '12px' }} source={v} />
                 </Box>
               );
@@ -215,7 +217,7 @@ export default function ExperimentsSingleView({
       </Box>
       {/* Desktop View */}
       <Hide below="md">
-        <ExperimentSideInformation minW="400px" data={data} />
+        <ExperimentSideInformation minW="400px" marginLeft={8} data={data} />
       </Hide>
     </Flex>
   );

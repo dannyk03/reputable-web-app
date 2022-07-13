@@ -5,6 +5,7 @@ import type { ITransaction } from '@reputable/types';
 export class Transaction implements ITransaction {
   @Field()
   from: string;
+
   @Field()
   to: string;
   @Field(() => Int)

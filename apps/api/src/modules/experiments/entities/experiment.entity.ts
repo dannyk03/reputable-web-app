@@ -1,8 +1,15 @@
-import { ObjectType, Field, registerEnumType, Int } from '@nestjs/graphql';
+import {
+  ObjectType,
+  Field,
+  registerEnumType,
+  Int,
+  Float,
+} from '@nestjs/graphql';
 import { BaseMongoEntity } from '../../../common/entities/mongo';
 import { buildSchema, DocumentType, index, prop } from '@typegoose/typegoose';
 import type {
   IExperiment,
+  IExperimentBounty,
   IExperimentDescription,
   IExperimentResultMarker,
 } from '@reputable/types';
@@ -27,20 +34,34 @@ export class ExperimentDescription implements IExperimentDescription {
   @Field({ nullable: true })
   @prop()
   idea?: string;
+
   @Field({ nullable: true })
   @prop()
   goal?: string;
+
   @Field({ nullable: true })
   @prop()
   summary?: string;
+
   @Field({ nullable: true })
   @prop()
   results?: string;
+
   @Field({ nullable: true })
   @prop()
   design?: string;
 }
 
+@ObjectType()
+export class ExperimentBounty implements IExperimentBounty {
+  @Field(() => Float, { defaultValue: 0 })
+  @prop({ default: 0 })
+  amount: number;
+
+  @Field(() => [String], { nullable: 'itemsAndList' })
+  @prop({ default: [] })
+  description?: string[] | null;
+}
 /*
 registerEnumType(MarkerValueChangeType, {
   name: 'MarkerValueChangeType',
@@ -52,9 +73,11 @@ export class ExperimentResultMarker implements IExperimentResultMarker {
   @Field()
   @prop()
   name: string;
+
   @Field({ nullable: true })
   @prop()
   slug: string;
+
   @Field(() => [String], { nullable: true, defaultValue: [] })
   @prop()
   devices?: string[];
@@ -187,6 +210,10 @@ export class Experiment extends BaseMongoEntity implements IExperiment {
   })
   @Field(() => [Comment], { nullable: true, defaultValue: [] })
   public comments?: Comment[];
+
+  @Field(() => ExperimentBounty, { nullable: true, defaultValue: {} })
+  @prop({ required: true, default: {} })
+  public bounty: ExperimentBounty;
 
   /*
   public prettifyResult? = (result: ExperimentResult) => {

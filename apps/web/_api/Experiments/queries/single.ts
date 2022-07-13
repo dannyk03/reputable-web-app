@@ -1,7 +1,7 @@
-import { gql, request } from "graphql-request";
-import { useQuery, QueryClient } from "react-query";
-import { useApiContext } from "../../../providers/ApiContext";
-import type { PopulatedExperiment } from "@reputable/types";
+import { gql, request } from 'graphql-request';
+import { useQuery, QueryClient } from 'react-query';
+import { useApiContext } from '../../../providers/ApiContext';
+import type { PopulatedExperiment } from '@reputable/types';
 
 const query = gql`
   query ($_id: String!) {
@@ -18,6 +18,10 @@ const query = gql`
       tips {
         userId
         amount
+      }
+      bounty {
+        amount
+        description
       }
       description {
         goal
@@ -43,6 +47,7 @@ const query = gql`
         replyTo
         createdAt
         updatedAt
+        isApproved
         text
         author {
           name
@@ -51,6 +56,7 @@ const query = gql`
           email
           user_metadata {
             tokens
+            address
             tips {
               userId
               amount
@@ -62,11 +68,13 @@ const query = gql`
           _id
           createdAt
           updatedAt
+          isApproved
           author {
             name
             experiments_count
             user_metadata {
               tokens
+              address
               tips {
                 userId
                 amount
@@ -90,7 +98,7 @@ const query = gql`
 export const useExperiment = (_id: string) => {
   const { client } = useApiContext();
 
-  return useQuery<PopulatedExperiment>(["experiments", { _id }], () =>
+  return useQuery<PopulatedExperiment>(['experiments', { _id }], () =>
     client
       .request(query, { _id })
       .then((r) => {
@@ -98,18 +106,18 @@ export const useExperiment = (_id: string) => {
       })
       .catch((err) => {
         if (!_id) return undefined;
-      })
+      }),
   );
 };
 
 export const prefetchExperiment = async (_id: string) => {
   const queryClient = new QueryClient();
   await queryClient.prefetchQuery<PopulatedExperiment>(
-    ["experiments", { _id }],
+    ['experiments', { _id }],
     () =>
       request(`${process.env.API_URL}/graphql`, query).then((r) => {
         return r.experiment;
-      })
+      }),
   );
   return queryClient;
 };
