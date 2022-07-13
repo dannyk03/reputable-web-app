@@ -38,9 +38,11 @@ export default function BountyExperiment({
         </Box>
       </Box>
       <Divider />
-      {bountyDescription.map((desc, index) => (
-        <ExperimentCardContent content={desc} color={'white'} />
-      ))}
+      {bountyDescription &&
+        Array.isArray(bountyDescription) &&
+        bountyDescription.map((desc, index) => (
+          <ExperimentCardContent content={desc} color={'white'} key={index} />
+        ))}
     </Box>
   );
 }
