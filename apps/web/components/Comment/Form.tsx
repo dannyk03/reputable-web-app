@@ -1,5 +1,12 @@
 import { useAuth0 } from '@auth0/auth0-react';
-import { ChakraProps, Flex, VStack, Textarea, Avatar } from '@chakra-ui/react';
+import {
+  ChakraProps,
+  Flex,
+  VStack,
+  Textarea,
+  Avatar,
+  propNames,
+} from '@chakra-ui/react';
 import { useForm } from 'react-hook-form';
 import makeAvatar from '../../helpers/makeAvatar';
 import { useApiContext } from '../../providers/ApiContext';
@@ -13,6 +20,7 @@ import {
   UseControllerProps,
 } from 'react-hook-form';
 import dynamic from 'next/dynamic';
+import { useMediaQuery } from '@chakra-ui/react';
 
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
@@ -58,26 +66,37 @@ const ControlledEditor = ({
 );
 interface Props extends ChakraProps {
   onSubmit: (data: any) => void;
+  type?: string;
   placeholder?: string;
 }
 
-export default function CommentForm({ onSubmit, ...restProps }: Props) {
+export default function CommentForm({ onSubmit, type, ...restProps }: Props) {
   const { register, handleSubmit, reset, control } = useForm<any>();
   const { isAuthenticated } = useAuth0();
   const { user } = useApiContext();
+  const [isMobile] = useMediaQuery('(max-width: 30em');
+
   if (!isAuthenticated) {
     return <></>;
   }
   return (
-    <Flex w="100%">
-      <Avatar
-        width={'40px'}
-        height={'40px'}
-        name="Profile Photo"
-        src={user?.picture ?? makeAvatar(user?.name ?? 'User')}
-      />
+    <Flex
+      w={type !== 'create' && isMobile ? '90%' : '100%'}
+      marginLeft="auto"
+      align={'start'}
+      marginTop="4"
+    >
+      {(type === 'create' || !isMobile) && (
+        <Avatar
+          width={'40px'}
+          height={'40px'}
+          name="Profile Photo"
+          src={user?.picture ?? makeAvatar(user?.name ?? 'User')}
+        />
+      )}
+
       <form
-        style={{ width: '100%' }}
+        style={{ width: '100%', marginLeft: '5px', marginTop: '20px' }}
         onSubmit={handleSubmit((values) => {
           onSubmit(values);
           reset();

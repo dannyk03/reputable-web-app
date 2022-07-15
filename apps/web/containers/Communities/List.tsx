@@ -6,11 +6,11 @@ import {
   Text,
   VStack,
   Link,
-} from "@chakra-ui/react";
-import Image from "next/image";
-import React from "react";
-import type { ICommunity } from "@reputable/types";
-import NextLink from "next/link";
+} from '@chakra-ui/react';
+import Image from 'next/image';
+import React from 'react';
+import type { ICommunity } from '@reputable/types';
+import NextLink from 'next/link';
 
 interface CommunitiesListViewProps {
   data: ICommunity[];
@@ -22,14 +22,14 @@ export default function CommunitiesListView({
 }: React.PropsWithChildren<CommunitiesListViewProps>) {
   return (
     <Box maxW="960px">
-      <Grid gap={[4, 6]} templateColumns={["repeat(2, 1fr)", "repeat(4, 1fr)"]}>
+      <Grid gap={[4, 6]} templateColumns={['repeat(2, 1fr)', 'repeat(4, 1fr)']}>
         {data.map((community, index) => (
           <NextLink
             key={`community_${index}`}
             href={`/${community.slug}`}
             passHref
           >
-            <Link _hover={{ textDecoration: "none" }}>
+            <Link _hover={{ textDecoration: 'none' }}>
               <GridItem w="100%">
                 <Box
                   border="1px solid"
@@ -49,7 +49,7 @@ export default function CommunitiesListView({
                       </Box>
                       <Text
                         color="gray.800"
-                        fontSize={["18px", "24px"]}
+                        fontSize={['18px', '24px']}
                         lineHeight="32px"
                         fontWeight={600}
                       >
