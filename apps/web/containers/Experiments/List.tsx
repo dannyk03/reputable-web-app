@@ -11,6 +11,7 @@ import { useApiContext } from '../../providers/ApiContext';
 import Modal from '../../components/Modal';
 import Fuse from 'fuse.js';
 import { sortBy } from 'lodash';
+import { useMediaQuery } from '@chakra-ui/react';
 
 export interface ExperimentsListViewProps {
   experiments: PopulatedExperiment[];
@@ -24,6 +25,7 @@ export default function ExperimentsListView({
   const router = useRouter();
   const [searchInput, setSearchInput] = React.useState('');
   const [items, setItems] = React.useState(experiments || []);
+  const [isMobile] = useMediaQuery('(max-width: 30em');
 
   const { user, authorized, isAdmin } = useApiContext();
 
@@ -57,43 +59,62 @@ export default function ExperimentsListView({
   let createNewExperiementModalButtonName = 'Ok';
 
   return (
-    <Flex direction="row" justify={['center', 'space-between']} w="100%">
-      <Hide below="md">
-        <VStack w={['100%', '260px']} gap={5}>
-          <CommunityCard community={community} />
+    <Flex
+      direction={isMobile ? 'column' : 'row'}
+      justify={['center', 'space-between']}
+      w="100%"
+    >
+      {/* <Hide below="md"> */}
 
-          {isAdmin ? (
-            <PrimaryButton
-              onClick={() => router.push(`/${community.slug}/create`)}
-              text="Create new experiment"
-              leftIcon={<AddIcon width="12px" height="12px" />}
+      <VStack w={['100%', '260px']} gap={5}>
+        <Hide above="md">
+          <HStack w={'100%'}>
+            <SearchInput
+              value={searchInput}
+              placeholder="Search for an experiment"
+              onChange={(v) => {
+                setSearchInput(v);
+              }}
             />
-          ) : (
-            <Modal
-              title={createNewExperiementModalTitle}
-              closeButtonTitle={createNewExperiementModalButtonName}
-              button={
-                <PrimaryButton
-                  text="Create new experiment"
-                  leftIcon={<AddIcon width="12px" height="12px" />}
-                />
-              }
-            >
-              {createNewExperiementModalBody}
-            </Modal>
-          )}
-        </VStack>
-      </Hide>
-      <Box ml={[0, 10]} width="100%">
-        <HStack>
-          <SearchInput
-            value={searchInput}
-            placeholder="Search for an experiment"
-            onChange={(v) => {
-              setSearchInput(v);
-            }}
+          </HStack>
+        </Hide>
+        <CommunityCard community={community} />
+
+        {isAdmin ? (
+          <PrimaryButton
+            onClick={() => router.push(`/${community.slug}/create`)}
+            text="Create new experiment"
+            leftIcon={<AddIcon width="12px" height="12px" />}
           />
-        </HStack>
+        ) : (
+          <Modal
+            title={createNewExperiementModalTitle}
+            closeButtonTitle={createNewExperiementModalButtonName}
+            button={
+              <PrimaryButton
+                text="Create new experiment"
+                leftIcon={<AddIcon width="12px" height="12px" />}
+              />
+            }
+          >
+            {createNewExperiementModalBody}
+          </Modal>
+        )}
+      </VStack>
+      {/* </Hide> */}
+      <Box ml={[0, 10]} width="100%">
+        <Hide below="md">
+          <HStack>
+            <SearchInput
+              value={searchInput}
+              placeholder="Search for an experiment"
+              onChange={(v) => {
+                setSearchInput(v);
+              }}
+            />
+          </HStack>
+        </Hide>
+
         <Box mt={6}>
           {items.map((experiment, idx) => (
             <ExperimentCard

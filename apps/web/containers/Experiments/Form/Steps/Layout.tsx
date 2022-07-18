@@ -1,6 +1,7 @@
-import { Box, HStack, VStack } from "@chakra-ui/react";
-import React from "react";
-import { CreateInfoCard } from "../../../../components/Experiments";
+import { Box, Flex, VStack } from '@chakra-ui/react';
+import React from 'react';
+import { CreateInfoCard } from '../../../../components/Experiments';
+import { useMediaQuery } from '@chakra-ui/react';
 
 interface StepperLayoutProps {
   title: string;
@@ -14,18 +15,21 @@ export default function StepperLayout({
   description,
   currentStep,
 }: React.PropsWithChildren<StepperLayoutProps>) {
+  const [isMobile] = useMediaQuery('(max-width: 30em');
+
   return (
-    <HStack
+    <Flex
       justify="stretch"
       width="100%"
       align="start"
       gap={20}
       position="relative"
+      direction={isMobile ? 'column' : 'row'}
     >
       <Box flexGrow={1}>{children}</Box>
       <VStack align="end">
         <CreateInfoCard
-          mt={10}
+          mt={isMobile ? 2 : 10}
           currentStep={currentStep}
           totalSteps={2}
           step={{
@@ -34,6 +38,6 @@ export default function StepperLayout({
           }}
         />
       </VStack>
-    </HStack>
+    </Flex>
   );
 }

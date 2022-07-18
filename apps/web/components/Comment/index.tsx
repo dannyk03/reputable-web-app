@@ -75,8 +75,13 @@ export default function Comment({
         pr={2}
         pt={5}
       >
-        <Flex justify={'start'} align="center" position="relative">
-          <Flex align={'center'} cursor="pointer">
+        <Flex
+          justify={'start'}
+          align="start"
+          position="relative"
+          direction={isMobile ? 'column' : 'row'}
+        >
+          <Flex align={'start'} cursor="pointer">
             <Avatar
               id={id}
               width={'40px'}
@@ -95,115 +100,117 @@ export default function Comment({
               {author.name}
             </Text>
           </Flex>
-          <Text pl="2" fontWeight={400} color="gray.600">
-            {timeAgo}
-          </Text>
-          {isUserCardOpen && (
-            <ClickOutside
-              onClickOutside={() => {
-                setUserCardOpen(false);
-              }}
-            >
-              <Card
-                py={6}
-                px="60px"
-                position="absolute"
-                top="30px"
-                left="50px"
-                zIndex={999}
-                backgroundColor="white"
-                borderRadius="16px"
+          <Flex w={'100%'}>
+            <Text pl={isMobile ? 12 : 2} fontWeight={400} color="gray.600">
+              {timeAgo}
+            </Text>
+            {isAdmin && !isApproved && (
+              <Button
+                colorScheme="green.200"
+                color="green.200"
+                variant="ghost"
+                style={{ marginLeft: 'auto', padding: 0 }}
+                height={6}
+                ml={'auto'}
+                onClick={() => {
+                  if (window.confirm('Are you sure to approve this comment?'))
+                    approve.mutate({ _id });
+                }}
               >
-                <VStack>
-                  <Avatar
-                    id={id}
-                    width={'64px'}
-                    height={'64px'}
-                    name="User Card Profile Photo"
-                    src={author.picture ?? makeAvatar('User')}
-                  />
-                  <Text
-                    pl="2"
-                    fontWeight={600}
-                    color="gray.700"
-                    onClick={() => setUserCardOpen(true)}
-                  >
-                    {author.name}
-                  </Text>
-                  <HStack>
-                    <HStack alignItems="center">
-                      <Icon
-                        as={TipsIcon}
-                        width="14px"
-                        height="14px"
-                        color="gray.600"
-                      />
-                      <Text size="12px" lineHeight="26px" color="gray.600">
-                        {Math.round(parseFloat(totalTokens))}
-                      </Text>
-                    </HStack>
-                    <HStack alignItems="center">
-                      <Icon
-                        as={ExperimentsIcon}
-                        width="14px"
-                        height="14px"
-                        color="gray.600"
-                      />
-                      <Text size="12px" lineHeight="26px" color="gray.600">
-                        {author?.experiments_count}
-                      </Text>
-                    </HStack>
-                  </HStack>
-                  <NextLink
-                    passHref
-                    href={`/user/${encodeURIComponent(author.email)}`}
-                  >
-                    <PrimaryButton
-                      text="See full profile"
-                      size="sm"
-                      fontSize="14px"
-                      height="32px"
+                <Image
+                  src="/icons/approveBadge.png"
+                  width={'20px'}
+                  height={'20px'}
+                  alt="Reply"
+                />
+                {!isMobile && <Text pl="6px">Approve</Text>}
+              </Button>
+            )}
+            {isApproved && (
+              <HStack style={{ marginLeft: 'auto' }}>
+                <Image
+                  src="/icons/approveBadge.png"
+                  width={'20px'}
+                  height={'20px'}
+                  alt="Reply"
+                />
+                {!isMobile && <Text color="green.400">Approved</Text>}
+              </HStack>
+            )}
+            {isUserCardOpen && (
+              <ClickOutside
+                onClickOutside={() => {
+                  setUserCardOpen(false);
+                }}
+              >
+                <Card
+                  py={6}
+                  px="60px"
+                  position="absolute"
+                  top="30px"
+                  left="50px"
+                  zIndex={999}
+                  backgroundColor="white"
+                  borderRadius="16px"
+                >
+                  <VStack>
+                    <Avatar
+                      id={id}
+                      width={'64px'}
+                      height={'64px'}
+                      name="User Card Profile Photo"
+                      src={author.picture ?? makeAvatar('User')}
                     />
-                  </NextLink>
-                </VStack>
-              </Card>
-            </ClickOutside>
-          )}
-          {isAdmin && !isApproved && (
-            <Button
-              colorScheme="green.200"
-              color="green.200"
-              variant="ghost"
-              style={{ marginLeft: 'auto', padding: 0 }}
-              height={6}
-              ml={1}
-              onClick={() => {
-                if (window.confirm('Are you sure to approve this comment?'))
-                  approve.mutate({ _id });
-              }}
-            >
-              <Image
-                src="/icons/approveBadge.png"
-                width={'16px'}
-                height={'16px'}
-                alt="Reply"
-              />
-              {!isMobile && <Text pl="6px">Approve</Text>}
-            </Button>
-          )}
-          {isApproved && (
-            <HStack style={{ marginLeft: 'auto' }}>
-              <Image
-                src="/icons/approveBadge.png"
-                width={'16px'}
-                height={'16px'}
-                alt="Reply"
-              />
-              {!isMobile && <Text color="green.400">Approved</Text>}
-            </HStack>
-          )}
+                    <Text
+                      pl="2"
+                      fontWeight={600}
+                      color="gray.700"
+                      onClick={() => setUserCardOpen(true)}
+                    >
+                      {author.name}
+                    </Text>
+                    <HStack>
+                      <HStack alignItems="center">
+                        <Icon
+                          as={TipsIcon}
+                          width="14px"
+                          height="14px"
+                          color="gray.600"
+                        />
+                        <Text size="12px" lineHeight="26px" color="gray.600">
+                          {Math.round(parseFloat(totalTokens))}
+                        </Text>
+                      </HStack>
+                      <HStack alignItems="center">
+                        <Icon
+                          as={ExperimentsIcon}
+                          width="14px"
+                          height="14px"
+                          color="gray.600"
+                        />
+                        <Text size="12px" lineHeight="26px" color="gray.600">
+                          {author?.experiments_count}
+                        </Text>
+                      </HStack>
+                    </HStack>
+                    <NextLink
+                      passHref
+                      href={`/user/${encodeURIComponent(author.email)}`}
+                    >
+                      <PrimaryButton
+                        text="See full profile"
+                        size="sm"
+                        fontSize="14px"
+                        height="32px"
+                      />
+                    </NextLink>
+                  </VStack>
+                </Card>
+              </ClickOutside>
+            )}
+          </Flex>
         </Flex>
-        <Flex pl={12}>
+        <Flex pl={12} marginTop="2">
           <Text w="100%">{text}</Text>
         </Flex>
         <Flex flexWrap={'wrap'} pl={12} pt="12px" align="center">
@@ -317,7 +324,7 @@ export default function Comment({
       </Box>
       <Collapse in={showReplyForm}>
         <CommentForm
-          mt={5}
+          mt={10}
           ml={12}
           h="70px"
           placeholder="Add a reply"

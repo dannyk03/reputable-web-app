@@ -25,11 +25,12 @@ import Image from 'next/image';
 import calculateContributions from '../../../helpers/calculateContributions';
 import { useRouter } from 'next/router';
 import { useExperiment } from '../../../_api/Experiments/mutations';
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import { DeleteIcon, EditIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { useApiContext } from '../../../providers/ApiContext';
 import moment from 'moment';
 import ExperimentCardContent from './components/ExperimentCardContent';
 import { useQueryClient } from 'react-query';
+import {} from '@chakra-ui/icons';
 
 export interface ExperimentCardProps extends ChakraProps {
   experiment: Pick<
@@ -44,6 +45,7 @@ export interface ExperimentCardProps extends ChakraProps {
     | 'createdAt'
   >;
 }
+import { useMediaQuery } from '@chakra-ui/react';
 
 export default function ExperimentCard({
   experiment,
@@ -53,6 +55,8 @@ export default function ExperimentCard({
   const queryClient = useQueryClient();
   const { user } = useApiContext();
   const { totalTokens } = calculateContributions(experiment.tips);
+  const [isMobile] = useMediaQuery('(max-width: 30em');
+
   const timeAgo = moment(
     new Date(experiment.updatedAt || experiment.createdAt),
   ).fromNow();
@@ -152,11 +156,17 @@ export default function ExperimentCard({
             {/* Mobile View END */}
             <Spacer />
             <HStack alignItems="center">
-              <Icon as={ReputableLogo} width="20px" height="20px" />
+              <Icon
+                as={ReputableLogo}
+                color={isMobile ? '#796CF6' : ''}
+                width="20px"
+                height="20px"
+              />
               <Text
                 fontWeight={{ small: 600, medium: 400 }}
                 size="16px"
                 lineHeight="24px"
+                color={isMobile ? '#796CF6' : ''}
               >
                 {totalTokens}
               </Text>
@@ -198,7 +208,25 @@ export default function ExperimentCard({
               </Tag>
             ))}
           </HStack>
+          {isMobile && (
+            <NextLink
+              href={`/${experiment.communities[0].slug}/${experiment._id}`}
+              passHref
+            >
+              <LinkOverlay>
+                <Text
+                  fontSize={16}
+                  textAlign="center"
+                  marginTop="2"
+                  fontWeight="600"
+                >
+                  View experiment <ArrowForwardIcon />
+                </Text>
+              </LinkOverlay>
+            </NextLink>
+          )}
         </LinkBox>
+
         {canEdit && (
           <HStack>
             <Tooltip label="Update Experiment">
