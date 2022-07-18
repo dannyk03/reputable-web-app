@@ -1,7 +1,7 @@
 import { Box, Image, Divider, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 import dynamic from 'next/dynamic';
-import { useMediaQuery } from '@chakra-ui/react';
+import useWindowDimensions from '../../providers/getWindowSize';
 
 import ExperimentCardContent from './ExperimentCard/components/ExperimentCardContent';
 const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
@@ -17,8 +17,8 @@ export default function BountyExperiment({
   bountyAmount,
   bountyDescription,
 }: React.PropsWithChildren<BountyExperimentProps>) {
-  const [isMobile] = useMediaQuery('(max-width: 30em');
-
+  const { height, width } = useWindowDimensions();
+  const isMobile = width < 900;
   return (
     <Box
       bgGradient="linear(to-t, #4F498B, #5C50CB)"

@@ -1,8 +1,7 @@
 import { Box, Flex, VStack } from '@chakra-ui/react';
 import React from 'react';
 import { CreateInfoCard } from '../../../../components/Experiments';
-import { useMediaQuery } from '@chakra-ui/react';
-
+import useWindowDimensions from '../../../../providers/getWindowSize';
 interface StepperLayoutProps {
   title: string;
   description: string;
@@ -15,8 +14,8 @@ export default function StepperLayout({
   description,
   currentStep,
 }: React.PropsWithChildren<StepperLayoutProps>) {
-  const [isMobile] = useMediaQuery('(max-width: 30em');
-
+  const { height, width } = useWindowDimensions();
+  const isMobile = width < 900;
   return (
     <Flex
       justify="stretch"

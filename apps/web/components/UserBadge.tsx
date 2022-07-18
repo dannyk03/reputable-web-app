@@ -51,6 +51,7 @@ export default function UserBadge({
               lineHeight="24px"
               fontSize="16px"
               fontWeight={600}
+              style={{ whiteSpace: 'nowrap' }}
             >
               {user.name}
             </Text>

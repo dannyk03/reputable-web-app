@@ -16,8 +16,7 @@ import {
 import { useFormContext, useWatch } from 'react-hook-form';
 import { TCreateExperiment } from '..';
 import { removeIndex } from '@chakra-ui/utils';
-import { useMediaQuery } from '@chakra-ui/react';
-
+import useWindowDimensions from '../../../../providers/getWindowSize';
 interface MarkerInputProps extends ChakraProps {
   name: string;
 }
@@ -30,8 +29,8 @@ const MarkerInput = ({ index, ...restProps }) => {
     name: `markers.${index}.devices`,
   });
   const [deviceText, setDeviceText] = React.useState('');
-  const [isMobile] = useMediaQuery('(max-width: 30em');
-
+  const { height, width } = useWindowDimensions();
+  const isMobile = width < 900;
   return (
     <Flex
       direction={isMobile ? 'column' : 'row'}

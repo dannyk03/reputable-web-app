@@ -10,6 +10,8 @@ import {
 import { useForm } from 'react-hook-form';
 import makeAvatar from '../../helpers/makeAvatar';
 import { useApiContext } from '../../providers/ApiContext';
+import useWindowDimensions from '../../providers/getWindowSize';
+
 import { PrimaryButton } from '../Button';
 import Modal from '../Modal';
 import {
@@ -20,7 +22,6 @@ import {
   UseControllerProps,
 } from 'react-hook-form';
 import dynamic from 'next/dynamic';
-import { useMediaQuery } from '@chakra-ui/react';
 
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
@@ -74,7 +75,9 @@ export default function CommentForm({ onSubmit, type, ...restProps }: Props) {
   const { register, handleSubmit, reset, control } = useForm<any>();
   const { isAuthenticated } = useAuth0();
   const { user } = useApiContext();
-  const [isMobile] = useMediaQuery('(max-width: 30em');
+
+  const { height, width } = useWindowDimensions();
+  const isMobile = width < 900;
 
   if (!isAuthenticated) {
     return <></>;

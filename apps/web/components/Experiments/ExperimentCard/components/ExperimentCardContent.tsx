@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/react';
 import '@uiw/react-markdown-preview/markdown.css';
 import dynamic from 'next/dynamic';
 import MDPreviewT from '@uiw/react-markdown-preview';
-import { useMediaQuery } from '@chakra-ui/react';
+import useWindowDimensions from '../../../../providers/getWindowSize';
 
 const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
   ssr: false,
@@ -17,13 +17,9 @@ export default function ExperimentCardContent({
   color?: string;
 }) {
   const ref = React.useRef(null);
-  const [height, setHeight] = React.useState(0);
-  const [isMobile] = useMediaQuery('(max-width: 30em');
-  console.log('isMobile', isMobile);
-  React.useEffect(() => {
-    const cHeight = ref.current.clientHeight;
-    setHeight(cHeight);
-  });
+  const { height, width } = useWindowDimensions();
+  const isMobile = width < 900;
+
   return (
     <Box
       color={color ? color : 'gray.600'}
@@ -33,22 +29,22 @@ export default function ExperimentCardContent({
       fontWeight={400}
       position="relative"
       // maxH={300}
-      // _after={
-      //   height > 280 && {
-      //     position: 'absolute',
-      //     top: 0,
-      //     left: 0,
-      //     color: 'primary.600',
-      //     content: '"↓ Read more"',
-      //     display: 'flex',
-      //     justifyContent: 'center',
-      //     alignItems: 'end',
-      //     cursor: 'pointer',
-      //     fontSize: '16px',
-      //     width: '100%',
-      //     height: '100%',
-      //   }
-      // }
+      _after={
+        height > 280 && {
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          color: 'primary.600',
+          content: '"↓ Read more"',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'end',
+          cursor: 'pointer',
+          fontSize: '16px',
+          width: '100%',
+          height: '100%',
+        }
+      }
       mt={3}
       textOverflow="ellipsis"
       overflow="hidden"
