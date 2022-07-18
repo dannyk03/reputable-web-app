@@ -17,9 +17,13 @@ export default function ExperimentCardContent({
   color?: string;
 }) {
   const ref = React.useRef(null);
+  const [contentHeight, setContentHeight] = React.useState(0);
   const { height, width } = useWindowDimensions();
   const isMobile = width < 900;
-
+  React.useEffect(() => {
+    const cHeight = ref.current.clientHeight;
+    setContentHeight(cHeight);
+  });
   return (
     <Box
       color={color ? color : 'gray.600'}
@@ -30,7 +34,7 @@ export default function ExperimentCardContent({
       position="relative"
       // maxH={300}
       _after={
-        height > 280 && {
+        contentHeight > 280 && {
           position: 'absolute',
           top: 0,
           left: 0,
