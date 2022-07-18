@@ -27,6 +27,8 @@ import { useRouter } from 'next/router';
 import { useExperiment } from '../../../_api/Experiments/mutations';
 import { DeleteIcon, EditIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { useApiContext } from '../../../providers/ApiContext';
+import useWindowDimensions from '../../../providers/getWindowSize';
+
 import moment from 'moment';
 import ExperimentCardContent from './components/ExperimentCardContent';
 import { useQueryClient } from 'react-query';
@@ -45,7 +47,6 @@ export interface ExperimentCardProps extends ChakraProps {
     | 'createdAt'
   >;
 }
-import { useMediaQuery } from '@chakra-ui/react';
 
 export default function ExperimentCard({
   experiment,
@@ -55,8 +56,8 @@ export default function ExperimentCard({
   const queryClient = useQueryClient();
   const { user } = useApiContext();
   const { totalTokens } = calculateContributions(experiment.tips);
-  const [isMobile] = useMediaQuery('(max-width: 30em');
-
+  const { height, width } = useWindowDimensions();
+  const isMobile = width < 900;
   const timeAgo = moment(
     new Date(experiment.updatedAt || experiment.createdAt),
   ).fromNow();

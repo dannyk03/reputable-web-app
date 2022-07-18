@@ -29,7 +29,7 @@ import ExperimentsIcon from '../Icons/ExperimentsIcon';
 import CommentForm from './Form';
 import Modal from '../Modal';
 import calculateContributions from '../../helpers/calculateContributions';
-import { useMediaQuery } from '@chakra-ui/react';
+import useWindowDimensions from '../../providers/getWindowSize';
 
 interface CommentProps {
   data: Partial<PopulatedComment>;
@@ -54,8 +54,8 @@ export default function Comment({
   const [isUserCardOpen, setUserCardOpen] = React.useState(false);
   const timeAgo = moment(new Date(updatedAt)).fromNow();
   const router = useRouter();
-  const [isMobile] = useMediaQuery('(max-width: 30em');
-
+  const { height, width } = useWindowDimensions();
+  const isMobile = width < 900;
   const { user } = useApiContext();
   const [showReplies, setShowReplies] = React.useState(false);
   const [showReplyForm, setShowReplyForm] = React.useState(false);

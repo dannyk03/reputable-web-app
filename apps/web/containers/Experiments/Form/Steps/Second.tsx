@@ -30,7 +30,7 @@ import dynamic from 'next/dynamic';
 import { PrimaryButton } from '../../../../components/Button';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
-import { useMediaQuery } from '@chakra-ui/react';
+import useWindowDimensions from '../../../../providers/getWindowSize';
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ssr: false,
@@ -78,8 +78,8 @@ export default function SecondStep({
 }: React.PropsWithChildren<StepProps>) {
   const { register, control, handleSubmit } =
     useFormContext<TCreateExperiment>();
-  const [isMobile] = useMediaQuery('(max-width: 30em');
-
+  const { height, width } = useWindowDimensions();
+  const isMobile = width < 900;
   const {
     fields: markersFields,
     append: markersAppend,

@@ -8,10 +8,11 @@ import CommunityCard from '../../components/Communities/CommunityCard';
 import { useRouter } from 'next/router';
 import SearchInput from '../../components/SearchInput';
 import { useApiContext } from '../../providers/ApiContext';
+import useWindowDimensions from '../../providers/getWindowSize';
+
 import Modal from '../../components/Modal';
 import Fuse from 'fuse.js';
 import { sortBy } from 'lodash';
-import { useMediaQuery } from '@chakra-ui/react';
 
 export interface ExperimentsListViewProps {
   experiments: PopulatedExperiment[];
@@ -25,9 +26,9 @@ export default function ExperimentsListView({
   const router = useRouter();
   const [searchInput, setSearchInput] = React.useState('');
   const [items, setItems] = React.useState(experiments || []);
-  const [isMobile] = useMediaQuery('(max-width: 40em');
-
+  const { height, width } = useWindowDimensions();
   const { user, authorized, isAdmin } = useApiContext();
+  const isMobile = width < 900;
 
   useEffect(() => {
     const options = {
