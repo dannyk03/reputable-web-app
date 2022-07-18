@@ -28,7 +28,6 @@ export default function Modal({
 }: React.PropsWithChildren<ModalProps>) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   useEffect(() => {
-    console.log('isClose--------', isClose);
     if (isClose) onClose();
   }, [isClose, onClose]);
   return (
@@ -40,7 +39,7 @@ export default function Modal({
 
       <ChakraModal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent width="98%">
           <ModalHeader>{title}</ModalHeader>
           <ModalCloseButton />
           <ModalBody>{children}</ModalBody>

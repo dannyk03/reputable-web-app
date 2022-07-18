@@ -58,7 +58,7 @@ export default function TipModal({
       })}
       <Modal finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent width="98%">
           {isLoading && (
             <Progress size="xs" isIndeterminate color="primary.500" />
           )}

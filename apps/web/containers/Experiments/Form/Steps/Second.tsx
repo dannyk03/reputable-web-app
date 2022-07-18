@@ -13,6 +13,7 @@ import {
   Box,
   Icon,
   Image,
+  Flex,
 } from '@chakra-ui/react';
 import { TCreateExperiment, StepProps } from '..';
 import {
@@ -29,6 +30,7 @@ import dynamic from 'next/dynamic';
 import { PrimaryButton } from '../../../../components/Button';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
+import { useMediaQuery } from '@chakra-ui/react';
 
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ssr: false,
@@ -56,7 +58,6 @@ const ControlledEditor = ({
           style={{
             border: error && '1px solid red',
             width: '100%',
-            maxHeight: '80px',
             ...style,
           }}
           onBlur={onBlur}
@@ -77,6 +78,7 @@ export default function SecondStep({
 }: React.PropsWithChildren<StepProps>) {
   const { register, control, handleSubmit } =
     useFormContext<TCreateExperiment>();
+  const [isMobile] = useMediaQuery('(max-width: 30em');
 
   const {
     fields: markersFields,
@@ -185,10 +187,15 @@ export default function SecondStep({
 
           {bountyDescFields.map((field, index) => {
             return (
-              <HStack align="end" style={{ marginTop: 10 }}>
+              <Flex
+                direction={isMobile ? 'column' : 'row'}
+                align="end"
+                style={{ marginTop: 10 }}
+              >
                 <VStack
                   align="start"
-                  style={{ width: '100%', marginRight: 20 }}
+                  marginRight={isMobile ? 0 : 10}
+                  width="100%"
                 >
                   <ControlledEditor
                     control={control}
@@ -207,7 +214,7 @@ export default function SecondStep({
                     />
                   </Box>
                 </VStack>
-              </HStack>
+              </Flex>
 
               // </HStack>
             );
@@ -248,7 +255,7 @@ export default function SecondStep({
           <VStack align={'start'}>
             {markersFields.map((field, index) => {
               return (
-                <HStack align="end">
+                <HStack align="end" width={'100%'}>
                   <MarkerInput index={index} />
                   <Box pb={1}>
                     <IconButton

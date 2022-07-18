@@ -16,6 +16,7 @@ import {
 import { useFormContext, useWatch } from 'react-hook-form';
 import { TCreateExperiment } from '..';
 import { removeIndex } from '@chakra-ui/utils';
+import { useMediaQuery } from '@chakra-ui/react';
 
 interface MarkerInputProps extends ChakraProps {
   name: string;
@@ -29,8 +30,15 @@ const MarkerInput = ({ index, ...restProps }) => {
     name: `markers.${index}.devices`,
   });
   const [deviceText, setDeviceText] = React.useState('');
+  const [isMobile] = useMediaQuery('(max-width: 30em');
+
   return (
-    <HStack justify={'start'} align={'end'} w="100%">
+    <Flex
+      direction={isMobile ? 'column' : 'row'}
+      justify={'start'}
+      align={isMobile ? 'start' : 'end'}
+      w="100%"
+    >
       <FormControl w="fit-content" minW="fit-content">
         {/* <FormLabel htmlFor={`markers.${index}`}>Value</FormLabel> */}
         <InputGroup size="md">
@@ -53,7 +61,7 @@ const MarkerInput = ({ index, ...restProps }) => {
           p={2}
           pt={0}
           w="100%"
-          minW="400px"
+          minW={isMobile ? '200px' : '400px'}
         >
           {devices.map((device, idx) => (
             <Tag
@@ -97,7 +105,7 @@ const MarkerInput = ({ index, ...restProps }) => {
           />
         </Flex>
       </VStack>
-    </HStack>
+    </Flex>
   );
 };
 

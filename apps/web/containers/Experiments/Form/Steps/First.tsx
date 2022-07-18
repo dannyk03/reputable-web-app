@@ -1,21 +1,21 @@
-import React from "react";
-import { Heading, useTheme, VStack, Input, Text } from "@chakra-ui/react";
-import { StepProps, TCreateExperiment } from "..";
+import React from 'react';
+import { Heading, useTheme, VStack, Input, Text } from '@chakra-ui/react';
+import { StepProps, TCreateExperiment } from '..';
 import {
   Controller,
   useFormContext,
   FieldPath,
   UseControllerProps,
-} from "react-hook-form";
-import { PrimaryButton } from "../../../../components/Button";
-import TextLink from "../../../../components/TextLink";
-import { ArrowBackIcon } from "@chakra-ui/icons";
-import { ErrorMessage } from "@hookform/error-message";
-import "@uiw/react-md-editor/markdown-editor.css";
-import "@uiw/react-markdown-preview/markdown.css";
-import dynamic from "next/dynamic";
+} from 'react-hook-form';
+import { PrimaryButton } from '../../../../components/Button';
+import TextLink from '../../../../components/TextLink';
+import { ArrowBackIcon } from '@chakra-ui/icons';
+import { ErrorMessage } from '@hookform/error-message';
+import '@uiw/react-md-editor/markdown-editor.css';
+import '@uiw/react-markdown-preview/markdown.css';
+import dynamic from 'next/dynamic';
 
-const MDEditor = dynamic(() => import("@uiw/react-md-editor"), {
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
   ssr: false,
 }) as unknown as React.FC<any>;
 
@@ -39,8 +39,8 @@ const ControlledEditor = ({
         <MDEditor
           preview="edit"
           style={{
-            border: error && "1px solid red",
-            width: "100%",
+            border: error && '1px solid red',
+            width: '100%',
             ...style,
           }}
           onBlur={onBlur}
@@ -48,7 +48,7 @@ const ControlledEditor = ({
           value={value}
           onChange={onChange}
         />
-        <p style={{ color: "red" }}>{error?.message}</p>
+        <p style={{ color: 'red' }}>{error?.message}</p>
       </>
     )}
     {...restProps}
@@ -75,11 +75,11 @@ export default function FirstStep({
           w="100%"
           size="lg"
           placeholder="Title for this experiment"
-          {...register("title", {
+          {...register('title', {
             required: true,
             minLength: {
               value: 10,
-              message: "This field should be at least 10 chars long.",
+              message: 'This field should be at least 10 chars long.',
             },
           })}
         />
@@ -91,7 +91,7 @@ export default function FirstStep({
           fontWeight={400}
           lineHeight="20px"
           fontSize="14px"
-          style={{ marginTop: "0px" }}
+          style={{ marginTop: '0px' }}
         >
           This would be the outcome you hope to achieve for yourself or others.
           Example: “I want to improve my sleep to 2 hours of deep and 2 hours
@@ -104,18 +104,18 @@ export default function FirstStep({
             required: true,
             minLength: {
               value: 10,
-              message: "This field should be at least 10 chars long.",
+              message: 'This field should be at least 10 chars long.',
             },
           }}
         />
         <Heading fontSize="1.5rem">
-          What is the big idea for your experiment?{" "}
+          What is the big idea for your experiment?{' '}
         </Heading>
         <Text
           color="gray.500"
           fontWeight={400}
           lineHeight="20px"
-          style={{ marginTop: "0px" }}
+          style={{ marginTop: '0px' }}
           fontSize="14px"
         >
           Think of this as your "hypothesis". Example: “Having sex before bed
@@ -128,7 +128,7 @@ export default function FirstStep({
             required: true,
             minLength: {
               value: 10,
-              message: "This field should be at least 10 chars long.",
+              message: 'This field should be at least 10 chars long.',
             },
           }}
         />
@@ -136,7 +136,7 @@ export default function FirstStep({
         <Text
           color="gray.500"
           fontWeight={400}
-          style={{ marginTop: "0px" }}
+          style={{ marginTop: '0px' }}
           lineHeight="20px"
           fontSize="14px"
         >
@@ -161,7 +161,7 @@ export default function FirstStep({
             required: true,
             minLength: {
               value: 10,
-              message: "This field should be at least 10 chars long.",
+              message: 'This field should be at least 10 chars long.',
             },
           }}
         />
@@ -171,7 +171,7 @@ export default function FirstStep({
         <Text
           color="gray.500"
           fontWeight={400}
-          style={{ marginTop: "0px" }}
+          style={{ marginTop: '0px' }}
           lineHeight="20px"
           fontSize="14px"
         >
@@ -183,7 +183,7 @@ export default function FirstStep({
           color="gray.500"
           fontWeight={400}
           lineHeight="20px"
-          style={{ marginTop: "0px" }}
+          style={{ marginTop: '0px' }}
           fontSize="14px"
         >
           In this section, it would be appropriate to discuss your experience

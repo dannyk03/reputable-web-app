@@ -50,7 +50,7 @@ export default function Comments({
   return (
     <Card p={0}>
       {isLoading && <Progress isIndeterminate />}
-      <Box p={6}>
+      <Box p={1}>
         <Heading fontSize="20px" fontWeight={600} color="gray.700">
           {' '}
           Results ({comments.length})
@@ -70,6 +70,7 @@ export default function Comments({
        */}
         <CommentForm
           h="100px"
+          type="create"
           placeholder="Add a comment"
           onSubmit={(data) => {
             create.mutate({

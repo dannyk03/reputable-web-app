@@ -1,5 +1,5 @@
-import { useAuth0 } from "@auth0/auth0-react";
-import { ChevronDownIcon, ChevronUpIcon } from "@chakra-ui/icons";
+import { useAuth0 } from '@auth0/auth0-react';
+import { ChevronDownIcon, ChevronUpIcon } from '@chakra-ui/icons';
 import {
   Collapse,
   useDisclosure,
@@ -11,11 +11,11 @@ import {
   Avatar,
   ChakraProps,
   Link,
-} from "@chakra-ui/react";
-import makeAvatar from "../helpers/makeAvatar";
-import NextLink from "next/link";
-import React from "react";
-import { ClickOutside } from "../hooks/useClickOutside";
+} from '@chakra-ui/react';
+import makeAvatar from '../helpers/makeAvatar';
+import NextLink from 'next/link';
+import React from 'react';
+import { ClickOutside } from '../hooks/useClickOutside';
 
 export default function UserBadge({
   children,
@@ -37,11 +37,11 @@ export default function UserBadge({
           borderColor="gray.200"
           borderRadius="24px"
           onClick={onToggle}
-          _hover={{ cursor: "pointer" }}
+          _hover={{ cursor: 'pointer' }}
         >
           <Avatar
-            width={"24px"}
-            height={"24px"}
+            width={'24px'}
+            height={'24px'}
             name="Profile Photo"
             src={user.picture ?? makeAvatar(user.user_id)}
           />
@@ -69,6 +69,7 @@ export default function UserBadge({
             backgroundColor="white"
             zIndex={2}
             p={3}
+            width={200}
           >
             <NextLink href={`/user/${encodeURIComponent(user.email)}`} passHref>
               <Link>
@@ -80,9 +81,9 @@ export default function UserBadge({
                   size="16px"
                   lineHeight="24px"
                   _hover={{
-                    backgroundColor: "primary.100",
-                    cursor: "pointer",
-                    textDecor: "none",
+                    backgroundColor: 'primary.100',
+                    cursor: 'pointer',
+                    textDecor: 'none',
                   }}
                 >
                   My Experiments
@@ -100,7 +101,7 @@ export default function UserBadge({
                 logout({ returnTo: window.location.origin });
               }}
               borderRadius="6px"
-              _hover={{ backgroundColor: "primary.100", cursor: "pointer" }}
+              _hover={{ backgroundColor: 'primary.100', cursor: 'pointer' }}
             >
               Log out
             </Text>
