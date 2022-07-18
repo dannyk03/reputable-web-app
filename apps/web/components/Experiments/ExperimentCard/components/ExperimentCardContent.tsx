@@ -33,7 +33,6 @@ export default function ExperimentCardContent({
       fontWeight={400}
       position="relative"
       // maxH={300}
-      maxW={400}
       // _after={
       //   height > 280 && {
       //     position: 'absolute',
