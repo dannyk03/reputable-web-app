@@ -102,7 +102,7 @@ export default function ExperimentsListView({
         )}
       </VStack>
       {/* </Hide> */}
-      <Box ml={[0, 10]} width="100%">
+      <Box ml={isMobile ? 0 : 10} width="100%">
         <Hide below="md">
           <HStack>
             <SearchInput
