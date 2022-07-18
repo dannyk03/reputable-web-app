@@ -50,7 +50,7 @@ export default function Comments({
   return (
     <Card p={0}>
       {isLoading && <Progress isIndeterminate />}
-      <Box p={1}>
+      <Box p={4}>
         <Heading fontSize="20px" fontWeight={600} color="gray.700">
           {' '}
           Results ({comments.length})

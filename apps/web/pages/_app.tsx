@@ -8,6 +8,7 @@ import { Hydrate, QueryClient, QueryClientProvider } from 'react-query';
 import { APIContextProvider } from '../providers/ApiContext';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { DefaultSeo } from 'next-seo';
+import '../styles.css';
 
 axios.defaults.baseURL = process.env.API_URL;
 
