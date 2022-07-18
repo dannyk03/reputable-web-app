@@ -1,6 +1,12 @@
 import { Box, Image, Divider, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
+import dynamic from 'next/dynamic';
+import { useMediaQuery } from '@chakra-ui/react';
+
 import ExperimentCardContent from './ExperimentCard/components/ExperimentCardContent';
+const MDPreview = dynamic(() => import('@uiw/react-markdown-preview'), {
+  ssr: false,
+}) as unknown as React.FC<any>;
 
 export interface BountyExperimentProps {
   bountyAmount: number;
@@ -11,6 +17,8 @@ export default function BountyExperiment({
   bountyAmount,
   bountyDescription,
 }: React.PropsWithChildren<BountyExperimentProps>) {
+  const [isMobile] = useMediaQuery('(max-width: 30em');
+
   return (
     <Box
       bgGradient="linear(to-t, #4F498B, #5C50CB)"
@@ -41,7 +49,15 @@ export default function BountyExperiment({
       {bountyDescription &&
         Array.isArray(bountyDescription) &&
         bountyDescription.map((desc, index) => (
-          <ExperimentCardContent content={desc} color={'white'} key={index} />
+          <Box maxW={'400'} mt="3" textOverflow="ellipsis" overflow="hidden">
+            <MDPreview
+              style={{
+                fontSize: isMobile && '14px',
+                whiteSpace: 'break-spaces',
+              }}
+              source={desc}
+            />
+          </Box>
         ))}
     </Box>
   );
