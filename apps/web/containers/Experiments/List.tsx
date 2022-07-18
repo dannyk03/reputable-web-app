@@ -25,7 +25,7 @@ export default function ExperimentsListView({
   const router = useRouter();
   const [searchInput, setSearchInput] = React.useState('');
   const [items, setItems] = React.useState(experiments || []);
-  const [isMobile] = useMediaQuery('(max-width: 30em');
+  const [isMobile] = useMediaQuery('(max-width: 40em');
 
   const { user, authorized, isAdmin } = useApiContext();
 
@@ -61,12 +61,12 @@ export default function ExperimentsListView({
   return (
     <Flex
       direction={isMobile ? 'column' : 'row'}
-      justify={['center', 'space-between']}
+      justify={isMobile ? 'center' : 'space-between'}
       w="100%"
     >
       {/* <Hide below="md"> */}
 
-      <VStack w={['100%', '260px']} gap={5}>
+      <VStack w={isMobile ? '100%' : '260px'} gap={5}>
         <Hide above="md">
           <HStack w={'100%'}>
             <SearchInput
