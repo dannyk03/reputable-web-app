@@ -133,6 +133,12 @@ export class UsersService {
       });
   }
 
+  async findOneById(userId: string) {
+    return this.client.get<User>(`/users/${userId}`).then((r) => {
+      return plainToClass(User, r.data);
+    });
+  }
+
   async addBalanceForApprovedComment(
     amount: number,
     userId: string,
