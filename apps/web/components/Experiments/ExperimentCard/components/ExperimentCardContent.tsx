@@ -32,31 +32,33 @@ export default function ExperimentCardContent({
       className="previewBox"
       fontWeight={400}
       position="relative"
-      maxH={300}
-      _after={
-        height > 280 && {
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          color: 'primary.600',
-          content: '"↓ Read more"',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'end',
-          cursor: 'pointer',
-          fontSize: '16px',
-          width: '100%',
-          height: '100%',
-          background:
-            'linear-gradient(180deg, rgba(2,0,36,0) 65%, rgba(255,255,255,1) 100%);',
-        }
-      }
+      // maxH={300}
+      maxW={400}
+      // _after={
+      //   height > 280 && {
+      //     position: 'absolute',
+      //     top: 0,
+      //     left: 0,
+      //     color: 'primary.600',
+      //     content: '"↓ Read more"',
+      //     display: 'flex',
+      //     justifyContent: 'center',
+      //     alignItems: 'end',
+      //     cursor: 'pointer',
+      //     fontSize: '16px',
+      //     width: '100%',
+      //     height: '100%',
+      //   }
+      // }
       mt={3}
       textOverflow="ellipsis"
       overflow="hidden"
       ref={ref}
     >
-      <MDPreview style={{ fontSize: isMobile && '14px' }} source={content} />
+      <MDPreview
+        style={{ fontSize: isMobile && '14px', whiteSpace: 'break-spaces' }}
+        source={content}
+      />
     </Box>
   );
 }
