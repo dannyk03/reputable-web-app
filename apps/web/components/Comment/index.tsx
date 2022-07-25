@@ -195,7 +195,7 @@ export default function Comment({
                     </HStack>
                     <NextLink
                       passHref
-                      href={`/user/${encodeURIComponent(author.email)}`}
+                      href={`/user/${encodeURIComponent(author.user_id)}`}
                     >
                       <PrimaryButton
                         text="See full profile"

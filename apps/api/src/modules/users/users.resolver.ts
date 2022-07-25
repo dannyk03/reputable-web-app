@@ -27,8 +27,14 @@ export class UsersResolver {
 
   @Public()
   @Query(() => User, { name: 'userByEmail' })
-  findById(@Args('email') email: string) {
+  findByEmail(@Args('email') email: string) {
     return this.usersService.findOne(email);
+  }
+
+  @Public()
+  @Query(() => User, { name: 'userById' })
+  findById(@Args('user_id') userId: string) {
+    return this.usersService.findOneById(userId);
   }
 
   @Query(() => User, { name: 'me' })

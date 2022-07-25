@@ -33,3 +33,34 @@ export const useUserByEmail = (email: string) => {
     }),
   );
 };
+
+const userByIdQuery = gql`
+  query ($userId: String!) {
+    userById(user_id: $userId) {
+      name
+      picture
+      user_metadata {
+        tokens
+        communities
+        address
+        tips {
+          userId
+          amount
+        }
+      }
+      user_id
+      experiments_count
+      last_login
+    }
+  }
+`;
+
+export const useUserById = (userId: string) => {
+  const { client } = useApiContext();
+
+  return useQuery<IUser>(['userById', { userId }], () =>
+    client.request(userByIdQuery, { userId }).then((r) => {
+      return r.userById;
+    }),
+  );
+};

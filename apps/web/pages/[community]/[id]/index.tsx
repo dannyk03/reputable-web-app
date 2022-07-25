@@ -54,7 +54,7 @@ export default function ExperimentSingle() {
       modifiedTime: String(data.updatedAt),
       authors: [
         `${window.location.origin}/user/${encodeURIComponent(
-          data.createdBy.email,
+          data.createdBy.user_id,
         )}`,
       ],
     },

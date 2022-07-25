@@ -83,7 +83,7 @@ export default function ExperimentsSingleView({
                   src={data.createdBy.picture ?? makeAvatar(user.user_id)}
                 />
                 <NextLink
-                  href={`/user/${encodeURIComponent(data.createdBy.email)}`}
+                  href={`/user/${encodeURIComponent(data.createdBy.user_id)}`}
                   passHref
                 >
                   <Link>
@@ -152,7 +152,7 @@ export default function ExperimentsSingleView({
             <Hide below="md">
               <Text fontSize="18px">by</Text>
               <NextLink
-                href={`/user/${encodeURIComponent(data.createdBy.email)}`}
+                href={`/user/${encodeURIComponent(data.createdBy.user_id)}`}
                 passHref
               >
                 <Link>
