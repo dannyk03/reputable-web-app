@@ -51,6 +51,7 @@ export default function Comment({
     isApproved,
     replies = [],
   } = data;
+  console.log('author', author);
   const [isUserCardOpen, setUserCardOpen] = React.useState(false);
   const timeAgo = moment(new Date(updatedAt)).fromNow();
   const router = useRouter();
@@ -64,6 +65,16 @@ export default function Comment({
     author?.user_metadata?.tips || [],
   );
   const isAdmin = user && user?.app_metadata?.role === 'admin';
+  const validateEmail = (email) => {
+    return String(email)
+      .toLowerCase()
+      .match(
+        /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      );
+  };
+  const protectEmail = (email) => {
+    return email.substring(0, 3) + '***' + email.substring(email.length - 3);
+  };
   if (!author) return null;
   return (
     <>
@@ -96,8 +107,11 @@ export default function Comment({
               fontWeight={600}
               color="gray.700"
               onClick={() => setUserCardOpen(true)}
+              minWidth={120}
             >
-              {author.name}
+              {validateEmail(author.name)
+                ? protectEmail(author.name)
+                : author.name}
             </Text>
           </Flex>
           <Flex w={'100%'}>
@@ -166,8 +180,11 @@ export default function Comment({
                       fontWeight={600}
                       color="gray.700"
                       onClick={() => setUserCardOpen(true)}
+                      minWidth={120}
                     >
-                      {author.name}
+                      {validateEmail(author.name)
+                        ? protectEmail(author.name)
+                        : author.name}
                     </Text>
                     <HStack>
                       <HStack alignItems="center">
