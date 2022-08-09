@@ -51,7 +51,6 @@ export default function Comment({
     isApproved,
     replies = [],
   } = data;
-  console.log('author', author);
   const [isUserCardOpen, setUserCardOpen] = React.useState(false);
   const timeAgo = moment(new Date(updatedAt)).fromNow();
   const router = useRouter();
@@ -107,7 +106,9 @@ export default function Comment({
               fontWeight={600}
               color="gray.700"
               onClick={() => setUserCardOpen(true)}
-              minWidth={120}
+              whiteSpace="nowrap"
+              overflow="hidden"
+              textOverflow={'clip'}
             >
               {validateEmail(author.name)
                 ? protectEmail(author.name)
@@ -180,7 +181,9 @@ export default function Comment({
                       fontWeight={600}
                       color="gray.700"
                       onClick={() => setUserCardOpen(true)}
-                      minWidth={120}
+                      whiteSpace="nowrap"
+                      overflow="hidden"
+                      textOverflow={'clip'}
                     >
                       {validateEmail(author.name)
                         ? protectEmail(author.name)
