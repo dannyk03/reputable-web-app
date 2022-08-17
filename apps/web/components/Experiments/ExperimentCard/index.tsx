@@ -100,9 +100,10 @@ export default function ExperimentCard({
     },
   });
   const canEdit =
-    user?.email === experiment.createdBy.email ||
+    user?.email === experiment.createdBy?.email ||
     user?.app_metadata?.role === 'admin';
 
+  console.log(experiment, experiment.createdBy);
   if (!experiment.createdBy) return <></>;
   return (
     <Card {...restProps} noShadow>
@@ -113,7 +114,7 @@ export default function ExperimentCard({
               width={'32px'}
               height={'32px'}
               name="Profile Photo"
-              src={experiment.createdBy.picture ?? makeAvatar('Some name')}
+              src={experiment.createdBy?.picture ?? makeAvatar('Some name')}
             />
             <Hide below="md">
               <Text
@@ -122,7 +123,7 @@ export default function ExperimentCard({
                 lineHeight="28px"
                 fontSize={18}
               >
-                {experiment.createdBy.name}
+                {experiment.createdBy?.name}
               </Text>
               <Text
                 color="gray.600"
@@ -142,7 +143,7 @@ export default function ExperimentCard({
                   lineHeight="28px"
                   fontSize={18}
                 >
-                  {experiment.createdBy.name}
+                  {experiment.createdBy?.name}
                 </Text>
                 <Text
                   style={{ marginTop: '-5px' }}

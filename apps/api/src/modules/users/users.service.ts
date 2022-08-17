@@ -102,6 +102,7 @@ export class UsersService {
     const promises = await Promise.all([
       this.client.get('/users?page=0&per_page=50'),
       this.client.get('/users?page=1&per_page=50'),
+      this.client.get('/users?page=2&per_page=50'),
     ]);
 
     return promises.reduce((prev, curr) => {
